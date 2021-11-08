@@ -1,0 +1,30 @@
+<?php declare(strict_types=1);
+
+namespace Somnambulist\Components\Validation\Exceptions;
+
+use Exception;
+use Somnambulist\Components\Validation\Rule;
+
+/**
+ * Class RuleException
+ *
+ * @package    Somnambulist\Components\Validation\Exceptions
+ * @subpackage Somnambulist\Components\Validation\Exceptions\RuleException
+ */
+class RuleException extends Exception
+{
+    public static function notFound(string $rule): self
+    {
+        return new self(sprintf('Validator "%s" is not registered', $rule));
+    }
+
+    public static function cannotOverrideExistingRule(string $rule): self
+    {
+        return new self(sprintf('A rule named "%s" is already registered and cannot be overridden. Specify a different name for your rule', $rule));
+    }
+
+    public static function invalidRuleType(string $rule): self
+    {
+        return new self(sprintf('Rule must be a string, Closure or "%s" instance; "%s" given', Rule::class, $rule));
+    }
+}
