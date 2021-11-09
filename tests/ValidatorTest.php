@@ -273,7 +273,7 @@ class ValidatorTest extends TestCase
 
     public function testNewValidationRuleCanBeAdded()
     {
-        $this->validator->setValidator('even', new Even());
+        $this->validator->addRuleMapping('even', new Even());
 
         $data = [4, 6, 8, 10 ];
 
@@ -286,7 +286,7 @@ class ValidatorTest extends TestCase
 
     public function testInternalValidationRuleCanBeOverridden()
     {
-        $this->validator->setValidator('required', new Required());
+        $this->validator->addRuleMapping('required', new Required());
 
         $data = ['s' => json_encode(['name' => 'space x', 'human' => false])];
 

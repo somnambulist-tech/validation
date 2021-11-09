@@ -15,18 +15,23 @@ class Factory
     use Traits\TranslationsTrait;
     use Traits\MessagesTrait;
 
-    private array $validators = [];
+    private array $rules = [];
 
     public function __construct(array $messages = [])
     {
         $this->messages = $messages;
 
-        $this->registerBaseValidators();
+        $this->registerDefaultRules();
     }
 
-    protected function registerBaseValidators()
+    public function __invoke(string $rule, ...$args): Rule
     {
-        $baseValidator = [
+        return $this->getRule($rule)->fillParameters($args);
+    }
+
+    protected function registerDefaultRules()
+    {
+        $rules = [
             'required'             => new Rules\Required,
             'required_if'          => new Rules\RequiredIf,
             'required_unless'      => new Rules\RequiredUnless,
@@ -74,17 +79,9 @@ class Factory
             'nullable'             => new Rules\Nullable,
         ];
 
-        foreach ($baseValidator as $key => $validator) {
-            $this->setValidator($key, $validator);
+        foreach ($rules as $key => $rule) {
+            $this->addRuleMapping($key, $rule);
         }
-    }
-
-    public function validate(array $inputs, array $rules, array $messages = []): Validation
-    {
-        $validation = $this->make($inputs, $rules, $messages);
-        $validation->validate();
-
-        return $validation;
     }
 
     public function make(array $inputs, array $rules, array $messages = []): Validation
@@ -96,28 +93,34 @@ class Factory
         return $validation;
     }
 
-    public function __invoke(string $rule, ...$args): Rule
+    public function validate(array $inputs, array $rules, array $messages = []): Validation
     {
-        $validator = $this->getValidator($rule);
+        $validation = $this->make($inputs, $rules, $messages);
+        $validation->validate();
 
-        $clonedValidator = clone $validator;
-        $clonedValidator->fillParameters($args);
-
-        return $clonedValidator;
+        return $validation;
     }
 
-    public function getValidator(string $rule): mixed
+    /**
+     * Returns the Rule instance for the key; this is a cloned instance
+     *
+     * @param string $rule
+     *
+     * @return Rule
+     * @throws RuleException
+     */
+    public function getRule(string $rule): Rule
     {
-        if (null !== $v = $this->validators[$rule] ?? null) {
-            return $v;
+        if (null !== $v = $this->rules[$rule] ?? null) {
+            return clone $v;
         }
 
         throw RuleException::notFound($rule);
     }
 
-    public function setValidator(string $key, Rule $rule): void
+    public function addRuleMapping(string $key, Rule $rule): void
     {
-        $this->validators[$key] = $rule;
+        $this->rules[$key] = $rule;
         $rule->setKey($key);
     }
 }

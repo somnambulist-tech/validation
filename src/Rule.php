@@ -63,6 +63,7 @@ abstract class Rule
             if (empty($params)) {
                 break;
             }
+
             $this->params[$key] = array_shift($params);
         }
 

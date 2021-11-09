@@ -25,12 +25,10 @@ class RequiredIf extends Required
     {
         $this->requireParameters(['field', 'values']);
 
-        $anotherAttribute = $this->parameter('field');
-        $definedValues    = $this->parameter('values');
-        $anotherValue     = $this->getAttribute()->getValue($anotherAttribute);
-
-        $validator         = $this->validation->getFactory();
-        $requiredValidator = $validator('required');
+        $anotherAttribute  = $this->parameter('field');
+        $definedValues     = $this->parameter('values');
+        $anotherValue      = $this->getAttribute()->getValue($anotherAttribute);
+        $requiredValidator = $this->validation->getFactory()->getRule('required');
 
         if (in_array($anotherValue, $definedValues)) {
             $this->setAttributeAsRequired();

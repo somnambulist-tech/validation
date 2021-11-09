@@ -76,9 +76,9 @@ class Attribute
         return $this->rules;
     }
 
-    public function setRequired(bool $required): void
+    public function makeRequired(): void
     {
-        $this->required = $required;
+        $this->required = true;
     }
 
     public function isRequired(): bool
@@ -114,7 +114,7 @@ class Attribute
         $this->keyIndexes = $keyIndexes;
     }
 
-    public function resolveSiblingKey(string $key): string
+    private function resolveSiblingKey(string $key): string
     {
         $indexes        = $this->getKeyIndexes();
         $keys           = explode("*", $key);

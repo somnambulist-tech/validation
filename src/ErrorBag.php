@@ -10,11 +10,8 @@ namespace Somnambulist\Components\Validation;
  */
 class ErrorBag
 {
-    private array $messages;
-
-    public function __construct(array $messages = [])
+    public function __construct(private array $messages = [])
     {
-        $this->messages = $messages;
     }
 
     public function add(string $key, string $rule, string $message): void

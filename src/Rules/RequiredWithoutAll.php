@@ -25,8 +25,7 @@ class RequiredWithoutAll extends Required
         $this->requireParameters(['fields']);
 
         $fields            = $this->parameter('fields');
-        $validator         = $this->validation->getFactory();
-        $requiredValidator = $validator('required');
+        $requiredValidator = $this->validation->getFactory()->getRule('required');
 
         foreach ($fields as $field) {
             if ($this->validation->hasValue($field)) {

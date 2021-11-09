@@ -24,6 +24,6 @@ class Present extends Rule
 
     protected function setAttributeAsRequired()
     {
-        $this->attribute?->setRequired(true);
+        $this->attribute?->makeRequired();
     }
 }

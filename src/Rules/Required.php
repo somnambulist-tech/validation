@@ -37,6 +37,6 @@ class Required extends Rule
 
     protected function setAttributeAsRequired(): void
     {
-        $this->attribute?->setRequired(true);
+        $this->attribute?->makeRequired();
     }
 }

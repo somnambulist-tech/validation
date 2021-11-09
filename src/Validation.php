@@ -30,35 +30,34 @@ class Validation
     use Traits\MessagesTrait;
 
     private ErrorBag $errors;
-    private Factory  $validator;
-    private array    $inputs;
-    private array    $attributes       = [];
-    private array    $aliases          = [];
-    private string   $messageSeparator = ':';
-    private array    $validData        = [];
-    private array    $invalidData      = [];
+    private Factory $factory;
+    private array $inputs;
+    private array $attributes = [];
+    private array $aliases = [];
+    private string $messageSeparator = ':';
+    private array $validData = [];
+    private array $invalidData = [];
 
-    public function __construct(Factory $validator, array $inputs, array $rules, array $messages = []) {
-        $this->validator = $validator;
-        $this->inputs    = $inputs;
-        $this->messages  = $messages;
-        $this->errors    = new ErrorBag;
+    public function __construct(Factory $validator, array $inputs, array $rules, array $messages = [])
+    {
+        $this->factory  = $validator;
+        $this->inputs   = $inputs;
+        $this->messages = $messages;
+        $this->errors   = new ErrorBag;
 
         foreach ($rules as $attributeKey => $rule) {
             $this->addAttribute($attributeKey, $rule);
         }
     }
 
-    public function addAttribute(string $key, $rules): void
+    protected function addAttribute(string $key, $rules): void
     {
         if (str_contains($key, ':')) {
             [$key, $alias] = explode(':', $key);
             $this->aliases[$key] = $alias;
         }
 
-        $resolvedRules          = $this->resolveRules($rules);
-        $attribute              = new Attribute($this, $key, $this->getAlias($key), $resolvedRules);
-        $this->attributes[$key] = $attribute;
+        $this->attributes[$key] = new Attribute($this, $key, $this->getAlias($key), $this->resolveRules($rules));
     }
 
     protected function resolveRules(array|string $rules): array
@@ -68,7 +67,6 @@ class Validation
         }
 
         $resolvedRules = [];
-        $factory       = $this->getFactory();
 
         foreach ($rules as $i => $rule) {
             if (empty($rule)) {
@@ -81,11 +79,11 @@ class Validation
 
             if (is_string($rule)) {
                 [$rulename, $params] = $this->parseRule($rule);
-                $validator = call_user_func_array($factory, array_merge([$rulename], $params));
+                $validator = $this->factory->getRule($rulename)->fillParameters($params);
             } elseif ($rule instanceof Rule) {
                 $validator = $rule;
             } elseif ($rule instanceof Closure) {
-                $validator = call_user_func_array($factory, ['callback', $rule]);
+                $validator = $this->factory->getRule('callback')->fillParameters([$rule]);
             } else {
                 throw RuleException::invalidRuleType(is_object($rule) ? get_class($rule) : gettype($rule));
             }
@@ -98,7 +96,7 @@ class Validation
 
     public function getFactory(): Factory
     {
-        return $this->validator;
+        return $this->factory;
     }
 
     protected function parseRule(string $rule): array
