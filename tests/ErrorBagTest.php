@@ -1,11 +1,16 @@
 <?php declare(strict_types=1);
 
-
 namespace Somnambulist\Components\Validation\Tests;
 
 use Somnambulist\Components\Validation\ErrorBag;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ErrorBagTest
+ *
+ * @package    Somnambulist\Components\Validation\Tests
+ * @subpackage Somnambulist\Components\Validation\Tests\ErrorBagTest
+ */
 class ErrorBagTest extends TestCase
 {
 

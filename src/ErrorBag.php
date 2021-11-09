@@ -32,7 +32,7 @@ class ErrorBag
         $messages = $this->messages;
         $results  = [];
 
-        foreach ($messages as $key => $keyMessages) {
+        foreach ($messages as $keyMessages) {
             foreach ($keyMessages as $message) {
                 $results[] = $this->formatMessage($message, $format);
             }

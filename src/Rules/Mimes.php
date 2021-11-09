@@ -18,14 +18,14 @@ class Mimes extends Rule
 
     protected string $message = "The :attribute file type must be :allowed_types";
 
-    public function fillParameters(array $params): Rule
+    public function fillParameters(array $params): self
     {
         $this->allowTypes($params);
 
         return $this;
     }
 
-    public function allowTypes($types): Rule
+    public function allowTypes($types): self
     {
         if (is_string($types)) {
             $types = explode('|', $types);

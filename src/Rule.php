@@ -43,21 +43,21 @@ abstract class Rule
         return $this->params;
     }
 
-    public function setParameters(array $params): Rule
+    public function setParameters(array $params): self
     {
         $this->params = array_merge($this->params, $params);
 
         return $this;
     }
 
-    public function setParameter(string $key, mixed $value): Rule
+    public function setParameter(string $key, mixed $value): self
     {
         $this->params[$key] = $value;
 
         return $this;
     }
 
-    public function fillParameters(array $params): Rule
+    public function fillParameters(array $params): self
     {
         foreach ($this->fillableParams as $key) {
             if (empty($params)) {
@@ -98,7 +98,7 @@ abstract class Rule
     /**
      * Alias of setMessage
      */
-    public function message(string $message): Rule
+    public function message(string $message): self
     {
         return $this->setMessage($message);
     }
@@ -108,7 +108,7 @@ abstract class Rule
         return $this->message;
     }
 
-    public function setMessage(string $message): Rule
+    public function setMessage(string $message): self
     {
         $this->message = $message;
 

@@ -2,8 +2,6 @@
 
 namespace Somnambulist\Components\Validation\Rules;
 
-use Somnambulist\Components\Validation\Rule;
-
 /**
  * Class RequiredWith
  *
@@ -15,7 +13,7 @@ class RequiredWith extends Required
     protected bool $implicit = true;
     protected string $message = "The :attribute is required";
 
-    public function fillParameters(array $params): Rule
+    public function fillParameters(array $params): self
     {
         $this->params['fields'] = $params;
 
@@ -34,7 +32,7 @@ class RequiredWith extends Required
             if ($this->validation->hasValue($field)) {
                 $this->setAttributeAsRequired();
 
-                return $requiredValidator->check($value, []);
+                return $requiredValidator->check($value);
             }
         }
 

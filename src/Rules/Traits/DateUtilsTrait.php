@@ -2,8 +2,6 @@
 
 namespace Somnambulist\Components\Validation\Rules\Traits;
 
-use Exception;
-
 /**
  * Trait DateUtilsTrait
  *

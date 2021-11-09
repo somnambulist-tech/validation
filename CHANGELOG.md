@@ -5,6 +5,7 @@ Change Log
 ----------
 
  * remove the humanize keys and override checks - not needed
+ * remove unused methods
  * add support for aliases on rules and drop pre-process of input data
  * add support for rules as array of rule -> value as well as [ rule:value ]
  * correct usage of assertEquals in tests

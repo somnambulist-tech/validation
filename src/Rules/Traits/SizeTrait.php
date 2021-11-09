@@ -70,12 +70,12 @@ trait SizeTrait
             throw new InvalidArgumentException("Size must be string or numeric bytes");
         }
 
-        if (!preg_match("/^(?<number>((\d+)?\.)?\d+)(?<format>(B|K|M|G|T|P)B?)?$/i", $size, $match)) {
+        if (!preg_match("/^(?<number>((\d+)?\.)?\d+)(?<format>([BKMGTP])B?)?$/i", $size, $match)) {
             throw new InvalidArgumentException("Size is not valid format, expected number + B, KB, MB, GB, TB, PB");
         }
 
         $number = (float)$match['number'];
-        $format = isset($match['format']) ? $match['format'] : '';
+        $format = $match['format'] ?? '';
 
         return match (strtoupper($format)) {
             "KB", "K" => $number * 1024,

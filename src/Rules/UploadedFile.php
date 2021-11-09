@@ -19,7 +19,7 @@ class UploadedFile extends Rule implements BeforeValidate
 
     protected string $message = "The :attribute is not a valid uploaded file";
 
-    public function fillParameters(array $params): Rule
+    public function fillParameters(array $params): self
     {
         if (count($params) < 3) {
             return $this;
@@ -35,7 +35,7 @@ class UploadedFile extends Rule implements BeforeValidate
     /**
      * Set the minimum filesize
      */
-    public function minSize(int|string $size): Rule
+    public function minSize(int|string $size): self
     {
         $this->params['min_size'] = $size;
 
@@ -45,7 +45,7 @@ class UploadedFile extends Rule implements BeforeValidate
     /**
      * Set the max allowed file size
      */
-    public function maxSize(int|string $size): Rule
+    public function maxSize(int|string $size): self
     {
         $this->params['max_size'] = $size;
 
@@ -55,7 +55,7 @@ class UploadedFile extends Rule implements BeforeValidate
     /**
      * Set the array of allowed types e.g. doc|docx|xls|xlsx
      */
-    public function fileTypes($types): Rule
+    public function fileTypes($types): self
     {
         if (is_string($types)) {
             $types = explode('|', $types);
@@ -69,7 +69,7 @@ class UploadedFile extends Rule implements BeforeValidate
     /**
      * Set the filesize between the min/max
      */
-    public function between(int|string $min, int|string $max): Rule
+    public function between(int|string $min, int|string $max): self
     {
         $this->minSize($min);
         $this->maxSize($max);

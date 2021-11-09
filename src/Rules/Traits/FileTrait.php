@@ -48,7 +48,7 @@ trait FileTrait
         //      'error'     => string|array,
         // ]
 
-        // Flatten $value to it's array dot format,
+        // Flatten $value to an array with dot formatted keys,
         // so our array must be something like:
         // ['name' => string, 'type' => string, 'size' => int, ...]
         // or for multiple values:

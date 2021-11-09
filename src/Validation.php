@@ -148,7 +148,7 @@ class Validation
         if ($this->isArrayAttribute($attribute)) {
             $attributes = $this->parseArrayAttribute($attribute);
 
-            foreach ($attributes as $i => $attr) {
+            foreach ($attributes as $attr) {
                 $this->validateAttribute($attr);
             }
 
@@ -256,7 +256,7 @@ class Validation
             return $data;
         }
 
-        return Helper::arraySet($data, $attributeKey, null, true);
+        return Helper::arraySet($data, $attributeKey, null);
     }
 
     /**

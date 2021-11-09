@@ -14,7 +14,7 @@ class Url extends Rule
 {
     protected string $message = 'The :attribute is not a valid URL';
 
-    public function fillParameters(array $params): Rule
+    public function fillParameters(array $params): self
     {
         if (count($params) == 1 and is_array($params[0])) {
             $params = $params[0];
@@ -23,7 +23,7 @@ class Url extends Rule
         return $this->forScheme(...$params);
     }
 
-    public function forScheme(string ...$scheme): Rule
+    public function forScheme(string ...$scheme): self
     {
         $this->params['schemes'] = (array)$scheme;
 
@@ -53,9 +53,9 @@ class Url extends Rule
     private function validateCommonScheme(string $value, string $scheme = null): bool
     {
         if (!$scheme) {
-            return $this->validateBasic($value) && (bool)preg_match("/^\w+:\/\//i", $value);
+            return $this->validateBasic($value) && preg_match("/^\w+:\/\//i", $value);
         } else {
-            return $this->validateBasic($value) && (bool)preg_match("/^{$scheme}:\/\//", $value);
+            return $this->validateBasic($value) && preg_match("/^{$scheme}:\/\//", $value);
         }
     }
 

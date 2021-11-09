@@ -15,7 +15,7 @@ class Extension extends Rule
 {
     protected string $message = "The :attribute must be a :allowed_extensions file";
 
-    public function fillParameters(array $params): Rule
+    public function fillParameters(array $params): self
     {
         if (count($params) == 1 && is_array($params[0])) {
             $params = $params[0];
@@ -40,6 +40,6 @@ class Extension extends Rule
 
         $ext = strtolower(pathinfo($value, PATHINFO_EXTENSION));
 
-        return ($ext && in_array($ext, $allowedExtensions)) ? true : false;
+        return $ext && in_array($ext, $allowedExtensions);
     }
 }

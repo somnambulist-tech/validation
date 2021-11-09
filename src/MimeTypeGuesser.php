@@ -788,8 +788,8 @@ class MimeTypeGuesser
         return $this->mimeTypes[$mimeType] ?? null;
     }
 
-    public function getMimeType(string $extension): ?string
+    public function getMimeType(string $extension): string
     {
-        return array_search($extension, $this->mimeTypes) ?: null;
+        return array_search($extension, $this->mimeTypes) ?: 'application/octet-stream';
     }
 }

@@ -11,31 +11,6 @@ namespace Somnambulist\Components\Validation;
 class Helper
 {
     /**
-     * Determine if a given string matches a given pattern.
-     * Adapted from: https://github.com/illuminate/support/blob/v5.3.23/Str.php#L119
-     *
-     * @param string $pattern
-     * @param string $value
-     *
-     * @return bool
-     */
-    public static function strIs(string $pattern, string $value): bool
-    {
-        if ($pattern == $value) {
-            return true;
-        }
-
-        $pattern = preg_quote($pattern, '#');
-
-        // Asterisks are translated into zero-or-more regular expression wildcards
-        // to make it convenient to check if the strings starts with the given
-        // pattern such as "library/*", making any string check convenient.
-        $pattern = str_replace('\*', '.*', $pattern);
-
-        return (bool)preg_match('#^' . $pattern . '\z#u', $value);
-    }
-
-    /**
      * Check if an item or items exist in an array using "dot" notation.
      * Adapted from: https://github.com/illuminate/support/blob/v5.3.23/Arr.php#L81
      *
@@ -71,7 +46,7 @@ class Helper
      *
      * @return mixed
      */
-    public static function arrayGet(array $array, $key, $default = null)
+    public static function arrayGet(array $array, mixed $key, mixed $default = null): mixed
     {
         if (is_null($key)) {
             return $array;
@@ -127,7 +102,7 @@ class Helper
      *
      * @return mixed
      */
-    public static function arraySet(&$target, $key, $value, $overwrite = true): array
+    public static function arraySet(mixed &$target, mixed $key, mixed $value, bool $overwrite = true): array
     {
         if (is_null($key)) {
             if ($overwrite) {
@@ -184,7 +159,7 @@ class Helper
      *
      * @return mixed
      */
-    public static function arrayUnset(&$target, $key)
+    public static function arrayUnset(mixed &$target, string|array $key): mixed
     {
         if (!is_array($target)) {
             return $target;
@@ -207,24 +182,6 @@ class Helper
     }
 
     /**
-     * Get snake_case format from given string
-     *
-     * @param string $value
-     * @param string $delimiter
-     *
-     * @return string
-     */
-    public static function snakeCase(string $value, string $delimiter = '_'): string
-    {
-        if (!ctype_lower($value)) {
-            $value = preg_replace('/\s+/u', '', ucwords($value));
-            $value = strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $value));
-        }
-
-        return $value;
-    }
-
-    /**
      * Join string[] to string with given $separator and $lastSeparator.
      *
      * @param array       $pieces
@@ -241,14 +198,11 @@ class Helper
 
         $last = array_pop($pieces);
 
-        switch (count($pieces)) {
-            case 0:
-                return (string) $last ?: '';
-            case 1:
-                return $pieces[0] . $lastSeparator . $last;
-            default:
-                return implode($separator, $pieces) . $lastSeparator . $last;
-        }
+        return match (count($pieces)) {
+            0 => (string)$last ?: '',
+            1 => $pieces[0] . $lastSeparator . $last,
+            default => implode($separator, $pieces) . $lastSeparator . $last,
+        };
     }
 
     /**

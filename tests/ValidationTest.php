@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-
 namespace Somnambulist\Components\Validation\Tests;
 
 use Somnambulist\Components\Validation\Validation;
@@ -8,6 +7,12 @@ use Somnambulist\Components\Validation\Factory;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
+/**
+ * Class ValidationTest
+ *
+ * @package    Somnambulist\Components\Validation\Tests
+ * @subpackage Somnambulist\Components\Validation\Tests\ValidationTest
+ */
 class ValidationTest extends TestCase
 {
     /**

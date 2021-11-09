@@ -17,7 +17,7 @@ class Callback extends Rule
     protected string $message = "The :attribute is not valid";
     protected array $fillableParams = ['callback'];
 
-    public function setCallback(Closure $callback): Rule
+    public function setCallback(Closure $callback): self
     {
         return $this->setParameter('callback', $callback);
     }
