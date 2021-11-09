@@ -28,10 +28,7 @@ class ValidationTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
-    /**
-     * @return array
-     */
-    public function parseRuleProvider()
+    public function parseRuleProvider(): array
     {
         return [
             [

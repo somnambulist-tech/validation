@@ -9,10 +9,12 @@ use Somnambulist\Components\Validation\Rules\Interfaces\ModifyValue;
 use Somnambulist\Components\Validation\Rules\Required;
 use function array_merge;
 use function call_user_func_array;
+use function explode;
 use function get_class;
 use function gettype;
 use function is_numeric;
 use function is_object;
+use function is_scalar;
 use function is_string;
 use function str_contains;
 
@@ -38,7 +40,7 @@ class Validation
 
     public function __construct(Factory $validator, array $inputs, array $rules, array $messages = []) {
         $this->validator = $validator;
-        $this->inputs    = $this->resolveInputAttributes($inputs);
+        $this->inputs    = $inputs;
         $this->messages  = $messages;
         $this->errors    = new ErrorBag;
 
@@ -47,25 +49,13 @@ class Validation
         }
     }
 
-    protected function resolveInputAttributes(array $inputs): array
-    {
-        $resolvedInputs = [];
-
-        foreach ($inputs as $key => $rules) {
-            $exp = explode(':', (string)$key);
-
-            if (count($exp) > 1) {
-                $this->aliases[$exp[0]] = $exp[1];
-            }
-
-            $resolvedInputs[$exp[0]] = $rules;
-        }
-
-        return $resolvedInputs;
-    }
-
     public function addAttribute(string $key, $rules): void
     {
+        if (str_contains($key, ':')) {
+            [$key, $alias] = explode(':', $key);
+            $this->aliases[$key] = $alias;
+        }
+
         $resolvedRules          = $this->resolveRules($rules);
         $attribute              = new Attribute($this, $key, $this->getAlias($key), $resolvedRules);
         $this->attributes[$key] = $attribute;
@@ -85,8 +75,12 @@ class Validation
                 continue;
             }
 
+            if (is_string($i) && is_scalar($rule)) {
+                $rule = sprintf('%s:%s', $i, $rule);
+            }
+
             if (is_string($rule)) {
-                [$rulename, $params] = $this->parseRule((is_numeric($i) ? $rule : $i . ':' . $rule));
+                [$rulename, $params] = $this->parseRule($rule);
                 $validator = call_user_func_array($factory, array_merge([$rulename], $params));
             } elseif ($rule instanceof Rule) {
                 $validator = $rule;
@@ -134,9 +128,9 @@ class Validation
     public function validate(array $inputs = []): void
     {
         $this->errors = new ErrorBag;
-        $this->inputs = array_merge($this->inputs, $this->resolveInputAttributes($inputs));
+        $this->inputs = array_merge($this->inputs, $inputs);
 
-        foreach ($this->attributes as $attributeKey => $attribute) {
+        foreach ($this->attributes as $attribute) {
             foreach ($attribute->getRules() as $rule) {
                 if ($rule instanceof BeforeValidate) {
                     $rule->beforeValidate();
@@ -144,7 +138,7 @@ class Validation
             }
         }
 
-        foreach ($this->attributes as $attributeKey => $attribute) {
+        foreach ($this->attributes as $attribute) {
             $this->validateAttribute($attribute);
         }
     }
@@ -415,8 +409,6 @@ class Validation
             return $this->aliases[$attribute->getKey()];
         } elseif ($primaryAttribute and isset($this->aliases[$primaryAttribute->getKey()])) {
             return $this->aliases[$primaryAttribute->getKey()];
-        } elseif ($this->validator->isUsingHumanizedKey()) {
-            return $attribute->getHumanizedKey();
         } else {
             return $attribute->getKey();
         }

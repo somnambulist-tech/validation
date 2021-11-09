@@ -6,8 +6,8 @@ namespace Somnambulist\Components\Validation\Tests;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
-use Somnambulist\Components\Validation\Rules\UploadedFile;
 use Somnambulist\Components\Validation\Factory;
+use Somnambulist\Components\Validation\Rules\UploadedFile;
 use Somnambulist\Components\Validation\Tests\Fixtures\Even;
 use Somnambulist\Components\Validation\Tests\Fixtures\Required;
 
@@ -614,7 +614,7 @@ class ValidatorTest extends TestCase
 
     public function testNewValidationRuleCanBeAdded()
     {
-        $this->validator->addValidator('even', new Even());
+        $this->validator->setValidator('even', new Even());
 
         $data = [4, 6, 8, 10 ];
 
@@ -625,24 +625,9 @@ class ValidatorTest extends TestCase
         $this->assertTrue($validation->passes());
     }
 
-    public function testInternalValidationRuleCannotBeOverridden()
-    {
-        $this->expectException(RuleException::class);
-
-        $this->validator->addValidator('required', new Required());
-
-        $data = ['s' => json_encode(['name' => 'space x', 'human' => false])];
-
-        $validation = $this->validator->make($data, ['s' => 'required'], []);
-
-        $validation->validate();
-    }
-
     public function testInternalValidationRuleCanBeOverridden()
     {
-        $this->validator->allowRuleOverride(true);
-
-        $this->validator->addValidator('required', new Required());
+        $this->validator->setValidator('required', new Required());
 
         $data = ['s' => json_encode(['name' => 'space x', 'human' => false])];
 
@@ -666,7 +651,7 @@ class ValidatorTest extends TestCase
 
         $errors = $validation->errors();
 
-        $this->assertEquals($errors->count(), 4);
+        $this->assertEquals(4, $errors->count());
 
         $this->assertNotNull($errors->first('required_field:required'));
         $this->assertNull($errors->first('required_field:numeric'));
@@ -695,7 +680,7 @@ class ValidatorTest extends TestCase
 
         $errors = $validation->errors();
 
-        $this->assertEquals($errors->count(), 1);
+        $this->assertEquals(1, $errors->count());
 
         $this->assertNull($errors->first('must_present_field:present'));
         $this->assertNotNull($errors->first('must_present_field:array'));
@@ -739,7 +724,7 @@ class ValidatorTest extends TestCase
             'required_if_field' => 'required_if:some_value,1|email'
         ]);
 
-        $this->assertEquals($validation->errors()->count(), 4);
+        $this->assertEquals(4, $validation->errors()->count());
     }
 
     public function testDontIgnoreOtherRulesWhenAttributeIsRequired()
@@ -755,7 +740,7 @@ class ValidatorTest extends TestCase
 
         $errors = $validation->errors();
 
-        $this->assertEquals($errors->count(), 3);
+        $this->assertEquals(3, $errors->count());
         $this->assertNotNull($errors->first('optional_field:ipv4'));
         $this->assertNotNull($errors->first('optional_field:in'));
         $this->assertNotNull($errors->first('required_if_field:email'));
@@ -798,7 +783,7 @@ class ValidatorTest extends TestCase
         ]);
 
         $errors = $validation->errors();
-        $this->assertEquals(implode(',', $errors->all()), '1,2,3,4,5,6,7,8,9,10');
+        $this->assertEquals('1,2,3,4,5,6,7,8,9,10', implode(',', $errors->all()));
     }
 
     public function testArrayAssocValidation()
@@ -817,7 +802,7 @@ class ValidatorTest extends TestCase
 
         $errors = $validation->errors();
 
-        $this->assertEquals($errors->count(), 2);
+        $this->assertEquals(2, $errors->count());
 
         $this->assertNotNull($errors->first('user.email:email'));
         $this->assertNotNull($errors->first('user.age:min'));
@@ -916,12 +901,40 @@ class ValidatorTest extends TestCase
 
         $errors = $validation->errors();
 
-        $this->assertEquals($errors->count(), 4);
+        $this->assertEquals(4, $errors->count());
 
         $this->assertNotNull($errors->first('cart_items.1.id_product:required'));
         $this->assertNotNull($errors->first('cart_items.2.qty:required'));
         $this->assertNotNull($errors->first('cart_items.3.qty:numeric'));
         $this->assertNotNull($errors->first('cart_items.4.id_product:numeric'));
+    }
+
+    public function testArrayValidationWithAliases()
+    {
+        $validation = $this->validator->validate([
+            'cart_items' => [
+                ['id_product' => 1, 'qty' => 10],
+                ['id_product' => null, 'qty' => 10],
+                ['id_product' => 3, 'qty' => null],
+                ['id_product' => 4, 'qty' => 'foo'],
+                ['id_product' => 'foo', 'qty' => 10],
+            ]
+        ], [
+            'cart_items.*.id_product:Product ID' => 'required|numeric',
+            'cart_items.*.qty:Quantity' => 'required|numeric'
+        ]);
+
+        $errors = $validation->errors();
+
+        $this->assertEquals(4, $errors->count());
+
+        $this->assertNotNull($errors->first('cart_items.1.id_product:required'));
+        $this->assertNotNull($errors->first('cart_items.2.qty:required'));
+        $this->assertNotNull($errors->first('cart_items.3.qty:numeric'));
+        $this->assertNotNull($errors->first('cart_items.4.id_product:numeric'));
+
+        $this->assertEquals('The Product ID is required', $errors->all()[0]);
+        $this->assertEquals('The Product ID must be numeric', $errors->all()[1]);
     }
 
     public function testSetCustomMessagesInValidator()
@@ -950,10 +963,10 @@ class ValidatorTest extends TestCase
         ]);
 
         $errors = $validation->errors();
-        $this->assertEquals($errors->first('foo:required'), 'foo');
-        $this->assertEquals($errors->first('email:email'), 'bar');
-        $this->assertEquals($errors->first('something:numeric'), 'baz');
-        $this->assertEquals($errors->first('comments.0.text:required'), 'baz');
+        $this->assertEquals('foo', $errors->first('foo:required'));
+        $this->assertEquals('bar', $errors->first('email:email'));
+        $this->assertEquals('baz', $errors->first('something:numeric'));
+        $this->assertEquals('baz', $errors->first('comments.0.text:required'));
     }
 
     public function testSetCustomMessagesInValidation()
@@ -984,10 +997,10 @@ class ValidatorTest extends TestCase
         $validation->validate();
 
         $errors = $validation->errors();
-        $this->assertEquals($errors->first('foo:required'), 'foo');
-        $this->assertEquals($errors->first('email:email'), 'bar');
-        $this->assertEquals($errors->first('something:numeric'), 'baz');
-        $this->assertEquals($errors->first('comments.0.text:required'), 'baz');
+        $this->assertEquals('foo', $errors->first('foo:required'));
+        $this->assertEquals('bar', $errors->first('email:email'));
+        $this->assertEquals('baz', $errors->first('something:numeric'));
+        $this->assertEquals('baz', $errors->first('comments.0.text:required'));
     }
 
     public function testCustomMessageInCallbackRule()
@@ -1008,7 +1021,7 @@ class ValidatorTest extends TestCase
         $validation->validate();
 
         $errors = $validation->errors();
-        $this->assertEquals($errors->first('foo:callback'), "Foo must be even number");
+        $this->assertEquals("foo must be even number", $errors->first('foo:callback'));
     }
 
     public function testSpecificRuleMessage()
@@ -1028,9 +1041,9 @@ class ValidatorTest extends TestCase
         $validation->validate();
 
         $errors = $validation->errors();
-        $this->assertEquals($errors->first('something:email'), 'foo');
-        $this->assertEquals($errors->first('something:numeric'), 'bar');
-        $this->assertEquals($errors->first('something:max'), 'baz');
+        $this->assertEquals('foo', $errors->first('something:email'));
+        $this->assertEquals('bar', $errors->first('something:numeric'));
+        $this->assertEquals('baz', $errors->first('something:max'));
     }
 
     public function testSetAttributeAliases()
@@ -1068,10 +1081,10 @@ class ValidatorTest extends TestCase
         $validation->validate();
 
         $errors = $validation->errors();
-        $this->assertEquals($errors->first('foo:required'), 'Foo foo');
-        $this->assertEquals($errors->first('email:email'), 'Bar bar');
-        $this->assertEquals($errors->first('something:numeric'), 'Baz baz');
-        $this->assertEquals($errors->first('comments.0.text:required'), 'Qux qux');
+        $this->assertEquals('Foo foo', $errors->first('foo:required'));
+        $this->assertEquals('Bar bar', $errors->first('email:email'));
+        $this->assertEquals('Baz baz', $errors->first('something:numeric'));
+        $this->assertEquals('Qux qux', $errors->first('comments.0.text:required'));
     }
 
     public function testUsingDefaults()
@@ -1094,24 +1107,24 @@ class ValidatorTest extends TestCase
 
         // Getting (all) validated data
         $validatedData = $validation->getValidatedData();
-        $this->assertEquals($validatedData, [
+        $this->assertEquals([
             'is_active' => '0',
             'is_enabled' => '1',
             'is_published' => 'invalid-value'
-        ]);
+        ], $validatedData);
 
         // Getting only valid data
         $validData = $validation->getValidData();
-        $this->assertEquals($validData, [
+        $this->assertEquals([
             'is_active' => '0',
             'is_enabled' => '1'
-        ]);
+        ], $validData);
 
         // Getting only invalid data
         $invalidData = $validation->getInvalidData();
-        $this->assertEquals($invalidData, [
+        $this->assertEquals([
             'is_published' => 'invalid-value',
-        ]);
+        ], $invalidData);
     }
 
     public function testHumanizedKeyInArrayValidation()
@@ -1129,8 +1142,8 @@ class ValidatorTest extends TestCase
 
         $errors = $validation->errors();
 
-        $this->assertEquals($errors->first('cart.*.qty'), 'The Cart 1 qty must be numeric');
-        $this->assertEquals($errors->first('cart.*.itemName'), 'The Cart 1 item name is required');
+        $this->assertEquals('The cart.0.qty must be numeric', $errors->first('cart.*.qty'));
+        $this->assertEquals('The cart.0.itemName is required', $errors->first('cart.*.itemName'));
     }
 
     public function testCustomMessageInArrayValidation()
@@ -1167,9 +1180,9 @@ class ValidatorTest extends TestCase
 
         $errors = $validation->errors();
 
-        $this->assertEquals($errors->first('cart.*.qty'), 'Item 1 qty is not a number');
-        $this->assertEquals($errors->first('cart.*.itemName'), 'Item 1 name is required');
-        $this->assertEquals($errors->first('cart.*.attributes.*.value'), 'Item 2 attribute 1 value is required');
+        $this->assertEquals('Item 1 qty is not a number', $errors->first('cart.*.qty'));
+        $this->assertEquals('Item 1 name is required', $errors->first('cart.*.itemName'));
+        $this->assertEquals('Item 2 attribute 1 value is required', $errors->first('cart.*.attributes.*.value'));
     }
 
     public function testRequiredIfOnArrayAttribute()
@@ -1382,7 +1395,7 @@ class ValidatorTest extends TestCase
             'number' => 'in:7,8,9',
         ]);
 
-        $this->assertEquals($validation->errors()->first('number'), "The Number must be one of '7', '8', or '9'");
+        $this->assertEquals("The number must be one of '7', '8', or '9'", $validation->errors()->first('number'));
 
         // Using translation
         $this->validator->setTranslation('or', 'atau');
@@ -1393,7 +1406,7 @@ class ValidatorTest extends TestCase
             'number' => 'in:7,8,9',
         ]);
 
-        $this->assertEquals($validation->errors()->first('number'), "The Number must be one of '7', '8', atau '9'");
+        $this->assertEquals("The number must be one of '7', '8', atau '9'", $validation->errors()->first('number'));
     }
 
     public function testRuleNotInInvalidMessages()
@@ -1404,7 +1417,7 @@ class ValidatorTest extends TestCase
             'number' => 'not_in:1,2,3',
         ]);
 
-        $this->assertEquals($validation->errors()->first('number'), "The Number does not allow the following values '1', '2', and '3'");
+        $this->assertEquals("The number does not allow the following values '1', '2', and '3'", $validation->errors()->first('number'));
 
         // Using translation
         $this->validator->setTranslation('and', 'dan');
@@ -1415,7 +1428,7 @@ class ValidatorTest extends TestCase
             'number' => 'not_in:1,2,3',
         ]);
 
-        $this->assertEquals($validation->errors()->first('number'), "The Number does not allow the following values '1', '2', dan '3'");
+        $this->assertEquals("The number does not allow the following values '1', '2', dan '3'", $validation->errors()->first('number'));
     }
 
     public function testRuleMimesInvalidMessages()
@@ -1434,7 +1447,7 @@ class ValidatorTest extends TestCase
             'sample' => 'mimes:jpeg,png,bmp',
         ]);
 
-        $expectedMessage = "The Sample file type must be 'jpeg', 'png', or 'bmp'";
+        $expectedMessage = "The sample file type must be 'jpeg', 'png', or 'bmp'";
         $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
 
         // Using translation
@@ -1446,7 +1459,7 @@ class ValidatorTest extends TestCase
             'sample' => 'mimes:jpeg,png,bmp',
         ]);
 
-        $expectedMessage = "The Sample file type must be 'jpeg', 'png', atau 'bmp'";
+        $expectedMessage = "The sample file type must be 'jpeg', 'png', atau 'bmp'";
         $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
     }
 
@@ -1469,7 +1482,7 @@ class ValidatorTest extends TestCase
             'sample' => 'uploaded_file',
         ]);
 
-        $expectedMessage = "The Sample is not a valid uploaded file";
+        $expectedMessage = "The sample is not a valid uploaded file";
         $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
 
         // Invalid min size
@@ -1479,7 +1492,7 @@ class ValidatorTest extends TestCase
             'sample' => [(clone $rule)->minSize('3M')],
         ]);
 
-        $expectedMessage = "The Sample file is too small, minimum size is 3M";
+        $expectedMessage = "The sample file is too small, minimum size is 3M";
         $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
 
         // Invalid max size
@@ -1489,7 +1502,7 @@ class ValidatorTest extends TestCase
             'sample' => [(clone $rule)->maxSize('1M')],
         ]);
 
-        $expectedMessage = "The Sample file is too large, maximum size is 1M";
+        $expectedMessage = "The sample file is too large, maximum size is 1M";
         $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
 
         // Invalid file types
@@ -1499,7 +1512,7 @@ class ValidatorTest extends TestCase
             'sample' => [(clone $rule)->fileTypes(['jpeg', 'png', 'bmp'])],
         ]);
 
-        $expectedMessage = "The Sample file type must be 'jpeg', 'png', or 'bmp'";
+        $expectedMessage = "The sample file type must be 'jpeg', 'png', or 'bmp'";
         $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
 
         // Invalid file types with translation
@@ -1510,7 +1523,7 @@ class ValidatorTest extends TestCase
             'sample' => [(clone $rule)->fileTypes(['jpeg', 'png', 'bmp'])],
         ]);
 
-        $expectedMessage = "The Sample file type must be 'jpeg', 'png', atau 'bmp'";
+        $expectedMessage = "The sample file type must be 'jpeg', 'png', atau 'bmp'";
         $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
     }
 
@@ -1571,6 +1584,17 @@ class ValidatorTest extends TestCase
             'number' => '1.2345'
         ], [
             'number' => 'numeric|max:2',
+        ]);
+
+        $this->assertTrue($validation->passes());
+    }
+
+    public function testArrayOfRules()
+    {
+        $validation = $this->validator->validate([
+            'number' => '1.2345'
+        ], [
+            'number' => ['numeric', 'max' => 2],
         ]);
 
         $this->assertTrue($validation->passes());

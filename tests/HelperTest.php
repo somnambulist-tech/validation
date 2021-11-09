@@ -50,7 +50,7 @@ class HelperTest extends TestCase
         $this->assertEquals(Helper::arrayGet($array, 'foo'), $array['foo']);
         $this->assertEquals(Helper::arrayGet($array, 'foo.bar'), $array['foo']['bar']);
         $this->assertEquals(Helper::arrayGet($array, 'foo.bar.baz'), $array['foo']['bar']['baz']);
-        $this->assertEquals(Helper::arrayGet($array, 'one.two.three'), 123);
+        $this->assertEquals(123, Helper::arrayGet($array, 'one.two.three'));
 
         $this->assertNull(Helper::arrayGet($array, 'foo.bar.baz.qux'));
         $this->assertNull(Helper::arrayGet($array, 'one.two'));
@@ -73,7 +73,7 @@ class HelperTest extends TestCase
             'one.two.three' => 789
         ];
 
-        $this->assertEquals(Helper::arrayDot($array), [
+        $this->assertEquals([
             'foo.bar.baz' => 123,
             'foo.bar.qux' => 456,
             'comments.0.id' => 1,
@@ -83,7 +83,7 @@ class HelperTest extends TestCase
             'comments.2.id' => 3,
             'comments.2.text' => 'baz',
             'one.two.three' => 789
-        ]);
+        ], Helper::arrayDot($array));
     }
 
     public function testArraySet()
@@ -99,13 +99,13 @@ class HelperTest extends TestCase
         Helper::arraySet($array, 'comments.*.id', null, false);
         Helper::arraySet($array, 'comments.*.x.y', 1, false);
 
-        $this->assertEquals($array, [
+        $this->assertEquals([
             'comments' => [
                 ['id' => null, 'text' => 'foo', 'x' => ['y' => 1]],
                 ['id' => 2, 'text' => 'bar', 'x' => ['y' => 1]],
                 ['id' => 3, 'text' => 'baz', 'x' => ['y' => 1]],
             ]
-        ]);
+        ], $array);
     }
 
     public function testArrayUnset()
@@ -120,22 +120,22 @@ class HelperTest extends TestCase
         ];
 
         Helper::arrayUnset($array, 'users.one');
-        $this->assertEquals($array, [
+        $this->assertEquals([
             'users' => [
                 'two' => 'user_two',
             ],
             'stuffs' => [1, 'two', ['three'], null, false, true],
             'message' => "lorem ipsum",
-        ]);
+        ], $array);
 
         Helper::arrayUnset($array, 'stuffs.*');
-        $this->assertEquals($array, [
+        $this->assertEquals([
             'users' => [
                 'two' => 'user_two',
             ],
             'stuffs' => [],
             'message' => "lorem ipsum",
-        ]);
+        ], $array);
     }
 
     public function testJoin()
@@ -148,17 +148,17 @@ class HelperTest extends TestCase
         $separator = ', ';
         $lastSeparator = ', and ';
 
-        $this->assertEquals(Helper::join($pieces0, $separator, $lastSeparator), '');
-        $this->assertEquals(Helper::join($pieces1, $separator, $lastSeparator), '1');
-        $this->assertEquals(Helper::join($pieces2, $separator, $lastSeparator), '1, and 2');
-        $this->assertEquals(Helper::join($pieces3, $separator, $lastSeparator), '1, 2, and 3');
+        $this->assertEquals('', Helper::join($pieces0, $separator, $lastSeparator));
+        $this->assertEquals('1', Helper::join($pieces1, $separator, $lastSeparator));
+        $this->assertEquals('1, and 2', Helper::join($pieces2, $separator, $lastSeparator));
+        $this->assertEquals('1, 2, and 3', Helper::join($pieces3, $separator, $lastSeparator));
     }
 
     public function testWraps()
     {
         $inputs = [1, 2, 3];
 
-        $this->assertEquals(Helper::wraps($inputs, '-'), ['-1-', '-2-', '-3-']);
-        $this->assertEquals(Helper::wraps($inputs, '-', '+'), ['-1+', '-2+', '-3+']);
+        $this->assertEquals(['-1-', '-2-', '-3-'], Helper::wraps($inputs, '-'));
+        $this->assertEquals(['-1+', '-2+', '-3+'], Helper::wraps($inputs, '-', '+'));
     }
 }

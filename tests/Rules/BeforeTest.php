@@ -82,9 +82,6 @@ class BeforeTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testUserProvidedParamCannotBeValidatedBecauseItIsInvalid()
     {
         $this->expectException(ParameterException::class);

@@ -16,8 +16,6 @@ class Factory
     use Traits\MessagesTrait;
 
     private array $validators = [];
-    private bool $allowRuleOverride = false;
-    private bool $useHumanizedKeys = true;
 
     public function __construct(array $messages = [])
     {
@@ -81,12 +79,6 @@ class Factory
         }
     }
 
-    private function setValidator(string $key, Rule $rule): void
-    {
-        $this->validators[$key] = $rule;
-        $rule->setKey($key);
-    }
-
     public function validate(array $inputs, array $rules, array $messages = []): Validation
     {
         $validation = $this->make($inputs, $rules, $messages);
@@ -123,33 +115,9 @@ class Factory
         throw RuleException::notFound($rule);
     }
 
-    public function addValidator(string $ruleName, Rule $rule): void
+    public function setValidator(string $key, Rule $rule): void
     {
-        if (!$this->allowRuleOverride && array_key_exists($ruleName, $this->validators)) {
-            throw RuleException::cannotOverrideExistingRule($ruleName);
-        }
-
-        $this->setValidator($ruleName, $rule);
-    }
-
-    /**
-     * Allow already defined rules to be overridden or not
-     */
-    public function allowRuleOverride(bool $status = false): void
-    {
-        $this->allowRuleOverride = $status;
-    }
-
-    /**
-     * Toggle whether to use humanised rule names or not e.g. required_if => Required if
-     */
-    public function useHumanizedKeys(bool $useHumanizedKeys = true): void
-    {
-        $this->useHumanizedKeys = $useHumanizedKeys;
-    }
-
-    public function isUsingHumanizedKey(): bool
-    {
-        return $this->useHumanizedKeys;
+        $this->validators[$key] = $rule;
+        $rule->setKey($key);
     }
 }

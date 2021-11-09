@@ -38,6 +38,7 @@ class Attribute
     {
         $rule->setAttribute($this);
         $rule->setValidation($this->validation);
+
         $this->rules[$rule->getKey()] = $rule;
     }
 
@@ -49,6 +50,7 @@ class Attribute
     public function setOtherAttributes(array $otherAttributes): void
     {
         $this->otherAttributes = [];
+
         foreach ($otherAttributes as $otherAttribute) {
             $this->addOtherAttribute($otherAttribute);
         }
@@ -137,26 +139,6 @@ class Attribute
         return str_contains($this->getKey(), '.');
     }
 
-    public function getHumanizedKey(): string
-    {
-        $primaryAttribute = $this->getPrimaryAttribute();
-        $key              = str_replace('_', ' ', $this->key);
-
-        // Resolve key from array validation
-        if ($primaryAttribute) {
-            $split = explode('.', $key);
-            $key   = implode(' ', array_map(function ($word) {
-                if (is_numeric($word)) {
-                    $word = $word + 1;
-                }
-
-                return Helper::snakeCase((string)$word, ' ');
-            }, $split));
-        }
-
-        return ucfirst($key);
-    }
-
     public function getPrimaryAttribute(): ?Attribute
     {
         return $this->primaryAttribute;
@@ -170,10 +152,5 @@ class Attribute
     public function getAlias(): ?string
     {
         return $this->alias;
-    }
-
-    public function setAlias(string $alias): void
-    {
-        $this->alias = $alias;
     }
 }
