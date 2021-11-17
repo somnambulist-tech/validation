@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\Components\Validation\Traits;
+namespace Somnambulist\Components\Validation\Behaviours;
 
 /**
  * Trait MessagesTrait
  *
- * @package    Somnambulist\Components\Validation\Traits
- * @subpackage Somnambulist\Components\Validation\Traits\MessagesTrait
+ * @package    Somnambulist\Components\Validation\Behaviours
+ * @subpackage Somnambulist\Components\Validation\Behaviours\MessagesTrait
  */
 trait MessagesTrait
 {

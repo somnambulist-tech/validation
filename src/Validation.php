@@ -3,12 +3,13 @@
 namespace Somnambulist\Components\Validation;
 
 use Closure;
+use Somnambulist\Components\Validation\Behaviours\MessagesTrait;
+use Somnambulist\Components\Validation\Behaviours\TranslationsTrait;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
-use Somnambulist\Components\Validation\Rules\Interfaces\BeforeValidate;
-use Somnambulist\Components\Validation\Rules\Interfaces\ModifyValue;
+use Somnambulist\Components\Validation\Rules\Contracts\BeforeValidate;
+use Somnambulist\Components\Validation\Rules\Contracts\ModifyValue;
 use Somnambulist\Components\Validation\Rules\Required;
 use function array_merge;
-use function call_user_func_array;
 use function explode;
 use function get_class;
 use function gettype;
@@ -17,6 +18,7 @@ use function is_object;
 use function is_scalar;
 use function is_string;
 use function str_contains;
+use function str_getcsv;
 
 /**
  * Class Validation
@@ -26,8 +28,8 @@ use function str_contains;
  */
 class Validation
 {
-    use Traits\TranslationsTrait;
-    use Traits\MessagesTrait;
+    use TranslationsTrait;
+    use MessagesTrait;
 
     private ErrorBag $errors;
     private Factory $factory;
@@ -104,10 +106,10 @@ class Validation
         $exp      = explode(':', $rule, 2);
         $ruleName = $exp[0];
 
-        if ($ruleName !== 'regex') {
-            $params = isset($exp[1]) ? explode(',', $exp[1]) : [];
-        } else {
+        if (in_array($ruleName, ['matches', 'regex'])) {
             $params = [$exp[1]];
+        } else {
+            $params = isset($exp[1]) ? str_getcsv($exp[1]) : [];
         }
 
         return [$ruleName, $params];
@@ -338,7 +340,7 @@ class Validation
 
     protected function addError(Attribute $attribute, $value, Rule $ruleValidator): void
     {
-        $ruleName = $ruleValidator->getKey();
+        $ruleName = $ruleValidator->getName();
         $message  = $this->resolveMessage($attribute, $value, $ruleValidator);
 
         $this->errors->add($attribute->getKey(), $ruleName, $message);
@@ -349,7 +351,7 @@ class Validation
         $primaryAttribute = $attribute->getPrimaryAttribute();
         $params           = array_merge($validator->getParameters(), $validator->getParametersTexts());
         $attributeKey     = $attribute->getKey();
-        $ruleKey          = $validator->getKey();
+        $ruleKey          = $validator->getName();
         $alias            = $attribute->getAlias() ?: $this->resolveAttributeName($attribute);
         $message          = $validator->getMessage();
         $messageKeys      = [
@@ -445,7 +447,7 @@ class Validation
 
     public function passes(): bool
     {
-        return $this->errors->count() == 0;
+        return $this->errors->count() === 0;
     }
 
     /**

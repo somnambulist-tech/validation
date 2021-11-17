@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
+use Somnambulist\Components\Validation\Rules\Behaviours\CanValidateFiles;
 
 /**
  * Class Required
@@ -12,7 +13,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Required extends Rule
 {
-    use Traits\FileTrait;
+    use CanValidateFiles;
 
     protected bool $implicit = true;
     protected string $message = "The :attribute is required";

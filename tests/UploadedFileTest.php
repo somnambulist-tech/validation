@@ -127,7 +127,7 @@ class UploadedFileTest extends TestCase
             ]
         ];
 
-        $uploadedFileRule = $this->getMockedUploadedFileRule()->fileTypes('jpeg');
+        $uploadedFileRule = $this->getMockedUploadedFileRule()->types('jpeg');
 
         $validation = $this->validator->validate($sampleInputFiles, [
             'photos.*' => ['required', $uploadedFileRule]
@@ -188,7 +188,7 @@ class UploadedFileTest extends TestCase
             ]
         ];
 
-        $uploadedFileRule = $this->getMockedUploadedFileRule()->fileTypes('jpeg');
+        $uploadedFileRule = $this->getMockedUploadedFileRule()->types('jpeg');
 
         $validation = $this->validator->validate($sampleInputFiles, [
             'photos.foo' => ['required', clone $uploadedFileRule],
@@ -292,7 +292,7 @@ class UploadedFileTest extends TestCase
             ]
         ];
 
-        $uploadedFileRule = $this->getMockedUploadedFileRule()->fileTypes('jpeg');
+        $uploadedFileRule = $this->getMockedUploadedFileRule()->types('jpeg');
 
         $validation = $this->validator->validate($sampleInputFiles, [
             'files.foo.bar.baz' => ['required', clone $uploadedFileRule],
@@ -440,7 +440,7 @@ class UploadedFileTest extends TestCase
         $validation = $this->validator->validate([
             'sample' => $file,
         ], [
-            'sample' => [(clone $rule)->fileTypes(['jpeg', 'png', 'bmp'])],
+            'sample' => [(clone $rule)->types(['jpeg', 'png', 'bmp'])],
         ]);
 
         $expectedMessage = "The sample file type must be 'jpeg', 'png', or 'bmp'";
@@ -451,7 +451,7 @@ class UploadedFileTest extends TestCase
         $validation = $this->validator->validate([
             'sample' => $file,
         ], [
-            'sample' => [(clone $rule)->fileTypes(['jpeg', 'png', 'bmp'])],
+            'sample' => [(clone $rule)->types(['jpeg', 'png', 'bmp'])],
         ]);
 
         $expectedMessage = "The sample file type must be 'jpeg', 'png', atau 'bmp'";

@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
+use Somnambulist\Components\Validation\Rules\Behaviours\CanObtainSizeValue;
 
 /**
  * Class Between
@@ -12,7 +13,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Between extends Rule
 {
-    use Traits\SizeTrait;
+    use CanObtainSizeValue;
 
     protected string $message = "The :attribute must be between :min and :max";
     protected array $fillableParams = ['min', 'max'];

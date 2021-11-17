@@ -1,6 +1,18 @@
 Change Log
 ==========
 
+2021-11-17
+----------
+
+ * add `phone`, `uuid`, `prohibited`, `prohibited_if`, `prohibited_unless`, `string`, and `float` rules
+ * add `matches` as alias of `regex`
+ * add `MimeTypeGuesser` interface to allow injecting alternative guessers in rules
+ * add helpers to `In` and `NotIn` for building rules
+ * allow commas in parameters on rules e.g. in, not_in etc.
+ * change Rule `key` to `name`
+ * move `Interfaces` to `Contracts`
+ * move `Traits` to `Behaviours`
+
 2021-11-09
 ----------
 

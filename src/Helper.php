@@ -2,6 +2,10 @@
 
 namespace Somnambulist\Components\Validation;
 
+use function array_map;
+use function implode;
+use function str_replace;
+
 /**
  * Class Helper
  *
@@ -179,6 +183,18 @@ class Helper
         }
 
         return $target;
+    }
+
+    /**
+     * Returns a string of comma separated values
+     *
+     * @param array $values
+     *
+     * @return string
+     */
+    public static function flattenValues(array $values): string
+    {
+        return implode(',', array_map(static fn($value) => '"' . str_replace('"', '""', $value) . '"', $values));
     }
 
     /**

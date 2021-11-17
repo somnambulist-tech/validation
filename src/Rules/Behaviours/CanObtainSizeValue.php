@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\Components\Validation\Rules\Traits;
+namespace Somnambulist\Components\Validation\Rules\Behaviours;
 
 use InvalidArgumentException;
 
 /**
- * Trait SizeTrait
+ * Trait CanValidateSize
  *
- * @package    Somnambulist\Components\Validation\Rules\Traits
- * @subpackage Somnambulist\Components\Validation\Rules\Traits\SizeTrait
+ * @package    Somnambulist\Components\Validation\Rules\Behaviours
+ * @subpackage Somnambulist\Components\Validation\Rules\Behaviours\CanValidateSize
  */
-trait SizeTrait
+trait CanObtainSizeValue
 {
     /**
      * Get size (int) value from given $value

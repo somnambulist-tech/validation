@@ -141,7 +141,7 @@ class UploadedFileTest extends TestCase
             ->method('isUploadedFile')
             ->willReturn(true);
 
-        $rule->fileTypes('png|jpeg');
+        $rule->types('png,jpeg');
 
         $this->assertFalse($rule->check([
             'name' => pathinfo(__FILE__, PATHINFO_BASENAME),

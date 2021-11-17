@@ -2,6 +2,8 @@
 
 namespace Somnambulist\Components\Validation;
 
+use Somnambulist\Components\Validation\Behaviours\MessagesTrait;
+use Somnambulist\Components\Validation\Behaviours\TranslationsTrait;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
 
 /**
@@ -12,8 +14,8 @@ use Somnambulist\Components\Validation\Exceptions\RuleException;
  */
 class Factory
 {
-    use Traits\TranslationsTrait;
-    use Traits\MessagesTrait;
+    use TranslationsTrait;
+    use MessagesTrait;
 
     private array $rules = [];
 
@@ -32,55 +34,63 @@ class Factory
     protected function registerDefaultRules()
     {
         $rules = [
+            'accepted'             => new Rules\Accepted,
+            'after'                => new Rules\After,
+            'alpha'                => new Rules\Alpha,
+            'alpha_dash'           => new Rules\AlphaDash,
+            'alpha_num'            => new Rules\AlphaNum,
+            'alpha_spaces'         => new Rules\AlphaSpaces,
+            'array'                => new Rules\TypeArray,
+            'before'               => new Rules\Before,
+            'between'              => new Rules\Between,
+            'boolean'              => new Rules\Boolean,
+            'callback'             => new Rules\Callback,
+            'date'                 => new Rules\Date,
+            'default'              => new Rules\Defaults,
+            'defaults'             => new Rules\Defaults,
+            'different'            => new Rules\Different,
+            'digits'               => new Rules\Digits,
+            'digits_between'       => new Rules\DigitsBetween,
+            'email'                => new Rules\Email,
+            'extension'            => new Rules\Extension,
+            'float'                => new Rules\TypeFloat,
+            'in'                   => new Rules\In,
+            'integer'              => new Rules\Integer,
+            'ip'                   => new Rules\Ip,
+            'ipv4'                 => new Rules\Ipv4,
+            'ipv6'                 => new Rules\Ipv6,
+            'json'                 => new Rules\Json,
+            'lowercase'            => new Rules\Lowercase,
+            'matches'              => new Rules\Regex,
+            'max'                  => new Rules\Max,
+            'mimes'                => new Rules\Mimes,
+            'min'                  => new Rules\Min,
+            'not_in'               => new Rules\NotIn,
+            'nullable'             => new Rules\Nullable,
+            'numeric'              => new Rules\Numeric,
+            'phone'                => new Rules\PhoneNumber,
+            'present'              => new Rules\Present,
+            'prohibited'           => new Rules\Prohibited,
+            'prohibited_if'        => new Rules\ProhibitedIf,
+            'prohibited_unless'    => new Rules\ProhibitedUnless,
+            'regex'                => new Rules\Regex,
             'required'             => new Rules\Required,
             'required_if'          => new Rules\RequiredIf,
             'required_unless'      => new Rules\RequiredUnless,
             'required_with'        => new Rules\RequiredWith,
-            'required_without'     => new Rules\RequiredWithout,
             'required_with_all'    => new Rules\RequiredWithAll,
+            'required_without'     => new Rules\RequiredWithout,
             'required_without_all' => new Rules\RequiredWithoutAll,
-            'email'                => new Rules\Email,
-            'alpha'                => new Rules\Alpha,
-            'numeric'              => new Rules\Numeric,
-            'alpha_num'            => new Rules\AlphaNum,
-            'alpha_dash'           => new Rules\AlphaDash,
-            'alpha_spaces'         => new Rules\AlphaSpaces,
-            'in'                   => new Rules\In,
-            'not_in'               => new Rules\NotIn,
-            'min'                  => new Rules\Min,
-            'max'                  => new Rules\Max,
-            'between'              => new Rules\Between,
-            'url'                  => new Rules\Url,
-            'integer'              => new Rules\Integer,
-            'boolean'              => new Rules\Boolean,
-            'ip'                   => new Rules\Ip,
-            'ipv4'                 => new Rules\Ipv4,
-            'ipv6'                 => new Rules\Ipv6,
-            'extension'            => new Rules\Extension,
-            'array'                => new Rules\TypeArray,
             'same'                 => new Rules\Same,
-            'regex'                => new Rules\Regex,
-            'date'                 => new Rules\Date,
-            'accepted'             => new Rules\Accepted,
-            'present'              => new Rules\Present,
-            'different'            => new Rules\Different,
+            'string'               => new Rules\TypeString,
             'uploaded_file'        => new Rules\UploadedFile,
-            'mimes'                => new Rules\Mimes,
-            'callback'             => new Rules\Callback,
-            'before'               => new Rules\Before,
-            'after'                => new Rules\After,
-            'lowercase'            => new Rules\Lowercase,
             'uppercase'            => new Rules\Uppercase,
-            'json'                 => new Rules\Json,
-            'digits'               => new Rules\Digits,
-            'digits_between'       => new Rules\DigitsBetween,
-            'defaults'             => new Rules\Defaults,
-            'default'              => new Rules\Defaults,
-            'nullable'             => new Rules\Nullable,
+            'url'                  => new Rules\Url,
+            'uuid'                 => new Rules\Uuid,
         ];
 
         foreach ($rules as $key => $rule) {
-            $this->addRuleMapping($key, $rule);
+            $this->addRule($key, $rule);
         }
     }
 
@@ -118,9 +128,9 @@ class Factory
         throw RuleException::notFound($rule);
     }
 
-    public function addRuleMapping(string $key, Rule $rule): void
+    public function addRule(string $key, Rule $rule): void
     {
         $this->rules[$key] = $rule;
-        $rule->setKey($key);
+        $rule->setName($key);
     }
 }

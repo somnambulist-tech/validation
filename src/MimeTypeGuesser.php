@@ -8,7 +8,7 @@ namespace Somnambulist\Components\Validation;
  * @package    Somnambulist\Components\Validation
  * @subpackage Somnambulist\Components\Validation\MimeTypeGuesser
  */
-class MimeTypeGuesser
+class MimeTypeGuesser implements Contracts\MimeTypeGuesser
 {
     protected array $mimeTypes = [
         'application/andrew-inset'                                                  => 'ez',
@@ -791,5 +791,10 @@ class MimeTypeGuesser
     public function getMimeType(string $extension): string
     {
         return array_search($extension, $this->mimeTypes) ?: 'application/octet-stream';
+    }
+
+    public function addMimeType(string $extension, string $mimeType): void
+    {
+        $this->mimeTypes[$mimeType] = $extension;
     }
 }

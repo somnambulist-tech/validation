@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class MimesTest extends TestCase
 {
-
     public function setUp(): void
     {
         $this->rule = new Mimes();
@@ -84,7 +83,7 @@ class MimesTest extends TestCase
             ->method('isUploadedFile')
             ->willReturn(true);
 
-        $rule->allowTypes('png|jpeg');
+        $rule->types('png,jpeg');
 
         $this->assertFalse($rule->check([
             'name' => pathinfo(__FILE__, PATHINFO_BASENAME),

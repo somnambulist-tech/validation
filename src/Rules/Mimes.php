@@ -2,9 +2,10 @@
 
 namespace Somnambulist\Components\Validation\Rules;
 
-use Somnambulist\Components\Validation\Helper;
+use Somnambulist\Components\Validation\Contracts\MimeTypeGuesser as MimeTypeGuesserContract;
 use Somnambulist\Components\Validation\MimeTypeGuesser;
 use Somnambulist\Components\Validation\Rule;
+use Somnambulist\Components\Validation\Rules\Behaviours\CanValidateFiles;
 
 /**
  * Class Mimes
@@ -14,21 +15,27 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Mimes extends Rule
 {
-    use Traits\FileTrait;
+    use CanValidateFiles;
 
     protected string $message = "The :attribute file type must be :allowed_types";
+    protected MimeTypeGuesserContract $guesser;
+
+    public function __construct(MimeTypeGuesserContract $guesser = null)
+    {
+        $this->guesser = $guesser ?? new MimeTypeGuesser();
+    }
 
     public function fillParameters(array $params): self
     {
-        $this->allowTypes($params);
+        $this->types($params);
 
         return $this;
     }
 
-    public function allowTypes($types): self
+    public function types($types): self
     {
         if (is_string($types)) {
-            $types = explode('|', $types);
+            $types = explode(',', $types);
         }
 
         $this->params['allowed_types'] = $types;
@@ -39,11 +46,6 @@ class Mimes extends Rule
     public function check($value): bool
     {
         $allowedTypes = $this->parameter('allowed_types');
-
-        if ($allowedTypes) {
-            $or = $this->validation ? $this->validation->getTranslation('or') : 'or';
-            $this->setParameterText('allowed_types', Helper::join(Helper::wraps($allowedTypes, "'"), ', ', ", {$or} "));
-        }
 
         // below is Required rule job
         if (!$this->isValueFromUploadedFiles($value) or $value['error'] == UPLOAD_ERR_NO_FILE) {
@@ -59,14 +61,8 @@ class Mimes extends Rule
             return false;
         }
 
-        if (!empty($allowedTypes)) {
-            $guesser = new MimeTypeGuesser;
-            $ext     = $guesser->getExtension($value['type']);
-            unset($guesser);
-
-            if (!in_array($ext, $allowedTypes)) {
-                return false;
-            }
+        if (!empty($allowedTypes) && !in_array($this->guesser->getExtension($value['type']), $allowedTypes)) {
+            return false;
         }
 
         return true;

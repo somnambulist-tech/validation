@@ -3,7 +3,7 @@
 namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
-use Somnambulist\Components\Validation\Rules\Interfaces\ModifyValue;
+use Somnambulist\Components\Validation\Rules\Contracts\ModifyValue;
 
 /**
  * Class Defaults

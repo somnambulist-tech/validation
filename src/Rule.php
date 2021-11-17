@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Exceptions\ParameterException;
  */
 abstract class Rule
 {
-    protected ?string $key = null;
+    protected ?string $name = null;
     protected ?Attribute $attribute = null;
     protected ?Validation $validation = null;
     protected bool $implicit = false;
@@ -71,7 +71,7 @@ abstract class Rule
     }
 
     /**
-     * Get parameter from given $key, return null if it not exists
+     * Get parameter from given $key, return null if it does not exist
      */
     public function parameter(string $key): mixed
     {
@@ -125,18 +125,18 @@ abstract class Rule
     {
         foreach ($params as $param) {
             if (!isset($this->params[$param])) {
-                throw ParameterException::missing($this->getKey(), $param);
+                throw ParameterException::missing($this->getName(), $param);
             }
         }
     }
 
-    public function getKey(): string
+    public function getName(): string
     {
-        return $this->key ?: get_class($this);
+        return $this->name ?: get_class($this);
     }
 
-    public function setKey(string $key): void
+    public function setName(string $name): void
     {
-        $this->key = $key;
+        $this->name = $name;
     }
 }

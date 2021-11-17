@@ -39,7 +39,7 @@ class Attribute
         $rule->setAttribute($this);
         $rule->setValidation($this->validation);
 
-        $this->rules[$rule->getKey()] = $rule;
+        $this->rules[$rule->getName()] = $rule;
     }
 
     public function getOtherAttributes(): array

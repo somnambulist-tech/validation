@@ -4,6 +4,7 @@ namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Helper;
 use Somnambulist\Components\Validation\Rule;
+use Somnambulist\Components\Validation\Rules\Behaviours\FlattenValues;
 
 /**
  * Class In
@@ -16,6 +17,11 @@ class In extends Rule
     protected string $message = "The :attribute must be one of :allowed_values";
     protected bool $strict = false;
 
+    public static function make(array $values): string
+    {
+        return sprintf('in:%s', Helper::flattenValues($values));
+    }
+
     public function fillParameters(array $params): self
     {
         if (count($params) == 1 && is_array($params[0])) {
@@ -23,6 +29,13 @@ class In extends Rule
         }
 
         $this->params['allowed_values'] = $params;
+
+        return $this;
+    }
+
+    public function in(array $values): self
+    {
+        $this->params['allowed_values'] = $values;
 
         return $this;
     }

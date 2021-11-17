@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
+use Somnambulist\Components\Validation\Rules\Behaviours\CanObtainSizeValue;
 
 /**
  * Class Max
@@ -12,7 +13,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Max extends Rule
 {
-    use Traits\SizeTrait;
+    use CanObtainSizeValue;
 
     protected string $message = "The :attribute maximum is :max";
     protected array $fillableParams = ['max'];

@@ -1,23 +1,23 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\Components\Validation\Rules\Traits;
+namespace Somnambulist\Components\Validation\Rules\Behaviours;
 
 use Somnambulist\Components\Validation\Helper;
 
 /**
- * Trait FileTrait
+ * Trait CanValidateFiles
  *
- * @package    Somnambulist\Components\Validation\Rules\Traits
- * @subpackage Somnambulist\Components\Validation\Rules\Traits\FileTrait
+ * @package    Somnambulist\Components\Validation\Rules\Behaviours
+ * @subpackage Somnambulist\Components\Validation\Rules\Behaviours\CanValidateFiles
  */
-trait FileTrait
+trait CanValidateFiles
 {
     public function isUploadedFile(mixed $value): bool
     {
         return $this->isValueFromUploadedFiles($value) && is_uploaded_file($value['tmp_name']);
     }
 
-    public function isValueFromUploadedFiles(mixed $value): bool
+    protected function isValueFromUploadedFiles(mixed $value): bool
     {
         if (!is_array($value)) {
             return false;
@@ -33,7 +33,7 @@ trait FileTrait
         return true;
     }
 
-    public function resolveUploadedFileValue(mixed $value): ?array
+    protected function resolveUploadedFileValue(mixed $value): ?array
     {
         if (!$this->isValueFromUploadedFiles($value)) {
             return null;

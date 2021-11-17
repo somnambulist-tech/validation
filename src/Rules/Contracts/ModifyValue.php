@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\Components\Validation\Rules\Interfaces;
+namespace Somnambulist\Components\Validation\Rules\Contracts;
 
 /**
  * Interface ModifyValue
  *
- * @package    Somnambulist\Components\Validation\Rules\Interfaces
- * @subpackage Somnambulist\Components\Validation\Rules\Interfaces\ModifyValue
+ * @package    Somnambulist\Components\Validation\Rules\Contracts
+ * @subpackage Somnambulist\Components\Validation\Rules\Contracts\ModifyValue
  */
 interface ModifyValue
 {

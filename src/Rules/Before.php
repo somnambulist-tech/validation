@@ -2,8 +2,8 @@
 
 namespace Somnambulist\Components\Validation\Rules;
 
-use Somnambulist\Components\Validation\Exceptions\ParameterException;
 use Somnambulist\Components\Validation\Rule;
+use Somnambulist\Components\Validation\Rules\Behaviours\CanValidateDates;
 
 /**
  * Class Before
@@ -13,7 +13,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Before extends Rule
 {
-    use Traits\DateUtilsTrait;
+    use CanValidateDates;
 
     protected string $message = "The :attribute must be a date before :time.";
     protected array $fillableParams = ['time'];
@@ -24,13 +24,8 @@ class Before extends Rule
 
         $time = $this->parameter('time');
 
-        if (!$this->isValidDate($value)) {
-            throw ParameterException::invalidDate($value);
-        }
-
-        if (!$this->isValidDate($time)) {
-            throw ParameterException::invalidDate($value);
-        }
+        $this->assertDate($value);
+        $this->assertDate($time);
 
         return $this->getTimeStamp($time) > $this->getTimeStamp($value);
     }
