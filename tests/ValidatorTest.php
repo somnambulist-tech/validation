@@ -422,27 +422,27 @@ class ValidatorTest extends TestCase
             ]
         ], [
             'a_field' => [
-                $validator('required')->message('1'),
+                $validator('required'),
             ],
             'a_number' => [
-                $validator('min', 2000)->message('2'),
-                $validator('max', 5)->message('3'),
-                $validator('between', 1, 5)->message('4'),
-                $validator('in', [1, 2, 3, 4, 5])->message('5'),
-                $validator('not_in', [1000, 2, 3, 4, 5])->message('6'),
-                $validator('same', 'a_date')->message('7'),
-                $validator('different', 'a_same_number')->message('8'),
+                $validator('min', 2000),
+                $validator('max', 5),
+                $validator('between', 1, 5),
+                $validator('in', [1, 2, 3, 4, 5]),
+                $validator('not_in', [1000, 2, 3, 4, 5]),
+                $validator('same', 'a_date'),
+                $validator('different', 'a_same_number'),
             ],
             'a_date' => [
-                $validator('date', 'd-m-Y')->message('9')
+                $validator('date', 'd-m-Y')
             ],
             'a_file' => [
-                $validator('uploaded_file', 20000)->message('10')
+                $validator('uploaded_file', 20000)
             ]
         ]);
 
         $errors = $validation->errors();
-        $this->assertEquals('1,2,3,4,5,6,7,8,9,10', implode(',', $errors->all()));
+        $this->assertCount(10, $errors);
     }
 
     public function testArrayAssocValidation()
@@ -592,19 +592,18 @@ class ValidatorTest extends TestCase
         $this->assertNotNull($errors->first('cart_items.3.qty:numeric'));
         $this->assertNotNull($errors->first('cart_items.4.id_product:numeric'));
 
-        $this->assertEquals('The Product ID is required', $errors->all()[0]);
-        $this->assertEquals('The Product ID must be numeric', $errors->all()[1]);
+        $this->assertEquals('Product ID is required', $errors->all()[0]);
+        $this->assertEquals('Product ID must be numeric', $errors->all()[1]);
     }
 
     public function testSetCustomMessagesInValidator()
     {
-        $this->validator->setMessages([
-            'required' => 'foo',
-            'email' => 'bar',
-            'comments.*.text' => 'baz'
+        $this->validator->messages()->add('en', [
+            'rule.required' => 'foo',
+            'rule.email' => 'bar',
+            'comments.*.text' => 'baz',
+            'rule.numeric' => 'baz'
         ]);
-
-        $this->validator->setMessage('numeric', 'baz');
 
         $validation = $this->validator->validate([
             'foo' => null,
@@ -645,13 +644,12 @@ class ValidatorTest extends TestCase
             'comments.*.text' => 'required'
         ]);
 
-        $validation->setMessages([
-            'required' => 'foo',
-            'email' => 'bar',
-            'comments.*.text' => 'baz'
+        $validation->messages()->add('en', [
+            'rule.required' => 'foo',
+            'rule.email' => 'bar',
+            'comments.*.text' => 'baz',
+            'rule.numeric' => 'baz'
         ]);
-
-        $validation->setMessage('numeric', 'baz');
 
         $validation->validate();
 
@@ -666,7 +664,7 @@ class ValidatorTest extends TestCase
     {
         $evenNumberValidator = function ($value) {
             if (!is_numeric($value) or $value % 2 !== 0) {
-                return ":attribute must be even number";
+                return 'custom.rule.even_number';
             }
             return true;
         };
@@ -676,6 +674,7 @@ class ValidatorTest extends TestCase
         ], [
             'foo' => [$evenNumberValidator],
         ]);
+        $validation->messages()->replace('en', 'custom.rule.even_number', ':attribute must be even number');
 
         $validation->validate();
 
@@ -691,7 +690,7 @@ class ValidatorTest extends TestCase
             'something' => 'email|max:3|numeric',
         ]);
 
-        $validation->setMessages([
+        $validation->messages()->add('en', [
             'something:email' => 'foo',
             'something:numeric' => 'bar',
             'something:max' => 'baz',
@@ -722,10 +721,10 @@ class ValidatorTest extends TestCase
             'comments.*.text' => 'required'
         ]);
 
-        $validation->setMessages([
-            'required' => ':attribute foo',
-            'email' => ':attribute bar',
-            'numeric' => ':attribute baz',
+        $validation->messages()->add('en', [
+            'rule.required' => ':attribute foo',
+            'rule.email' => ':attribute bar',
+            'rule.numeric' => ':attribute baz',
             'comments.*.text' => ':attribute qux'
         ]);
 
@@ -786,7 +785,7 @@ class ValidatorTest extends TestCase
         ], $invalidData);
     }
 
-    public function testHumanizedKeyInArrayValidation()
+    public function testPreservesKeyInArrayValidation()
     {
         $validation = $this->validator->validate([
             'cart' => [
@@ -801,8 +800,8 @@ class ValidatorTest extends TestCase
 
         $errors = $validation->errors();
 
-        $this->assertEquals('The cart.0.qty must be numeric', $errors->first('cart.*.qty'));
-        $this->assertEquals('The cart.0.itemName is required', $errors->first('cart.*.itemName'));
+        $this->assertEquals('cart.0.qty must be numeric', $errors->first('cart.*.qty'));
+        $this->assertEquals('cart.0.itemName is required', $errors->first('cart.*.itemName'));
     }
 
     public function testCustomMessageInArrayValidation()
@@ -829,7 +828,7 @@ class ValidatorTest extends TestCase
             'cart.*.attributes.*.value' => 'required'
         ]);
 
-        $validation->setMessages([
+        $validation->messages()->add('en', [
             'cart.*.itemName:required' => 'Item [0] name is required',
             'cart.*.qty:numeric' => 'Item {0} qty is not a number',
             'cart.*.attributes.*.value' => 'Item {0} attribute {1} value is required',
@@ -1054,18 +1053,7 @@ class ValidatorTest extends TestCase
             'number' => 'in:7,8,9',
         ]);
 
-        $this->assertEquals("The number must be one of '7', '8', or '9'", $validation->errors()->first('number'));
-
-        // Using translation
-        $this->validator->setTranslation('or', 'atau');
-
-        $validation = $this->validator->validate([
-            'number' => 1
-        ], [
-            'number' => 'in:7,8,9',
-        ]);
-
-        $this->assertEquals("The number must be one of '7', '8', atau '9'", $validation->errors()->first('number'));
+        $this->assertEquals('number must be one of "7","8","9"', $validation->errors()->first('number'));
     }
 
     public function testRuleNotInInvalidMessages()
@@ -1076,18 +1064,7 @@ class ValidatorTest extends TestCase
             'number' => 'not_in:1,2,3',
         ]);
 
-        $this->assertEquals("The number does not allow the following values '1', '2', and '3'", $validation->errors()->first('number'));
-
-        // Using translation
-        $this->validator->setTranslation('and', 'dan');
-
-        $validation = $this->validator->validate([
-            'number' => 1
-        ], [
-            'number' => 'not_in:1,2,3',
-        ]);
-
-        $this->assertEquals("The number does not allow the following values '1', '2', dan '3'", $validation->errors()->first('number'));
+        $this->assertEquals('number must not be one of "1","2","3"', $validation->errors()->first('number'));
     }
 
     public function testIgnoreNextRulesWithNullableRule()

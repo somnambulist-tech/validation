@@ -2,7 +2,7 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
-use Somnambulist\Components\Validation\Rules\Integer;
+use Somnambulist\Components\Validation\Rules\TypeInteger;
 use PHPUnit\Framework\TestCase;
 
 class IntegerTest extends TestCase
@@ -10,7 +10,7 @@ class IntegerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->rule = new Integer;
+        $this->rule = new TypeInteger;
     }
 
     public function testValids()

@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class AlphaDash extends Rule
 {
-    protected string $message = "The :attribute only allows a-z, 0-9, _ and -";
+    protected string $message = 'rule.alpha_dash';
 
     public function check($value): bool
     {

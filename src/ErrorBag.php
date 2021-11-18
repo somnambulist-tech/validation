@@ -2,21 +2,36 @@
 
 namespace Somnambulist\Components\Validation;
 
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
+use function count;
+use function explode;
+use function preg_match;
+use function preg_quote;
+use function str_contains;
+use function str_replace;
+
 /**
  * Class ErrorBag
  *
  * @package    Somnambulist\Components\Validation
  * @subpackage Somnambulist\Components\Validation\ErrorBag
  */
-class ErrorBag
+class ErrorBag implements Countable, IteratorAggregate
 {
-    public function __construct(private array $messages = [])
+    public function __construct(private array $errors = [])
     {
+        foreach ($errors as $key => $rules) {
+            foreach ($rules as $rule => $error) {
+                $this->add($key, $rule, $error);
+            }
+        }
     }
 
-    public function add(string $key, string $rule, string $message): void
+    public function add(string $key, string $rule, ErrorMessage $message): void
     {
-        $this->messages[$key][$rule] = $message;
+        $this->errors[$key][$rule] = $message;
     }
 
     public function count(): int
@@ -24,9 +39,14 @@ class ErrorBag
         return count($this->all());
     }
 
+    public function getIterator()
+    {
+        return new ArrayIterator($this->all());
+    }
+
     public function all(string $format = ':message'): array
     {
-        $messages = $this->messages;
+        $messages = $this->errors;
         $results  = [];
 
         foreach ($messages as $keyMessages) {
@@ -38,9 +58,9 @@ class ErrorBag
         return $results;
     }
 
-    protected function formatMessage(string $message, string $format): string
+    protected function formatMessage(ErrorMessage $message, string $format): string
     {
-        return str_replace(':message', $message, $format);
+        return str_replace(':message', (string)$message, $format);
     }
 
     public function has(string $key): bool
@@ -52,12 +72,12 @@ class ErrorBag
 
             return count(Helper::arrayDot($messages)) > 0;
         } else {
-            $messages = $this->messages[$key] ?? null;
+            $messages = $this->errors[$key] ?? null;
 
             if (!$ruleName) {
                 return !empty($messages);
             } else {
-                return !empty($messages) and isset($messages[$ruleName]);
+                return !empty($messages) && isset($messages[$ruleName]);
             }
         }
     }
@@ -78,7 +98,7 @@ class ErrorBag
 
     protected function filterMessagesForWildcardKey(string $key, $ruleName = null): array
     {
-        $messages = $this->messages;
+        $messages = $this->errors;
         $pattern  = preg_quote($key, '#');
         $pattern  = str_replace('\*', '.*', $pattern);
 
@@ -108,20 +128,22 @@ class ErrorBag
             $messages        = $this->filterMessagesForWildcardKey($key, $ruleName);
             $flattenMessages = Helper::arrayDot($messages);
 
-            return array_shift($flattenMessages);
+            $ret = array_shift($flattenMessages);
         } else {
-            $keyMessages = $this->messages[$key] ?? [];
+            $keyMessages = $this->errors[$key] ?? [];
 
             if (empty($keyMessages)) {
                 return null;
             }
 
             if ($ruleName) {
-                return $keyMessages[$ruleName] ?? null;
+                $ret = $keyMessages[$ruleName] ?? null;
             } else {
-                return array_shift($keyMessages);
+                $ret = array_shift($keyMessages);
             }
         }
+
+        return !is_null($ret) ? (string)$ret : null;
     }
 
     public function get(string $key, string $format = ':message'): array
@@ -138,7 +160,7 @@ class ErrorBag
                 }
             }
         } else {
-            $keyMessages = $this->messages[$key] ?? [];
+            $keyMessages = $this->errors[$key] ?? [];
 
             foreach ($keyMessages as $rule => $message) {
                 if ($ruleName and $ruleName != $rule) {
@@ -153,7 +175,7 @@ class ErrorBag
 
     public function firstOfAll(string $format = ':message', bool $dotNotation = false): array
     {
-        $messages = $this->messages;
+        $messages = $this->errors;
         $results  = [];
 
         foreach ($messages as $key => $keyMessages) {
@@ -169,6 +191,6 @@ class ErrorBag
 
     public function toArray(): array
     {
-        return $this->messages;
+        return $this->errors;
     }
 }

@@ -34,7 +34,7 @@ trait CanConvertValuesToBooleans
                 return 'false';
             }
 
-            return $value;
+            return (string)$value;
         }, $values);
     }
 }

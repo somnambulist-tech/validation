@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Date extends Rule
 {
-    protected string $message = "The :attribute is not valid date format";
+    protected string $message = 'rule.date';
     protected array $fillableParams = ['format'];
     protected array $params = [
         'format' => 'Y-m-d',
@@ -20,7 +20,7 @@ class Date extends Rule
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         $format = $this->parameter('format');
 

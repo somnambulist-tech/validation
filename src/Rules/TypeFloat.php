@@ -13,7 +13,7 @@ use function gettype;
  */
 class TypeFloat extends Rule
 {
-    protected string $message = ':attribute must be a floating point number / double';
+    protected string $message = 'rule.float';
 
     public function check($value): bool
     {

@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Url extends Rule
 {
-    protected string $message = 'The :attribute is not a valid URL';
+    protected string $message = 'rule.url';
 
     public function fillParameters(array $params): self
     {

@@ -16,7 +16,7 @@ class Required extends Rule
     use CanValidateFiles;
 
     protected bool $implicit = true;
-    protected string $message = "The :attribute is required";
+    protected string $message = 'rule.required';
 
     public function check($value): bool
     {

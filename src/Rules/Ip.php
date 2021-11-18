@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Ip extends Rule
 {
-    protected string $message = "The :attribute is not a valid IP address";
+    protected string $message = 'rule.ip';
 
     public function check($value): bool
     {

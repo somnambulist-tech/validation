@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class AlphaNum extends Rule
 {
-    protected string $message = "The :attribute only allows alphabet and numeric characters";
+    protected string $message = 'rule.alpha_num';
 
     public function check($value): bool
     {

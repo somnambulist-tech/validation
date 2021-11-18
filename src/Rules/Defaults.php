@@ -13,12 +13,12 @@ use Somnambulist\Components\Validation\Rules\Contracts\ModifyValue;
  */
 class Defaults extends Rule implements ModifyValue
 {
-    protected string $message = "The :attribute default is :default";
+    protected string $message = 'rule.default_value';
     protected array $fillableParams = ['default'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         return true;
     }

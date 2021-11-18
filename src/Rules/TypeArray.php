@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class TypeArray extends Rule
 {
-    protected string $message = "The :attribute must be an array";
+    protected string $message = 'rule.array';
 
     public function check($value): bool
     {

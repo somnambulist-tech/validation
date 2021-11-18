@@ -14,7 +14,7 @@ use Somnambulist\Components\Validation\Rules\Behaviours\FlattenValues;
  */
 class In extends Rule
 {
-    protected string $message = "The :attribute must be one of :allowed_values";
+    protected string $message = 'rule.in';
     protected bool $strict = false;
 
     public static function make(array $values): string
@@ -49,14 +49,8 @@ class In extends Rule
 
     public function check($value): bool
     {
-        $this->requireParameters(['allowed_values']);
+        $this->assertHasRequiredParameters(['allowed_values']);
 
-        $allowedValues = $this->parameter('allowed_values');
-
-        $or                = $this->validation ? $this->validation->getTranslation('or') : 'or';
-        $allowedValuesText = Helper::join(Helper::wraps($allowedValues, "'"), ', ', ", {$or} ");
-        $this->setParameterText('allowed_values', $allowedValuesText);
-
-        return in_array($value, $allowedValues, $this->strict);
+        return in_array($value, $this->parameter('allowed_values'), $this->strict);
     }
 }

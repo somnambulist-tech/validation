@@ -13,13 +13,13 @@ use Somnambulist\Components\Validation\Rule;
 class Present extends Rule
 {
     protected bool $implicit = true;
-    protected string $message = "The :attribute must be present";
+    protected string $message = 'rule.present';
 
     public function check($value): bool
     {
         $this->setAttributeAsRequired();
 
-        return $this->validation->hasValue($this->attribute->getKey());
+        return $this->validation->hasValue($this->attribute->key());
     }
 
     protected function setAttributeAsRequired()

@@ -11,7 +11,7 @@ namespace Somnambulist\Components\Validation\Rules;
 class RequiredUnless extends Required
 {
     protected bool $implicit = true;
-    protected string $message = "The :attribute is required";
+    protected string $message = 'rule.required_unless';
 
     public function fillParameters(array $params): self
     {
@@ -23,12 +23,12 @@ class RequiredUnless extends Required
 
     public function check($value): bool
     {
-        $this->requireParameters(['field', 'values']);
+        $this->assertHasRequiredParameters(['field', 'values']);
 
         $anotherAttribute  = $this->parameter('field');
         $definedValues     = $this->parameter('values');
-        $anotherValue      = $this->getAttribute()->getValue($anotherAttribute);
-        $requiredValidator = $this->validation->getFactory()->getRule('required');
+        $anotherValue      = $this->attribute()->value($anotherAttribute);
+        $requiredValidator = $this->validation->getFactory()->rule('required');
 
         if (!in_array($anotherValue, $definedValues)) {
             $this->setAttributeAsRequired();

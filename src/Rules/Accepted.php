@@ -13,7 +13,7 @@ use Somnambulist\Components\Validation\Rule;
 class Accepted extends Rule
 {
     protected bool $implicit = true;
-    protected string $message = 'The :attribute must be one of: yes, on, (string)1, (int)1, or true';
+    protected string $message = 'rule.accepted';
     protected array $params = ['accepted' => ['yes', 'on', '1', 1, true, 'true']];
 
     public function check(mixed $value): bool

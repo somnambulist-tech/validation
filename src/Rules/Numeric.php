@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Numeric extends Rule
 {
-    protected string $message = "The :attribute must be numeric";
+    protected string $message = 'rule.numeric';
 
     public function check($value): bool
     {

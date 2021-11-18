@@ -8,10 +8,12 @@ Change Log
  * add `matches` as alias of `regex`
  * add `MimeTypeGuesser` interface to allow injecting alternative guessers in rules
  * add helpers to `In` and `NotIn` for building rules
+ * add initial language translation support
  * allow commas in parameters on rules e.g. in, not_in etc.
  * change Rule `key` to `name`
  * move `Interfaces` to `Contracts`
  * move `Traits` to `Behaviours`
+ * refactor more internals
 
 2021-11-09
 ----------

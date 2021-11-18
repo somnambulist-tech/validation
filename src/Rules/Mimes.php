@@ -17,7 +17,7 @@ class Mimes extends Rule
 {
     use CanValidateFiles;
 
-    protected string $message = "The :attribute file type must be :allowed_types";
+    protected string $message = 'rule.mimes';
     protected MimeTypeGuesserContract $guesser;
 
     public function __construct(MimeTypeGuesserContract $guesser = null)

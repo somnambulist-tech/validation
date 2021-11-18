@@ -15,12 +15,12 @@ class Max extends Rule
 {
     use CanObtainSizeValue;
 
-    protected string $message = "The :attribute maximum is :max";
+    protected string $message = 'rule.max';
     protected array $fillableParams = ['max'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         $max       = $this->getSizeInBytes($this->parameter('max'));
         $valueSize = $this->getValueSize($value);

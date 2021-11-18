@@ -12,12 +12,12 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Different extends Rule
 {
-    protected string $message = "The :attribute must be different to :field";
+    protected string $message = 'rule.different';
     protected array $fillableParams = ['field'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         $field        = $this->parameter('field');
         $anotherValue = $this->validation->getValue($field);

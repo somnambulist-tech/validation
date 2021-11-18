@@ -194,7 +194,7 @@ class Helper
      */
     public static function flattenValues(array $values): string
     {
-        return implode(',', array_map(static fn($value) => '"' . str_replace('"', '""', $value) . '"', $values));
+        return implode(',', array_map(static fn($value) => '"' . str_replace('"', '""', (string)$value) . '"', $values));
     }
 
     /**

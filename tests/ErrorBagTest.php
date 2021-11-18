@@ -2,8 +2,9 @@
 
 namespace Somnambulist\Components\Validation\Tests;
 
-use Somnambulist\Components\Validation\ErrorBag;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\ErrorBag;
+use Somnambulist\Components\Validation\ErrorMessage;
 
 /**
  * Class ErrorBagTest
@@ -18,13 +19,13 @@ class ErrorBagTest extends TestCase
     {
         $errors = new ErrorBag([
             'email' => [
-                'email' => 'foo',
-                'unique' => 'bar',
+                'email'  => new ErrorMessage('foo'),
+                'unique' => new ErrorMessage('bar'),
             ],
-            'age' => [
-                'numeric' => 'baz',
-                'min' => 'qux'
-            ]
+            'age'   => [
+                'numeric' => new ErrorMessage('baz'),
+                'min'     => new ErrorMessage('qux'),
+            ],
         ]);
 
         $this->assertEquals(4, $errors->count());
@@ -34,38 +35,38 @@ class ErrorBagTest extends TestCase
     {
         $errors = new ErrorBag();
 
-        $errors->add('email', 'email', 'foo');
-        $errors->add('email', 'unique', 'bar');
-        $errors->add('age', 'numeric', 'baz');
-        $errors->add('age', 'min', 'qux');
+        $errors->add('email', 'email', $a = new ErrorMessage('foo'));
+        $errors->add('email', 'unique', $b = new ErrorMessage('bar'));
+        $errors->add('age', 'numeric', $c = new ErrorMessage('baz'));
+        $errors->add('age', 'min', $d = new ErrorMessage('qux'));
 
         $this->assertEquals([
             'email' => [
-                'email' => 'foo',
-                'unique' => 'bar',
+                'email'  => $a,
+                'unique' => $b,
             ],
-            'age' => [
-                'numeric' => 'baz',
-                'min' => 'qux'
-            ]
+            'age'   => [
+                'numeric' => $c,
+                'min'     => $d,
+            ],
         ], $errors->toArray());
     }
 
     public function testHas()
     {
         $errors = new ErrorBag([
-            'email' => [
-                'email' => 'foo',
-                'unique' => 'bar',
+            'email'              => [
+                'email'  => new ErrorMessage('foo'),
+                'unique' => new ErrorMessage('bar'),
             ],
             'items.0.id_product' => [
-                'numeric' => 'qwerty'
+                'numeric' => new ErrorMessage('qwerty'),
             ],
             'items.1.id_product' => [
-                'numeric' => 'qwerty'
+                'numeric' => new ErrorMessage('qwerty'),
             ],
             'items.2.id_product' => [
-                'numeric' => 'qwerty'
+                'numeric' => new ErrorMessage('qwerty'),
             ],
         ]);
 
@@ -87,18 +88,18 @@ class ErrorBagTest extends TestCase
     public function testFirst()
     {
         $errors = new ErrorBag([
-            'email' => [
-                'email' => '1',
-                'unique' => '2',
+            'email'              => [
+                'email'  => new ErrorMessage('1'),
+                'unique' => new ErrorMessage('2'),
             ],
             'items.0.id_product' => [
-                'numeric' => '3'
+                'numeric' => new ErrorMessage('3'),
             ],
             'items.1.id_product' => [
-                'numeric' => '4'
+                'numeric' => new ErrorMessage('4'),
             ],
             'items.2.id_product' => [
-                'numeric' => '5'
+                'numeric' => new ErrorMessage('5'),
             ],
         ]);
 
@@ -123,30 +124,30 @@ class ErrorBagTest extends TestCase
     {
         $errors = new ErrorBag([
             'email' => [
-                'email' => '1',
-                'unique' => '2',
+                'email'  => new ErrorMessage('1'),
+                'unique' => new ErrorMessage('2'),
             ],
 
             'items.0.id_product' => [
-                'numeric' => '3',
-                'etc' => 'x'
+                'numeric' => new ErrorMessage('3'),
+                'etc'     => new ErrorMessage('x'),
             ],
-            'items.0.qty' => [
-                'numeric' => 'a'
+            'items.0.qty'        => [
+                'numeric' => new ErrorMessage('a'),
             ],
 
             'items.1.id_product' => [
-                'numeric' => '4',
-                'etc' => 'y'
+                'numeric' => new ErrorMessage('4'),
+                'etc'     => new ErrorMessage('y'),
             ],
-            'items.1.qty' => [
-                'numeric' => 'b'
-            ]
+            'items.1.qty'        => [
+                'numeric' => new ErrorMessage('b'),
+            ],
         ]);
 
         $this->assertEquals([
-            'email' => 'prefix 1 suffix',
-            'unique' => 'prefix 2 suffix'
+            'email'  => 'prefix 1 suffix',
+            'unique' => 'prefix 2 suffix',
         ], $errors->get('email', 'prefix :message suffix'));
 
         $this->assertEquals([
@@ -156,81 +157,81 @@ class ErrorBagTest extends TestCase
         $this->assertEquals([
             'items.0.id_product' => [
                 'numeric' => 'prefix 3 suffix',
-                'etc' => 'prefix x suffix',
+                'etc'     => 'prefix x suffix',
             ],
-            'items.0.qty' => [
+            'items.0.qty'        => [
                 'numeric' => 'prefix a suffix',
             ],
             'items.1.id_product' => [
                 'numeric' => 'prefix 4 suffix',
-                'etc' => 'prefix y suffix',
+                'etc'     => 'prefix y suffix',
             ],
-            'items.1.qty' => [
+            'items.1.qty'        => [
                 'numeric' => 'prefix b suffix',
-            ]
+            ],
         ], $errors->get('items.*', 'prefix :message suffix'));
 
         $this->assertEquals([
             'items.0.id_product' => [
                 'numeric' => 'prefix 3 suffix',
-                'etc' => 'prefix x suffix'
+                'etc'     => 'prefix x suffix',
             ],
-            'items.0.qty' => [
+            'items.0.qty'        => [
                 'numeric' => 'prefix a suffix',
-            ]
+            ],
         ], $errors->get('items.0.*', 'prefix :message suffix'));
 
         $this->assertEquals([
             'items.0.id_product' => [
                 'numeric' => 'prefix 3 suffix',
-                'etc' => 'prefix x suffix'
+                'etc'     => 'prefix x suffix',
             ],
             'items.1.id_product' => [
                 'numeric' => 'prefix 4 suffix',
-                'etc' => 'prefix y suffix'
-            ]
+                'etc'     => 'prefix y suffix',
+            ],
         ], $errors->get('items.*.id_product', 'prefix :message suffix'));
 
         $this->assertEquals([
             'items.0.id_product' => [
-                'etc' => 'prefix x suffix'
+                'etc' => 'prefix x suffix',
             ],
             'items.1.id_product' => [
-                'etc' => 'prefix y suffix'
-            ]
+                'etc' => 'prefix y suffix',
+            ],
         ], $errors->get('items.*.id_product:etc', 'prefix :message suffix'));
 
         $this->assertEquals([
             'items.0.id_product' => [
-                'etc' => 'prefix x suffix'
+                'etc' => 'prefix x suffix',
             ],
             'items.1.id_product' => [
-                'etc' => 'prefix y suffix'
-            ]
+                'etc' => 'prefix y suffix',
+            ],
         ], $errors->get('items.*:etc', 'prefix :message suffix'));
     }
 
     public function testAll()
     {
         $errors = new ErrorBag([
-            'email' => [
-                'email' => '1',
-                'unique' => '2',
+            'email'              => [
+                'email'  => new ErrorMessage('1'),
+                'unique' => new ErrorMessage('2'),
             ],
             'items.0.id_product' => [
-                'numeric' => '3',
-                'etc' => 'x'
+                'numeric' => new ErrorMessage('3'),
+                'etc'     => new ErrorMessage('x'),
             ],
-            'items.0.qty' => [
-                'numeric' => 'a'
+            'items.0.qty'        => [
+                'numeric' => new ErrorMessage('a'),
             ],
             'items.1.id_product' => [
-                'numeric' => '4',
-                'etc' => 'y'
+                'numeric' => new ErrorMessage('4'),
+                'etc'     => new ErrorMessage('y'),
             ],
-            'items.1.qty' => [
-                'numeric' => 'b'
-            ]
+            'items.1.qty'        => [
+                'numeric' => new ErrorMessage('b'),
+            ],
         ]);
 
         $this->assertEquals([
@@ -250,24 +251,24 @@ class ErrorBagTest extends TestCase
     public function testFirstOfAll()
     {
         $errors = new ErrorBag([
-            'email' => [
-                'email' => '1',
-                'unique' => '2',
+            'email'              => [
+                'email'  => new ErrorMessage('1'),
+                'unique' => new ErrorMessage('2'),
             ],
             'items.0.id_product' => [
-                'numeric' => '3',
-                'etc' => 'x'
+                'numeric' => new ErrorMessage('3'),
+                'etc'     => new ErrorMessage('x'),
             ],
-            'items.0.qty' => [
-                'numeric' => 'a'
+            'items.0.qty'        => [
+                'numeric' => new ErrorMessage('a'),
             ],
             'items.1.id_product' => [
-                'numeric' => '4',
-                'etc' => 'y'
+                'numeric' => new ErrorMessage('4'),
+                'etc'     => new ErrorMessage('y'),
             ],
-            'items.1.qty' => [
-                'numeric' => 'b'
-            ]
+            'items.1.qty'        => [
+                'numeric' => new ErrorMessage('b'),
+            ],
         ]);
 
         $this->assertEquals([
@@ -275,45 +276,45 @@ class ErrorBagTest extends TestCase
             'items' => [
                 [
                     'id_product' => 'prefix 3 suffix',
-                    'qty' => 'prefix a suffix'
+                    'qty'        => 'prefix a suffix',
                 ],
                 [
                     'id_product' => 'prefix 4 suffix',
-                    'qty' => 'prefix b suffix'
+                    'qty'        => 'prefix b suffix',
                 ],
-            ]
+            ],
         ], $errors->firstOfAll('prefix :message suffix'));
     }
 
     public function testFirstOfAllDotNotation()
     {
         $errors = new ErrorBag([
-            'email' => [
-                'email' => '1',
-                'unique' => '2',
+            'email'              => [
+                'email'  => new ErrorMessage('1'),
+                'unique' => new ErrorMessage('2'),
             ],
             'items.0.id_product' => [
-                'numeric' => '3',
-                'etc' => 'x'
+                'numeric' => new ErrorMessage('3'),
+                'etc'     => new ErrorMessage('x'),
             ],
-            'items.0.qty' => [
-                'numeric' => 'a'
+            'items.0.qty'        => [
+                'numeric' => new ErrorMessage('a'),
             ],
             'items.1.id_product' => [
-                'numeric' => '4',
-                'etc' => 'y'
+                'numeric' => new ErrorMessage('4'),
+                'etc'     => new ErrorMessage('y'),
             ],
-            'items.1.qty' => [
-                'numeric' => 'b'
-            ]
+            'items.1.qty'        => [
+                'numeric' => new ErrorMessage('b'),
+            ],
         ]);
 
         $this->assertEquals([
-            'email' => 'prefix 1 suffix',
+            'email'              => 'prefix 1 suffix',
             'items.0.id_product' => 'prefix 3 suffix',
-            'items.0.qty' => 'prefix a suffix',
+            'items.0.qty'        => 'prefix a suffix',
             'items.1.id_product' => 'prefix 4 suffix',
-            'items.1.qty' => 'prefix b suffix',
+            'items.1.qty'        => 'prefix b suffix',
         ], $errors->firstOfAll('prefix :message suffix', true));
     }
 }

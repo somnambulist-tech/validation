@@ -14,7 +14,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Prohibited extends Rule
 {
-    protected string $message = ':attribute is not allowed';
+    protected string $message = 'rule.prohibited';
 
     public function check($value): bool
     {

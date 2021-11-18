@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Uppercase extends Rule
 {
-    protected string $message = "The :attribute must be uppercase";
+    protected string $message = 'rule.uppercase';
 
     public function check($value): bool
     {

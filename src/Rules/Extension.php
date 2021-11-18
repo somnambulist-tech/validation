@@ -13,7 +13,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Extension extends Rule
 {
-    protected string $message = "The :attribute must be a :allowed_extensions file";
+    protected string $message = 'rule.extension';
 
     public function fillParameters(array $params): self
     {
@@ -27,16 +27,13 @@ class Extension extends Rule
 
     public function check($value): bool
     {
-        $this->requireParameters(['allowed_extensions']);
+        $this->assertHasRequiredParameters(['allowed_extensions']);
 
         $allowedExtensions = $this->parameter('allowed_extensions');
+
         foreach ($allowedExtensions as $key => $ext) {
             $allowedExtensions[$key] = ltrim($ext, '.');
         }
-
-        $or                    = $this->validation ? $this->validation->getTranslation('or') : 'or';
-        $allowedExtensionsText = Helper::join(Helper::wraps($allowedExtensions, ".", ""), ', ', ", {$or} ");
-        $this->setParameterText('allowed_extensions', $allowedExtensionsText);
 
         $ext = strtolower(pathinfo($value, PATHINFO_EXTENSION));
 

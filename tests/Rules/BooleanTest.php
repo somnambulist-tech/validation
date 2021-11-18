@@ -3,13 +3,13 @@
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
 use PHPUnit\Framework\TestCase;
-use Somnambulist\Components\Validation\Rules\Boolean;
+use Somnambulist\Components\Validation\Rules\TypeBoolean;
 
 class BooleanTest extends TestCase
 {
     public function setUp(): void
     {
-        $this->rule = new Boolean;
+        $this->rule = new TypeBoolean;
     }
 
     public function testValids()

@@ -12,15 +12,15 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Same extends Rule
 {
-    protected string $message = "The :attribute must be same with :field";
+    protected string $message = 'rule.same';
     protected array $fillableParams = ['field'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         $field        = $this->parameter('field');
-        $anotherValue = $this->getAttribute()->getValue($field);
+        $anotherValue = $this->attribute()->value($field);
 
         return $value == $anotherValue;
     }

@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class AlphaSpaces extends Rule
 {
-    protected string $message = "The :attribute may only contain alphabetic characters and spaces";
+    protected string $message = 'rule.alpha_spaces';
 
     public function check($value): bool
     {

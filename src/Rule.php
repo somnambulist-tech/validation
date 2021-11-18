@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\Validation;
 
 use Somnambulist\Components\Validation\Exceptions\ParameterException;
+use function array_merge;
 
 /**
  * Class Rule
@@ -17,44 +18,35 @@ abstract class Rule
     protected ?Validation $validation = null;
     protected bool $implicit = false;
     protected array $params = [];
-    protected array $paramsTexts = [];
     protected array $fillableParams = [];
-    protected string $message = "The :attribute is invalid";
+    protected string $message = 'rule.default';
 
     abstract public function check(mixed $value): bool;
 
-    public function setValidation(Validation $validation): void
-    {
-        $this->validation = $validation;
-    }
-
-    public function getAttribute(): ?Attribute
+    public function attribute(): ?Attribute
     {
         return $this->attribute;
     }
 
+    /**
+     * @internal
+     */
     public function setAttribute(Attribute $attribute): void
     {
         $this->attribute = $attribute;
     }
 
-    public function getParameters(): array
+    /**
+     * @internal
+     */
+    public function setValidation(Validation $validation): void
+    {
+        $this->validation = $validation;
+    }
+
+    public function parameters(): array
     {
         return $this->params;
-    }
-
-    public function setParameters(array $params): self
-    {
-        $this->params = array_merge($this->params, $params);
-
-        return $this;
-    }
-
-    public function setParameter(string $key, mixed $value): self
-    {
-        $this->params[$key] = $value;
-
-        return $this;
     }
 
     public function fillParameters(array $params): self
@@ -78,59 +70,40 @@ abstract class Rule
         return $this->params[$key] ?? null;
     }
 
-    /**
-     * Set parameter text that can be displayed in error message using ':param_key'
-     */
-    public function setParameterText(string $key, string $text): void
-    {
-        $this->paramsTexts[$key] = $text;
-    }
-
-    public function getParametersTexts(): array
-    {
-        return $this->paramsTexts;
-    }
-
     public function isImplicit(): bool
     {
         return $this->implicit;
     }
 
-    /**
-     * Alias of setMessage
-     */
-    public function message(string $message): self
+    public function message(array $params = []): ErrorMessage
     {
-        return $this->setMessage($message);
+        $params = array_merge(
+            [
+                'attribute' => $this->attribute->alias() ?? $this->attribute->key(),
+                'value'     => $this->attribute->value()
+            ],
+            $this->convertParametersForMessage(),
+            $params,
+        );
+
+        return new ErrorMessage($this->message, $params);
     }
 
-    public function getMessage(): string
+    protected function convertParametersForMessage(): array
     {
-        return $this->message;
+        return $this->params;
     }
 
-    public function setMessage(string $message): self
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * Check $params for any that are required and missing
-     *
-     * @throws ParameterException
-     */
-    protected function requireParameters(array $params): void
+    protected function assertHasRequiredParameters(array $params): void
     {
         foreach ($params as $param) {
             if (!isset($this->params[$param])) {
-                throw ParameterException::missing($this->getName(), $param);
+                throw ParameterException::missing($this->name(), $param);
             }
         }
     }
 
-    public function getName(): string
+    public function name(): string
     {
         return $this->name ?: get_class($this);
     }

@@ -2,8 +2,6 @@
 
 namespace Somnambulist\Components\Validation;
 
-use Somnambulist\Components\Validation\Behaviours\MessagesTrait;
-use Somnambulist\Components\Validation\Behaviours\TranslationsTrait;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
 
 /**
@@ -14,21 +12,20 @@ use Somnambulist\Components\Validation\Exceptions\RuleException;
  */
 class Factory
 {
-    use TranslationsTrait;
-    use MessagesTrait;
-
     private array $rules = [];
+    private MessageBag $messages;
 
-    public function __construct(array $messages = [])
+    public function __construct()
     {
-        $this->messages = $messages;
+        $this->messages = new MessageBag();
 
         $this->registerDefaultRules();
+        $this->registerDefaultMessages();
     }
 
     public function __invoke(string $rule, ...$args): Rule
     {
-        return $this->getRule($rule)->fillParameters($args);
+        return $this->rule($rule)->fillParameters($args);
     }
 
     protected function registerDefaultRules()
@@ -43,7 +40,7 @@ class Factory
             'array'                => new Rules\TypeArray,
             'before'               => new Rules\Before,
             'between'              => new Rules\Between,
-            'boolean'              => new Rules\Boolean,
+            'boolean'              => new Rules\TypeBoolean,
             'callback'             => new Rules\Callback,
             'date'                 => new Rules\Date,
             'default'              => new Rules\Defaults,
@@ -55,7 +52,7 @@ class Factory
             'extension'            => new Rules\Extension,
             'float'                => new Rules\TypeFloat,
             'in'                   => new Rules\In,
-            'integer'              => new Rules\Integer,
+            'integer'              => new Rules\TypeInteger,
             'ip'                   => new Rules\Ip,
             'ipv4'                 => new Rules\Ipv4,
             'ipv6'                 => new Rules\Ipv6,
@@ -94,18 +91,19 @@ class Factory
         }
     }
 
-    public function make(array $inputs, array $rules, array $messages = []): Validation
+    protected function registerDefaultMessages(): void
     {
-        $messages   = array_merge($this->messages, $messages);
-        $validation = new Validation($this, $inputs, $rules, $messages);
-        $validation->setTranslations($this->getTranslations());
-
-        return $validation;
+        $this->messages->add('en', include __DIR__ . '/Resources/i18n/en.php');
     }
 
-    public function validate(array $inputs, array $rules, array $messages = []): Validation
+    public function make(array $inputs, array $rules): Validation
     {
-        $validation = $this->make($inputs, $rules, $messages);
+        return new Validation($this, $inputs, $rules);
+    }
+
+    public function validate(array $inputs, array $rules): Validation
+    {
+        $validation = $this->make($inputs, $rules);
         $validation->validate();
 
         return $validation;
@@ -119,7 +117,7 @@ class Factory
      * @return Rule
      * @throws RuleException
      */
-    public function getRule(string $rule): Rule
+    public function rule(string $rule): Rule
     {
         if (null !== $v = $this->rules[$rule] ?? null) {
             return clone $v;
@@ -132,5 +130,10 @@ class Factory
     {
         $this->rules[$key] = $rule;
         $rule->setName($key);
+    }
+
+    public function messages(): MessageBag
+    {
+        return $this->messages;
     }
 }

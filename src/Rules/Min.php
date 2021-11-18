@@ -15,12 +15,12 @@ class Min extends Rule
 {
     use CanObtainSizeValue;
 
-    protected string $message = "The :attribute minimum is :min";
+    protected string $message = 'rule.min';
     protected array $fillableParams = ['min'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         $min       = $this->getSizeInBytes($this->parameter('min'));
         $valueSize = $this->getValueSize($value);

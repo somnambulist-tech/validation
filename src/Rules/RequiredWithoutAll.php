@@ -11,7 +11,7 @@ namespace Somnambulist\Components\Validation\Rules;
 class RequiredWithoutAll extends Required
 {
     protected bool $implicit = true;
-    protected string $message = "The :attribute is required";
+    protected string $message = 'rule.required_without_all';
 
     public function fillParameters(array $params): self
     {
@@ -22,10 +22,10 @@ class RequiredWithoutAll extends Required
 
     public function check($value): bool
     {
-        $this->requireParameters(['fields']);
+        $this->assertHasRequiredParameters(['fields']);
 
         $fields            = $this->parameter('fields');
-        $requiredValidator = $this->validation->getFactory()->getRule('required');
+        $requiredValidator = $this->validation->getFactory()->rule('required');
 
         foreach ($fields as $field) {
             if ($this->validation->hasValue($field)) {

@@ -14,7 +14,7 @@ use function sprintf;
  */
 class NotIn extends Rule
 {
-    protected string $message = "The :attribute does not allow the following values :disallowed_values";
+    protected string $message = 'rule.not_in';
     protected bool $strict = false;
 
     public static function make(array $values): string
@@ -24,7 +24,7 @@ class NotIn extends Rule
 
     public function fillParameters(array $params): self
     {
-        if (count($params) == 1 and is_array($params[0])) {
+        if (count($params) == 1 && is_array($params[0])) {
             $params = $params[0];
         }
         $this->params['disallowed_values'] = $params;
@@ -48,14 +48,8 @@ class NotIn extends Rule
 
     public function check($value): bool
     {
-        $this->requireParameters(['disallowed_values']);
+        $this->assertHasRequiredParameters(['disallowed_values']);
 
-        $disallowedValues = (array)$this->parameter('disallowed_values');
-
-        $and                  = $this->validation ? $this->validation->getTranslation('and') : 'and';
-        $disallowedValuesText = Helper::join(Helper::wraps($disallowedValues, "'"), ', ', ", {$and} ");
-        $this->setParameterText('disallowed_values', $disallowedValuesText);
-
-        return !in_array($value, $disallowedValues, $this->strict);
+        return !in_array($value, (array)$this->parameter('disallowed_values'), $this->strict);
     }
 }

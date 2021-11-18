@@ -12,12 +12,12 @@ use Somnambulist\Components\Validation\Rule;
  */
 class DigitsBetween extends Rule
 {
-    protected string $message = "The :attribute must have a length between :min and :max";
+    protected string $message = 'rule.digits_between';
     protected array $fillableParams = ['min', 'max'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         $min = (int)$this->parameter('min');
         $max = (int)$this->parameter('max');

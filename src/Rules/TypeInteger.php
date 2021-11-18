@@ -5,14 +5,14 @@ namespace Somnambulist\Components\Validation\Rules;
 use Somnambulist\Components\Validation\Rule;
 
 /**
- * Class Integer
+ * Class TypeInteger
  *
  * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Integer
+ * @subpackage Somnambulist\Components\Validation\Rules\TypeInteger
  */
-class Integer extends Rule
+class TypeInteger extends Rule
 {
-    protected string $message = "The :attribute must be integer";
+    protected string $message = 'rule.integer';
 
     public function check($value): bool
     {

@@ -15,12 +15,12 @@ class After extends Rule
 {
     use CanValidateDates;
 
-    protected string $message = "The :attribute must be a date after :time.";
+    protected string $message = 'rule.after';
     protected array $fillableParams = ['time'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         $time = $this->parameter('time');
 

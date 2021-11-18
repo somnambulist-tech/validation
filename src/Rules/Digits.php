@@ -12,12 +12,12 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Digits extends Rule
 {
-    protected string $message = "The :attribute must be numeric and must have an exact length of :length";
+    protected string $message = 'rule.digits';
     protected array $fillableParams = ['length'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         $length = (int)$this->parameter('length');
 

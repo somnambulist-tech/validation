@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Json extends Rule
 {
-    protected string $message = "The :attribute must be a valid JSON string";
+    protected string $message = 'rule.json';
 
     public function check($value): bool
     {

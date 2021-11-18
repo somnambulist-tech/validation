@@ -15,12 +15,12 @@ class Between extends Rule
 {
     use CanObtainSizeValue;
 
-    protected string $message = "The :attribute must be between :min and :max";
+    protected string $message = 'rule.between';
     protected array $fillableParams = ['min', 'max'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         $min = $this->getSizeInBytes($this->parameter('min'));
         $max = $this->getSizeInBytes($this->parameter('max'));

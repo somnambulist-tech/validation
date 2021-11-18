@@ -13,7 +13,7 @@ use function preg_match;
  */
 class PhoneNumber extends Rule
 {
-    protected string $message = ':attribute is not a valid E.164 phone number.';
+    protected string $message = 'rule.phone_number';
 
     public function check($value): bool
     {

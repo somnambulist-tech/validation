@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class TypeString extends Rule
 {
-    protected string $message = ':attribute must be a string';
+    protected string $message = 'rule.string';
 
     public function check($value): bool
     {

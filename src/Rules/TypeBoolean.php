@@ -6,14 +6,14 @@ use Somnambulist\Components\Validation\Rule;
 use function in_array;
 
 /**
- * Class Boolean
+ * Class TypeBoolean
  *
  * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Boolean
+ * @subpackage Somnambulist\Components\Validation\Rules\TypeBoolean
  */
-class Boolean extends Rule
+class TypeBoolean extends Rule
 {
-    protected string $message = "The :attribute must be a boolean";
+    protected string $message = 'rule.boolean';
 
     public function check($value): bool
     {

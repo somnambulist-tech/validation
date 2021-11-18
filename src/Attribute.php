@@ -34,12 +34,27 @@ class Attribute
         }
     }
 
+    public function rule(string $ruleKey)
+    {
+        return $this->hasRule($ruleKey) ? $this->rules[$ruleKey] : null;
+    }
+
+    public function hasRule(string $ruleKey): bool
+    {
+        return isset($this->rules[$ruleKey]);
+    }
+
+    public function rules(): array
+    {
+        return $this->rules;
+    }
+
     public function addRule(Rule $rule): void
     {
         $rule->setAttribute($this);
         $rule->setValidation($this->validation);
 
-        $this->rules[$rule->getName()] = $rule;
+        $this->rules[$rule->name()] = $rule;
     }
 
     public function getOtherAttributes(): array
@@ -61,21 +76,6 @@ class Attribute
         $this->otherAttributes[] = $otherAttribute;
     }
 
-    public function getRule(string $ruleKey)
-    {
-        return $this->hasRule($ruleKey) ? $this->rules[$ruleKey] : null;
-    }
-
-    public function hasRule(string $ruleKey): bool
-    {
-        return isset($this->rules[$ruleKey]);
-    }
-
-    public function getRules(): array
-    {
-        return $this->rules;
-    }
-
     public function makeRequired(): void
     {
         $this->required = true;
@@ -86,22 +86,22 @@ class Attribute
         return $this->required;
     }
 
-    public function getValue(string $key = null): mixed
+    public function isArrayAttribute(): bool
+    {
+        return count($this->getKeyIndexes()) > 0;
+    }
+
+    public function value(string $key = null): mixed
     {
         if ($key && $this->isArrayAttribute()) {
             $key = $this->resolveSiblingKey($key);
         }
 
         if (!$key) {
-            $key = $this->getKey();
+            $key = $this->key();
         }
 
         return $this->validation->getValue($key);
-    }
-
-    public function isArrayAttribute(): bool
-    {
-        return count($this->getKeyIndexes()) > 0;
     }
 
     public function getKeyIndexes(): array
@@ -129,14 +129,14 @@ class Attribute
         return call_user_func_array('sprintf', $args);
     }
 
-    public function getKey(): string
+    public function key(): string
     {
         return $this->key;
     }
 
     public function isUsingDotNotation(): bool
     {
-        return str_contains($this->getKey(), '.');
+        return str_contains($this->key(), '.');
     }
 
     public function getPrimaryAttribute(): ?Attribute
@@ -149,7 +149,7 @@ class Attribute
         $this->primaryAttribute = $primaryAttribute;
     }
 
-    public function getAlias(): ?string
+    public function alias(): ?string
     {
         return $this->alias;
     }

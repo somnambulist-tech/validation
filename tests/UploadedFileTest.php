@@ -378,20 +378,8 @@ class UploadedFileTest extends TestCase
             'sample' => 'mimes:jpeg,png,bmp',
         ]);
 
-        $expectedMessage = "The sample file type must be 'jpeg', 'png', or 'bmp'";
-        $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
-
-        // Using translation
-        $this->validator->setTranslation('or', 'atau');
-
-        $validation = $this->validator->validate([
-            'sample' => $file,
-        ], [
-            'sample' => 'mimes:jpeg,png,bmp',
-        ]);
-
-        $expectedMessage = "The sample file type must be 'jpeg', 'png', atau 'bmp'";
-        $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
+        $expectedMessage = 'sample file type must be "jpeg","png","bmp"';
+        $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
     }
 
     public function testRuleUploadedFileInvalidMessages()
@@ -413,8 +401,8 @@ class UploadedFileTest extends TestCase
             'sample' => 'uploaded_file',
         ]);
 
-        $expectedMessage = "The sample is not a valid uploaded file";
-        $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
+        $expectedMessage = "sample is not a valid uploaded file";
+        $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
 
         // Invalid min size
         $validation = $this->validator->validate([
@@ -423,8 +411,8 @@ class UploadedFileTest extends TestCase
             'sample' => [(clone $rule)->minSize('3M')],
         ]);
 
-        $expectedMessage = "The sample file is too small, minimum size is 3M";
-        $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
+        $expectedMessage = "sample file is too small, minimum size is 3M";
+        $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
 
         // Invalid max size
         $validation = $this->validator->validate([
@@ -433,8 +421,8 @@ class UploadedFileTest extends TestCase
             'sample' => [(clone $rule)->maxSize('1M')],
         ]);
 
-        $expectedMessage = "The sample file is too large, maximum size is 1M";
-        $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
+        $expectedMessage = "sample file is too large, maximum size is 1M";
+        $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
 
         // Invalid file types
         $validation = $this->validator->validate([
@@ -443,18 +431,7 @@ class UploadedFileTest extends TestCase
             'sample' => [(clone $rule)->types(['jpeg', 'png', 'bmp'])],
         ]);
 
-        $expectedMessage = "The sample file type must be 'jpeg', 'png', or 'bmp'";
-        $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
-
-        // Invalid file types with translation
-        $this->validator->setTranslation('or', 'atau');
-        $validation = $this->validator->validate([
-            'sample' => $file,
-        ], [
-            'sample' => [(clone $rule)->types(['jpeg', 'png', 'bmp'])],
-        ]);
-
-        $expectedMessage = "The sample file type must be 'jpeg', 'png', atau 'bmp'";
-        $this->assertEquals($validation->errors()->first('sample'), $expectedMessage);
+        $expectedMessage = 'sample file type must be "jpeg","png","bmp"';
+        $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
     }
 }

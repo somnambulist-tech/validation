@@ -12,12 +12,12 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Regex extends Rule
 {
-    protected string $message = "The :attribute is not a valid format";
+    protected string $message = 'rule.regex';
     protected array $fillableParams = ['regex'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         return preg_match($this->parameter('regex'), $value) > 0;
     }

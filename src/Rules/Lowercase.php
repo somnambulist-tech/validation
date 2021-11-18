@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Lowercase extends Rule
 {
-    protected string $message = "The :attribute must be lowercase";
+    protected string $message = 'rule.lowercase';
 
     public function check($value): bool
     {

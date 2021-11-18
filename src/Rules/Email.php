@@ -12,7 +12,7 @@ use Somnambulist\Components\Validation\Rule;
  */
 class Email extends Rule
 {
-    protected string $message = "The :attribute is not a valid email address";
+    protected string $message = 'rule.email';
 
     public function check($value): bool
     {

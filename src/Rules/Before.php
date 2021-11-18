@@ -15,12 +15,12 @@ class Before extends Rule
 {
     use CanValidateDates;
 
-    protected string $message = "The :attribute must be a date before :time.";
+    protected string $message = 'rule.before';
     protected array $fillableParams = ['time'];
 
     public function check($value): bool
     {
-        $this->requireParameters($this->fillableParams);
+        $this->assertHasRequiredParameters($this->fillableParams);
 
         $time = $this->parameter('time');
 

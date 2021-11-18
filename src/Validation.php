@@ -3,13 +3,12 @@
 namespace Somnambulist\Components\Validation;
 
 use Closure;
-use Somnambulist\Components\Validation\Behaviours\MessagesTrait;
-use Somnambulist\Components\Validation\Behaviours\TranslationsTrait;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
 use Somnambulist\Components\Validation\Rules\Contracts\BeforeValidate;
 use Somnambulist\Components\Validation\Rules\Contracts\ModifyValue;
 use Somnambulist\Components\Validation\Rules\Required;
 use function array_merge;
+use function array_splice;
 use function explode;
 use function get_class;
 use function gettype;
@@ -17,6 +16,7 @@ use function is_numeric;
 use function is_object;
 use function is_scalar;
 use function is_string;
+use function sprintf;
 use function str_contains;
 use function str_getcsv;
 
@@ -28,27 +28,100 @@ use function str_getcsv;
  */
 class Validation
 {
-    use TranslationsTrait;
-    use MessagesTrait;
-
     private ErrorBag $errors;
     private Factory $factory;
+    private MessageBag $messages;
+    private string $separator = ':';
     private array $inputs;
+    /**
+     * @var array|Attribute[]
+     */
     private array $attributes = [];
     private array $aliases = [];
-    private string $messageSeparator = ':';
     private array $validData = [];
     private array $invalidData = [];
 
-    public function __construct(Factory $validator, array $inputs, array $rules, array $messages = [])
+    public function __construct(Factory $factory, array $inputs, array $rules)
     {
-        $this->factory  = $validator;
-        $this->inputs   = $inputs;
-        $this->messages = $messages;
-        $this->errors   = new ErrorBag;
+        $this->factory = $factory;
+        $this->inputs  = $inputs;
+        $this->messages = clone $factory->messages();
+        $this->errors  = new ErrorBag();
 
         foreach ($rules as $attributeKey => $rule) {
             $this->addAttribute($attributeKey, $rule);
+        }
+    }
+
+    public function validate(array $inputs = []): void
+    {
+        $this->errors = new ErrorBag();
+        $this->inputs = array_merge($this->inputs, $inputs);
+
+        foreach ($this->attributes as $attribute) {
+            foreach ($attribute->rules() as $rule) {
+                if ($rule instanceof BeforeValidate) {
+                    $rule->beforeValidate();
+                }
+            }
+        }
+
+        foreach ($this->attributes as $attribute) {
+            $this->validateAttribute($attribute);
+        }
+    }
+
+    protected function validateAttribute(Attribute $attribute): void
+    {
+        if ($this->isArrayAttribute($attribute)) {
+            $attributes = $this->parseArrayAttribute($attribute);
+
+            foreach ($attributes as $attr) {
+                $this->validateAttribute($attr);
+            }
+
+            return;
+        }
+
+        $attributeKey = $attribute->key();
+        $rules        = $attribute->rules();
+        $value        = $this->getValue($attributeKey);
+        $isEmptyValue = $this->isEmptyValue($value);
+
+        if ($attribute->hasRule('nullable') && $isEmptyValue) {
+            $rules = [];
+        }
+
+        $isValid = true;
+
+        foreach ($rules as $ruleValidator) {
+            $ruleValidator->setAttribute($attribute);
+
+            if ($ruleValidator instanceof ModifyValue) {
+                $value        = $ruleValidator->modifyValue($value);
+                $isEmptyValue = $this->isEmptyValue($value);
+            }
+
+            $valid = $ruleValidator->check($value);
+
+            if ($isEmptyValue and $this->ruleIsOptional($attribute, $ruleValidator)) {
+                continue;
+            }
+
+            if (!$valid) {
+                $isValid = false;
+                $this->addError($attribute, $ruleValidator, $value);
+
+                if ($ruleValidator->isImplicit()) {
+                    break;
+                }
+            }
+        }
+
+        if ($isValid) {
+            $this->setValidData($attribute, $value);
+        } else {
+            $this->setInvalidData($attribute, $value);
         }
     }
 
@@ -81,11 +154,11 @@ class Validation
 
             if (is_string($rule)) {
                 [$rulename, $params] = $this->parseRule($rule);
-                $validator = $this->factory->getRule($rulename)->fillParameters($params);
+                $validator = $this->factory->rule($rulename)->fillParameters($params);
             } elseif ($rule instanceof Rule) {
                 $validator = $rule;
             } elseif ($rule instanceof Closure) {
-                $validator = $this->factory->getRule('callback')->fillParameters([$rule]);
+                $validator = $this->factory->rule('callback')->fillParameters([$rule]);
             } else {
                 throw RuleException::invalidRuleType(is_object($rule) ? get_class($rule) : gettype($rule));
             }
@@ -94,11 +167,6 @@ class Validation
         }
 
         return $resolvedRules;
-    }
-
-    public function getFactory(): Factory
-    {
-        return $this->factory;
     }
 
     protected function parseRule(string $rule): array
@@ -115,9 +183,24 @@ class Validation
         return [$ruleName, $params];
     }
 
+    public function getFactory(): Factory
+    {
+        return $this->factory;
+    }
+
     public function getAlias(string $attributeKey): ?string
     {
         return $this->aliases[$attributeKey] ?? null;
+    }
+
+    public function setAlias(string $attributeKey, string $alias): void
+    {
+        $this->aliases[$attributeKey] = $alias;
+    }
+
+    public function setAliases(array $aliases): void
+    {
+        $this->aliases = array_merge($this->aliases, $aliases);
     }
 
     public function getAttribute(string $attributeKey): ?Attribute
@@ -125,82 +208,12 @@ class Validation
         return $this->attributes[$attributeKey] ?? null;
     }
 
-    public function validate(array $inputs = []): void
-    {
-        $this->errors = new ErrorBag;
-        $this->inputs = array_merge($this->inputs, $inputs);
-
-        foreach ($this->attributes as $attribute) {
-            foreach ($attribute->getRules() as $rule) {
-                if ($rule instanceof BeforeValidate) {
-                    $rule->beforeValidate();
-                }
-            }
-        }
-
-        foreach ($this->attributes as $attribute) {
-            $this->validateAttribute($attribute);
-        }
-    }
-
-    protected function validateAttribute(Attribute $attribute): void
-    {
-        if ($this->isArrayAttribute($attribute)) {
-            $attributes = $this->parseArrayAttribute($attribute);
-
-            foreach ($attributes as $attr) {
-                $this->validateAttribute($attr);
-            }
-
-            return;
-        }
-
-        $attributeKey = $attribute->getKey();
-        $rules        = $attribute->getRules();
-        $value        = $this->getValue($attributeKey);
-        $isEmptyValue = $this->isEmptyValue($value);
-
-        if ($attribute->hasRule('nullable') && $isEmptyValue) {
-            $rules = [];
-        }
-
-        $isValid = true;
-        foreach ($rules as $ruleValidator) {
-            $ruleValidator->setAttribute($attribute);
-
-            if ($ruleValidator instanceof ModifyValue) {
-                $value        = $ruleValidator->modifyValue($value);
-                $isEmptyValue = $this->isEmptyValue($value);
-            }
-
-            $valid = $ruleValidator->check($value);
-
-            if ($isEmptyValue and $this->ruleIsOptional($attribute, $ruleValidator)) {
-                continue;
-            }
-
-            if (!$valid) {
-                $isValid = false;
-                $this->addError($attribute, $value, $ruleValidator);
-                if ($ruleValidator->isImplicit()) {
-                    break;
-                }
-            }
-        }
-
-        if ($isValid) {
-            $this->setValidData($attribute, $value);
-        } else {
-            $this->setInvalidData($attribute, $value);
-        }
-    }
-
     /**
      * Check whether given $attribute is an array attribute
      */
     protected function isArrayAttribute(Attribute $attribute): bool
     {
-        return str_contains($attribute->getKey(), '*');
+        return str_contains($attribute->key(), '*');
     }
 
     /**
@@ -208,7 +221,7 @@ class Validation
      */
     protected function parseArrayAttribute(Attribute $attribute): array
     {
-        $attributeKey = $attribute->getKey();
+        $attributeKey = $attribute->key();
         $data         = Helper::arrayDot($this->initializeAttributeOnData($attributeKey));
 
         $pattern = str_replace('\*', '([^\.]+)', preg_quote($attributeKey));
@@ -222,7 +235,7 @@ class Validation
 
         foreach ($data as $key => $value) {
             if (preg_match('/^' . $pattern . '\z/', $key, $match)) {
-                $attr = new Attribute($this, $key, null, $attribute->getRules());
+                $attr = new Attribute($this, $key, null, $attribute->rules());
                 $attr->setPrimaryAttribute($attribute);
                 $attr->setKeyIndexes(array_slice($match, 1));
                 $attributes[] = $attr;
@@ -326,130 +339,6 @@ class Validation
         return Helper::arrayGet($this->inputs, $key);
     }
 
-    protected function isEmptyValue(mixed $value): bool
-    {
-        return false === (new Required)->check($value);
-    }
-
-    protected function ruleIsOptional(Attribute $attribute, Rule $rule): bool
-    {
-        return false === $attribute->isRequired() and
-               false === $rule->isImplicit() and
-               false === $rule instanceof Required;
-    }
-
-    protected function addError(Attribute $attribute, $value, Rule $ruleValidator): void
-    {
-        $ruleName = $ruleValidator->getName();
-        $message  = $this->resolveMessage($attribute, $value, $ruleValidator);
-
-        $this->errors->add($attribute->getKey(), $ruleName, $message);
-    }
-
-    protected function resolveMessage(Attribute $attribute, $value, Rule $validator): string
-    {
-        $primaryAttribute = $attribute->getPrimaryAttribute();
-        $params           = array_merge($validator->getParameters(), $validator->getParametersTexts());
-        $attributeKey     = $attribute->getKey();
-        $ruleKey          = $validator->getName();
-        $alias            = $attribute->getAlias() ?: $this->resolveAttributeName($attribute);
-        $message          = $validator->getMessage();
-        $messageKeys      = [
-            $attributeKey . $this->messageSeparator . $ruleKey,
-            $attributeKey,
-            $ruleKey,
-        ];
-
-        if ($primaryAttribute) {
-            $primaryAttributeKey = $primaryAttribute->getKey();
-            array_splice($messageKeys, 1, 0, $primaryAttributeKey . $this->messageSeparator . $ruleKey);
-            array_splice($messageKeys, 3, 0, $primaryAttributeKey);
-        }
-
-        foreach ($messageKeys as $key) {
-            if (isset($this->messages[$key])) {
-                $message = $this->messages[$key];
-                break;
-            }
-        }
-
-        // Replace message params
-        $vars = array_merge($params, [
-            'attribute' => $alias,
-            'value'     => $value,
-        ]);
-
-        foreach ($vars as $key => $value) {
-            $value   = $this->stringify($value);
-            $message = str_replace(':' . $key, $value, $message);
-        }
-
-        // Replace key indexes
-        $keyIndexes = $attribute->getKeyIndexes();
-        foreach ($keyIndexes as $pathIndex => $index) {
-            $replacers = [
-                "[{$pathIndex}]" => $index,
-            ];
-
-            if (is_numeric($index)) {
-                $replacers["{{$pathIndex}}"] = $index + 1;
-            }
-
-            $message = str_replace(array_keys($replacers), array_values($replacers), $message);
-        }
-
-        return $message;
-    }
-
-    protected function resolveAttributeName(Attribute $attribute): string
-    {
-        $primaryAttribute = $attribute->getPrimaryAttribute();
-
-        if (isset($this->aliases[$attribute->getKey()])) {
-            return $this->aliases[$attribute->getKey()];
-        } elseif ($primaryAttribute and isset($this->aliases[$primaryAttribute->getKey()])) {
-            return $this->aliases[$primaryAttribute->getKey()];
-        } else {
-            return $attribute->getKey();
-        }
-    }
-
-    protected function stringify(mixed $value): string
-    {
-        if (is_string($value) || is_numeric($value)) {
-            return (string)$value;
-        } elseif (is_array($value) || is_object($value)) {
-            return json_encode($value);
-        } else {
-            return '';
-        }
-    }
-
-    public function errors(): ErrorBag
-    {
-        return $this->errors;
-    }
-
-    public function setAlias(string $attributeKey, string $alias): void
-    {
-        $this->aliases[$attributeKey] = $alias;
-    }
-
-    public function setAliases(array $aliases): void
-    {
-        $this->aliases = array_merge($this->aliases, $aliases);
-    }
-
-    public function fails(): bool
-    {
-        return !$this->passes();
-    }
-
-    public function passes(): bool
-    {
-        return $this->errors->count() === 0;
-    }
-
     /**
      * Set an input value explicitly
      */
@@ -466,6 +355,86 @@ class Validation
         return Helper::arrayHas($this->inputs, $key);
     }
 
+    protected function isEmptyValue(mixed $value): bool
+    {
+        return false === (new Required)->check($value);
+    }
+
+    protected function ruleIsOptional(Attribute $attribute, Rule $rule): bool
+    {
+        return false === $attribute->isRequired() and
+               false === $rule->isImplicit() and
+               false === $rule instanceof Required;
+    }
+
+    protected function addError(Attribute $attribute, Rule $rule, mixed $value): void
+    {
+        $this->errors->add($attribute->key(), $rule->name(), $this->resolveMessage($attribute, $rule, $value));
+    }
+
+    protected function resolveAttributeName(Attribute $attribute): string
+    {
+        return $this->aliases[$attribute->key()] ?? $this->aliases[$attribute->getPrimaryAttribute()?->key()] ?? $attribute->key();
+    }
+
+    protected function resolveMessage(Attribute $attribute, Rule $rule, mixed $value): ErrorMessage
+    {
+        $primaryAttribute = $attribute->getPrimaryAttribute();
+        $attributeKey     = $attribute->key();
+        $ruleName         = $rule->name();
+        $message          = $rule->message(['attribute' => $this->resolveAttributeName($attribute), 'value' => $value]);
+        $messageKeys      = [
+            $attributeKey . $this->separator . $ruleName,
+            $attributeKey,
+            $message->key(),
+        ];
+
+        if ($primaryAttribute) {
+            $primaryAttributeKey = $primaryAttribute->key();
+            // adds additional key lookups in the message keys e.g. parent.*.attribute:rule
+            array_splice($messageKeys, 1, 0, $primaryAttributeKey . $this->separator . $ruleName);
+            array_splice($messageKeys, 3, 0, $primaryAttributeKey);
+        }
+
+        $message->setMessage($this->messages->firstOf($messageKeys));
+
+        // Replace key indexes
+        $keyIndexes = $attribute->getKeyIndexes();
+
+        // add placeholders for [0] or {1} to params set
+        foreach ($keyIndexes as $pathIndex => $index) {
+            $replacers = [sprintf('[%s]', $pathIndex) => $index];
+
+            if (is_numeric($index)) {
+                $replacers[sprintf('{%s}', $pathIndex)] = $index + 1;
+            }
+
+            $message->addParams($replacers);
+        }
+
+        return $message;
+    }
+
+    public function messages(): MessageBag
+    {
+        return $this->messages;
+    }
+
+    public function errors(): ErrorBag
+    {
+        return $this->errors;
+    }
+
+    public function fails(): bool
+    {
+        return !$this->passes();
+    }
+
+    public function passes(): bool
+    {
+        return $this->errors->count() === 0;
+    }
+
     public function getValidatedData(): array
     {
         return array_merge($this->validData, $this->invalidData);
@@ -478,7 +447,8 @@ class Validation
 
     protected function setValidData(Attribute $attribute, $value): void
     {
-        $key = $attribute->getKey();
+        $key = $attribute->key();
+
         if ($attribute->isArrayAttribute() || $attribute->isUsingDotNotation()) {
             Helper::arraySet($this->validData, $key, $value);
             Helper::arrayUnset($this->invalidData, $key);
@@ -494,7 +464,8 @@ class Validation
 
     protected function setInvalidData(Attribute $attribute, $value): void
     {
-        $key = $attribute->getKey();
+        $key = $attribute->key();
+
         if ($attribute->isArrayAttribute() || $attribute->isUsingDotNotation()) {
             Helper::arraySet($this->invalidData, $key, $value);
             Helper::arrayUnset($this->validData, $key);

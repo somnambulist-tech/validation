@@ -20,7 +20,7 @@ class UploadedFile extends Rule implements BeforeValidate
     use CanValidateFiles;
     use CanObtainSizeValue;
 
-    protected string $message = "The :attribute is not a valid uploaded file";
+    protected string $message = 'rule.uploaded_file';
     protected MimeTypeGuesserContract $guesser;
 
     public function __construct(MimeTypeGuesserContract $guesser = null)
@@ -88,7 +88,7 @@ class UploadedFile extends Rule implements BeforeValidate
 
     public function beforeValidate(): void
     {
-        $attribute = $this->getAttribute();
+        $attribute = $this->attribute();
 
         // We only resolve uploaded file value
         // from complex attribute such as 'files.photo', 'images.*', 'images.foo.bar', etc.
@@ -96,7 +96,7 @@ class UploadedFile extends Rule implements BeforeValidate
             return;
         }
 
-        $keys          = explode(".", $attribute->getKey());
+        $keys          = explode(".", $attribute->key());
         $firstKey      = array_shift($keys);
         $firstKeyValue = $this->validation->getValue($firstKey);
 
@@ -131,19 +131,19 @@ class UploadedFile extends Rule implements BeforeValidate
         }
 
         if ($minSize && $value['size'] < $this->getSizeInBytes($minSize)) {
-            $this->setMessage('The :attribute file is too small, minimum size is :min_size');
+            $this->message = 'rule.uploaded_file.min_size';
 
             return false;
         }
 
         if ($maxSize && $value['size'] > $this->getSizeInBytes($maxSize)) {
-            $this->setMessage('The :attribute file is too large, maximum size is :max_size');
+            $this->message = 'rule.uploaded_file.max_size';
 
             return false;
         }
 
         if (!empty($allowedTypes) && !in_array($this->guesser->getExtension($value['type']), $allowedTypes)) {
-            $this->setMessage('The :attribute file type must be :allowed_types');
+            $this->message = 'rule.uploaded_file.type';
 
             return false;
         }
