@@ -728,10 +728,8 @@ class ValidatorTest extends TestCase
             'comments.*.text' => ':attribute qux'
         ]);
 
-        $validation->setAliases([
-            'foo' => 'Foo',
-            'email' => 'Bar'
-        ]);
+        $validation->setAlias('foo', 'Foo');
+        $validation->setAlias('email', 'Bar');
 
         $validation->setAlias('something', 'Baz');
         $validation->setAlias('comments.*.text', 'Qux');

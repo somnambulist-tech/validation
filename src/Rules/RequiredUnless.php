@@ -28,7 +28,7 @@ class RequiredUnless extends Required
         $anotherAttribute  = $this->parameter('field');
         $definedValues     = $this->parameter('values');
         $anotherValue      = $this->attribute()->value($anotherAttribute);
-        $requiredValidator = $this->validation->getFactory()->rule('required');
+        $requiredValidator = $this->validation->factory()->rule('required');
 
         if (!in_array($anotherValue, $definedValues)) {
             $this->setAttributeAsRequired();

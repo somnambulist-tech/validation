@@ -98,7 +98,7 @@ class UploadedFile extends Rule implements BeforeValidate
 
         $keys          = explode(".", $attribute->key());
         $firstKey      = array_shift($keys);
-        $firstKeyValue = $this->validation->getValue($firstKey);
+        $firstKeyValue = $this->validation->input()->get($firstKey);
 
         $resolvedValue = $this->resolveUploadedFileValue($firstKeyValue);
 
@@ -107,7 +107,7 @@ class UploadedFile extends Rule implements BeforeValidate
             return;
         }
 
-        $this->validation->setValue($firstKey, $resolvedValue);
+        $this->validation->input()->set($firstKey, $resolvedValue);
     }
 
     public function check($value): bool
@@ -117,7 +117,7 @@ class UploadedFile extends Rule implements BeforeValidate
         $allowedTypes = $this->parameter('allowed_types');
 
         // below is Required rule job
-        if (!$this->isValueFromUploadedFiles($value) or $value['error'] == UPLOAD_ERR_NO_FILE) {
+        if (!$this->isValueFromUploadedFiles($value) || $value['error'] == UPLOAD_ERR_NO_FILE) {
             return true;
         }
 

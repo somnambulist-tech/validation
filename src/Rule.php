@@ -4,6 +4,8 @@ namespace Somnambulist\Components\Validation;
 
 use Somnambulist\Components\Validation\Exceptions\ParameterException;
 use function array_merge;
+use function array_shift;
+use function get_class;
 
 /**
  * Class Rule
@@ -73,6 +75,13 @@ abstract class Rule
     public function isImplicit(): bool
     {
         return $this->implicit;
+    }
+
+    public function makeImplicit(): self
+    {
+        $this->implicit = true;
+
+        return $this;
     }
 
     public function message(array $params = []): ErrorMessage

@@ -2,6 +2,13 @@
 
 namespace Somnambulist\Components\Validation;
 
+use function array_merge;
+use function call_user_func_array;
+use function count;
+use function explode;
+use function str_contains;
+use function str_replace;
+
 /**
  * Class Attribute
  *
@@ -15,8 +22,7 @@ class Attribute
     protected ?string $alias;
     protected Validation $validation;
     protected bool $required = false;
-    protected ?Attribute $primaryAttribute = null;
-    protected array $otherAttributes = [];
+    protected ?Attribute $parent = null;
     protected array $keyIndexes = [];
 
     public function __construct(
@@ -57,25 +63,6 @@ class Attribute
         $this->rules[$rule->name()] = $rule;
     }
 
-    public function getOtherAttributes(): array
-    {
-        return $this->otherAttributes;
-    }
-
-    public function setOtherAttributes(array $otherAttributes): void
-    {
-        $this->otherAttributes = [];
-
-        foreach ($otherAttributes as $otherAttribute) {
-            $this->addOtherAttribute($otherAttribute);
-        }
-    }
-
-    public function addOtherAttribute(Attribute $otherAttribute): void
-    {
-        $this->otherAttributes[] = $otherAttribute;
-    }
-
     public function makeRequired(): void
     {
         $this->required = true;
@@ -101,7 +88,7 @@ class Attribute
             $key = $this->key();
         }
 
-        return $this->validation->getValue($key);
+        return $this->validation->input()->get($key);
     }
 
     public function getKeyIndexes(): array
@@ -139,14 +126,14 @@ class Attribute
         return str_contains($this->key(), '.');
     }
 
-    public function getPrimaryAttribute(): ?Attribute
+    public function parent(): ?Attribute
     {
-        return $this->primaryAttribute;
+        return $this->parent;
     }
 
-    public function setPrimaryAttribute(Attribute $primaryAttribute): void
+    public function setParent(Attribute $parent): void
     {
-        $this->primaryAttribute = $primaryAttribute;
+        $this->parent = $parent;
     }
 
     public function alias(): ?string

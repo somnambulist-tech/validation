@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+2021-11-18
+----------
+
+ * add `InputBag` for holding all input items
+ * add support for callables in `Helper::arrayGet`
+ * rename more methods
+ * rename `primaryAttribute` to `parent`
+ * remove `setAliases`, `setAlias` is good enough
+ * remove `otherAttributes` from attribute, not used anywhere
+
 2021-11-17
 ----------
 

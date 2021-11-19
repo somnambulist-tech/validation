@@ -4,6 +4,7 @@ namespace Somnambulist\Components\Validation;
 
 use function array_map;
 use function implode;
+use function is_callable;
 use function str_replace;
 
 /**
@@ -64,7 +65,7 @@ class Helper
             if (is_array($array) && array_key_exists($segment, $array)) {
                 $array = $array[$segment];
             } else {
-                return $default;
+                return is_callable($default) ? $default() : $default;
             }
         }
 
