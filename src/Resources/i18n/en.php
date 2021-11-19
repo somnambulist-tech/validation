@@ -42,7 +42,7 @@ return [
     'rule.prohibited_unless'      => ':attribute is not allowed if :field does not have value(s) :values',
     'rule.regex'                  => ':attribute does not meet required format',
     'rule.required'               => ':attribute is required',
-    'rule.required_if'            => ':attribute is required if :field is filled',
+    'rule.required_if'            => ':attribute is required if :field has a value of :values',
     'rule.required_unless'        => ':attribute is required if :fields has one of :values',
     'rule.required_with'          => ':attribute is required with :fields',
     'rule.required_with_all'      => ':attribute is required with all of :fields',

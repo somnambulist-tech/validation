@@ -17,50 +17,24 @@ use function str_replace;
  */
 class Attribute
 {
-    protected array $rules = [];
-    protected string $key;
-    protected ?string $alias;
-    protected Validation $validation;
-    protected bool $required = false;
-    protected ?Attribute $parent = null;
-    protected array $keyIndexes = [];
+    private Validation $validation;
+    private ?Attribute $parent = null;
+    private RuleBag $rules;
+    private string $key;
+    private ?string $alias;
+    private bool $required = false;
+    private array $indexes = [];
 
     public function __construct(
         Validation $validation,
         string $key,
-        $alias = null,
+        string $alias = null,
         array $rules = []
     ) {
         $this->validation = $validation;
         $this->alias      = $alias;
         $this->key        = $key;
-
-        foreach ($rules as $rule) {
-            $this->addRule($rule);
-        }
-    }
-
-    public function rule(string $ruleKey)
-    {
-        return $this->hasRule($ruleKey) ? $this->rules[$ruleKey] : null;
-    }
-
-    public function hasRule(string $ruleKey): bool
-    {
-        return isset($this->rules[$ruleKey]);
-    }
-
-    public function rules(): array
-    {
-        return $this->rules;
-    }
-
-    public function addRule(Rule $rule): void
-    {
-        $rule->setAttribute($this);
-        $rule->setValidation($this->validation);
-
-        $this->rules[$rule->name()] = $rule;
+        $this->rules      = new RuleBag($this, $rules);
     }
 
     public function makeRequired(): void
@@ -75,35 +49,30 @@ class Attribute
 
     public function isArrayAttribute(): bool
     {
-        return count($this->getKeyIndexes()) > 0;
+        return count($this->indexes()) > 0;
     }
 
-    public function value(string $key = null): mixed
+    public function alias(): ?string
     {
-        if ($key && $this->isArrayAttribute()) {
-            $key = $this->resolveSiblingKey($key);
-        }
-
-        if (!$key) {
-            $key = $this->key();
-        }
-
-        return $this->validation->input()->get($key);
+        return $this->alias;
     }
 
-    public function getKeyIndexes(): array
+    public function indexes(): array
     {
-        return $this->keyIndexes;
+        return $this->indexes;
     }
 
-    public function setKeyIndexes(array $keyIndexes): void
+    /**
+     * @internal
+     */
+    public function setIndexes(array $indexes): void
     {
-        $this->keyIndexes = $keyIndexes;
+        $this->indexes = $indexes;
     }
 
     private function resolveSiblingKey(string $key): string
     {
-        $indexes        = $this->getKeyIndexes();
+        $indexes        = $this->indexes();
         $keys           = explode("*", $key);
         $countAsterisks = count($keys) - 1;
 
@@ -131,13 +100,37 @@ class Attribute
         return $this->parent;
     }
 
+    /**
+     * @internal
+     */
     public function setParent(Attribute $parent): void
     {
         $this->parent = $parent;
     }
 
-    public function alias(): ?string
+    public function rules(): RuleBag
     {
-        return $this->alias;
+        return $this->rules;
+    }
+
+    /**
+     * @internal
+     */
+    public function validation(): Validation
+    {
+        return $this->validation;
+    }
+
+    public function value(string $key = null): mixed
+    {
+        if ($key && $this->isArrayAttribute()) {
+            $key = $this->resolveSiblingKey($key);
+        }
+
+        if (!$key) {
+            $key = $this->key();
+        }
+
+        return $this->validation->input()->get($key);
     }
 }

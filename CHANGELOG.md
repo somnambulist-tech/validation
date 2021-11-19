@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+2021-11-19
+----------
+
+ * add `AttributeBag` and `RuleBag`
+ * rename `ValidatorTest` to `FactoryTest`
+ * refactor more internals
+ * split out tests from `FactoryTest` into smaller groups
+
 2021-11-18
 ----------
 

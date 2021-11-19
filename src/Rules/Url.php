@@ -16,7 +16,7 @@ class Url extends Rule
 
     public function fillParameters(array $params): self
     {
-        if (count($params) == 1 and is_array($params[0])) {
+        if (count($params) == 1 && is_array($params[0])) {
             $params = $params[0];
         }
 

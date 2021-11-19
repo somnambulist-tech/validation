@@ -18,7 +18,7 @@ trait CanObtainSizeValue
     protected function getValueSize(mixed $value): float
     {
         if ($this->attribute()
-            && ($this->attribute()->hasRule('numeric') || $this->attribute()->hasRule('integer'))
+            && ($this->attribute()->rules()->hasAnyOf('numeric', 'integer'))
             && is_numeric($value)
         ) {
             $value = (float)$value;

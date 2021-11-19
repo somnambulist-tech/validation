@@ -48,7 +48,7 @@ class Mimes extends Rule
         $allowedTypes = $this->parameter('allowed_types');
 
         // below is Required rule job
-        if (!$this->isValueFromUploadedFiles($value) or $value['error'] == UPLOAD_ERR_NO_FILE) {
+        if (!$this->isValueFromUploadedFiles($value) || $value['error'] == UPLOAD_ERR_NO_FILE) {
             return true;
         }
 

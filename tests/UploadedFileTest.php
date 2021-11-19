@@ -89,11 +89,13 @@ class UploadedFileTest extends TestCase
         ];
 
         $samples = [];
+
         foreach ($validUploadedFile as $key => $value) {
             $uploadedFile = $validUploadedFile;
             unset($uploadedFile[$key]);
             $samples[] = $uploadedFile;
         }
+
         return $samples;
     }
 
@@ -378,7 +380,7 @@ class UploadedFileTest extends TestCase
             'sample' => 'mimes:jpeg,png,bmp',
         ]);
 
-        $expectedMessage = 'sample file type must be "jpeg","png","bmp"';
+        $expectedMessage = 'sample file type must be "jpeg", "png", "bmp"';
         $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
     }
 
@@ -431,7 +433,50 @@ class UploadedFileTest extends TestCase
             'sample' => [(clone $rule)->types(['jpeg', 'png', 'bmp'])],
         ]);
 
-        $expectedMessage = 'sample file type must be "jpeg","png","bmp"';
+        $expectedMessage = 'sample file type must be "jpeg", "png", "bmp"';
         $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
+    }
+
+    public function testUploadedFileFunctionsWithRequiredIf()
+    {
+        $v1 = $this->validator->validate([
+            'b' => '',
+        ], [
+            'a' => 'required_if:b,foo|uploaded_file:0,10M,pdf,jpeg,jpg'
+        ]);
+
+        $this->assertTrue($v1->passes());
+
+        $v2 = $this->validator->validate([
+            'a' => '',
+            'b' => 'foo',
+        ], [
+            'a' => 'required_if:b,foo|uploaded_file:0,10M,pdf,jpeg,jpg'
+        ]);
+
+        $this->assertFalse($v2->passes());
+        $this->assertEquals('a is required if b has a value of "foo"', $v2->errors()->first('a'));
+    }
+
+    public function testUploadedFileFunctionsWithRequiredWhen()
+    {
+        $v1 = $this->validator->validate([
+            'a' => '',
+        ], [
+            'b' => 'nullable',
+            'a' => 'required_with:b|uploaded_file:0,10M,pdf,jpeg,jpg',
+        ]);
+
+        $this->assertTrue($v1->passes());
+
+        $v2 = $this->validator->validate([
+            'a' => '',
+            'b' => 'foo',
+        ], [
+            'a' => 'required_with:b|uploaded_file:0,10M,pdf,jpeg,jpg'
+        ]);
+
+        $this->assertFalse($v2->passes());
+        $this->assertEquals('a is required with "b"', $v2->errors()->first('a'));
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Somnambulist\Components\Validation\Tests;
 
-use DateTime;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
 use Somnambulist\Components\Validation\Factory;
@@ -11,12 +10,12 @@ use Somnambulist\Components\Validation\Tests\Fixtures\Required;
 use const UPLOAD_ERR_OK;
 
 /**
- * Class ValidatorTest
+ * Class FactoryTest
  *
  * @package    Somnambulist\Components\Validation\Tests
- * @subpackage Somnambulist\Components\Validation\Tests\ValidatorTest
+ * @subpackage Somnambulist\Components\Validation\Tests\FactoryTest
  */
-class ValidatorTest extends TestCase
+class FactoryTest extends TestCase
 {
     protected ?Factory $validator = null;
 
@@ -73,146 +72,6 @@ class ValidatorTest extends TestCase
         $this->assertTrue($validation->passes());
     }
 
-    public function testRequiredIfRule()
-    {
-        $v1 = $this->validator->validate([
-            'a' => '',
-            'b' => '',
-        ], [
-            'b' => 'required_if:a,1'
-        ]);
-
-        $this->assertTrue($v1->passes());
-
-        $v2 = $this->validator->validate([
-            'a' => '1',
-            'b' => '',
-        ], [
-            'b' => 'required_if:a,1'
-        ]);
-
-        $this->assertFalse($v2->passes());
-    }
-
-    public function testRequiredUnlessRule()
-    {
-        $v1 = $this->validator->validate([
-            'a' => '',
-            'b' => '',
-        ], [
-            'b' => 'required_unless:a,1'
-        ]);
-
-        $this->assertFalse($v1->passes());
-
-        $v2 = $this->validator->validate([
-            'a' => '1',
-            'b' => '',
-        ], [
-            'b' => 'required_unless:a,1'
-        ]);
-
-        $this->assertTrue($v2->passes());
-    }
-
-    public function testRequiredWithRule()
-    {
-        $v1 = $this->validator->validate([
-            'b' => '',
-        ], [
-            'b' => 'required_with:a'
-        ]);
-
-        $this->assertTrue($v1->passes());
-
-        $v2 = $this->validator->validate([
-            'a' => '1',
-            'b' => '',
-        ], [
-            'b' => 'required_with:a'
-        ]);
-
-        $this->assertFalse($v2->passes());
-    }
-
-    public function testRequiredWithoutRule()
-    {
-        $v1 = $this->validator->validate([
-            'b' => '',
-        ], [
-            'b' => 'required_without:a'
-        ]);
-
-        $this->assertFalse($v1->passes());
-
-        $v2 = $this->validator->validate([
-            'a' => '1',
-            'b' => '',
-        ], [
-            'b' => 'required_without:a'
-        ]);
-
-        $this->assertTrue($v2->passes());
-    }
-
-    public function testRequiredWithAllRule()
-    {
-        $v1 = $this->validator->validate([
-            'b' => '',
-            'a' => '1'
-        ], [
-            'b' => 'required_with_all:a,c'
-        ]);
-
-        $this->assertTrue($v1->passes());
-
-        $v2 = $this->validator->validate([
-            'a' => '1',
-            'b' => '',
-            'c' => '2'
-        ], [
-            'b' => 'required_with_all:a,c'
-        ]);
-
-        $this->assertFalse($v2->passes());
-    }
-
-    public function testRequiredWithoutAllRule()
-    {
-        $v1 = $this->validator->validate([
-            'b' => '',
-            'a' => '1'
-        ], [
-            'b' => 'required_without_all:a,c'
-        ]);
-
-        $this->assertTrue($v1->passes());
-
-        $v2 = $this->validator->validate([
-            'b' => '',
-        ], [
-            'b' => 'required_without_all:a,c'
-        ]);
-
-        $this->assertFalse($v2->passes());
-    }
-
-    public function testRulePresent()
-    {
-        $v1 = $this->validator->validate([
-        ], [
-            'something' => 'present'
-        ]);
-        $this->assertFalse($v1->passes());
-
-        $v2 = $this->validator->validate([
-            'something' => 10
-        ], [
-            'something' => 'present'
-        ]);
-        $this->assertTrue($v2->passes());
-    }
-
     public function testNonExistentValidationRule()
     {
         $this->expectException(RuleException::class);
@@ -221,54 +80,9 @@ class ValidatorTest extends TestCase
             'name' => "some name"
         ], [
             'name' => 'required|xxx'
-        ], [
-            'name.required' => "Fill in your name",
-            'xxx' => "Oops"
         ]);
 
         $validation->validate();
-    }
-
-    public function testBeforeRule()
-    {
-        $data = ["date" => (new DateTime())->format('Y-m-d')];
-
-        $validator = $this->validator->make($data, [
-            'date' => 'required|before:tomorrow'
-        ], []);
-
-        $validator->validate();
-
-        $this->assertTrue($validator->passes());
-
-        $validator2 = $this->validator->make($data, [
-            'date' => "required|before:last week"
-        ], []);
-
-        $validator2->validate();
-
-        $this->assertFalse($validator2->passes());
-    }
-
-    public function testAfterRule()
-    {
-        $data = ["date" => (new DateTime())->format('Y-m-d')];
-
-        $validator = $this->validator->make($data, [
-            'date' => 'required|after:yesterday'
-        ], []);
-
-        $validator->validate();
-
-        $this->assertTrue($validator->passes());
-
-        $validator2 = $this->validator->make($data, [
-            'date' => "required|after:next year"
-        ], []);
-
-        $validator2->validate();
-
-        $this->assertFalse($validator2->passes());
     }
 
     public function testNewValidationRuleCanBeAdded()
@@ -290,7 +104,7 @@ class ValidatorTest extends TestCase
 
         $data = ['s' => json_encode(['name' => 'space x', 'human' => false])];
 
-        $validation = $this->validator->make($data, ['s' => 'required'], []);
+        $validation = $this->validator->make($data, ['s' => 'required']);
 
         $validation->validate();
 
@@ -596,6 +410,25 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Product ID must be numeric', $errors->all()[1]);
     }
 
+    public function testPreservesKeyInArrayValidation()
+    {
+        $validation = $this->validator->validate([
+            'cart' => [
+                [
+                    'qty' => 'xyz',
+                ],
+            ]
+        ], [
+            'cart.*.itemName' => 'required',
+            'cart.*.qty' => 'required|numeric'
+        ]);
+
+        $errors = $validation->errors();
+
+        $this->assertEquals('cart.0.qty must be numeric', $errors->first('cart.*.qty'));
+        $this->assertEquals('cart.0.itemName is required', $errors->first('cart.*.itemName'));
+    }
+
     public function testSetCustomMessagesInValidator()
     {
         $this->validator->messages()->add('en', [
@@ -682,6 +515,45 @@ class ValidatorTest extends TestCase
         $this->assertEquals("foo must be even number", $errors->first('foo:callback'));
     }
 
+    public function testCustomMessageInArrayValidation()
+    {
+        $validation = $this->validator->make([
+            'cart' => [
+                [
+                    'qty' => 'xyz',
+                    'itemName' => 'Lorem ipsum'
+                ],
+                [
+                    'qty' => 10,
+                    'attributes' => [
+                        [
+                            'name' => 'color',
+                            'value' => null
+                        ]
+                    ]
+                ],
+            ]
+        ], [
+            'cart.*.itemName' => 'required',
+            'cart.*.qty' => 'required|numeric',
+            'cart.*.attributes.*.value' => 'required'
+        ]);
+
+        $validation->messages()->add('en', [
+            'cart.*.itemName:required' => 'Item [0] name is required',
+            'cart.*.qty:numeric' => 'Item {0} qty is not a number',
+            'cart.*.attributes.*.value' => 'Item {0} attribute {1} value is required',
+        ]);
+
+        $validation->validate();
+
+        $errors = $validation->errors();
+
+        $this->assertEquals('Item 1 qty is not a number', $errors->first('cart.*.qty'));
+        $this->assertEquals('Item 1 name is required', $errors->first('cart.*.itemName'));
+        $this->assertEquals('Item 2 attribute 1 value is required', $errors->first('cart.*.attributes.*.value'));
+    }
+
     public function testSpecificRuleMessage()
     {
         $validation = $this->validator->make([
@@ -741,196 +613,6 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Bar bar', $errors->first('email:email'));
         $this->assertEquals('Baz baz', $errors->first('something:numeric'));
         $this->assertEquals('Qux qux', $errors->first('comments.0.text:required'));
-    }
-
-    public function testUsingDefaults()
-    {
-        $validation = $this->validator->validate([
-            'is_active' => null,
-            'is_published' => 'invalid-value'
-        ], [
-            'is_active' => 'defaults:0|required|in:0,1',
-            'is_enabled' => 'defaults:1|required|in:0,1',
-            'is_published' => 'required|in:0,1'
-        ]);
-
-        $this->assertFalse($validation->passes());
-
-        $errors = $validation->errors();
-        $this->assertNull($errors->first('is_active'));
-        $this->assertNull($errors->first('is_enabled'));
-        $this->assertNotNull($errors->first('is_published'));
-
-        // Getting (all) validated data
-        $validatedData = $validation->getValidatedData();
-        $this->assertEquals([
-            'is_active' => '0',
-            'is_enabled' => '1',
-            'is_published' => 'invalid-value'
-        ], $validatedData);
-
-        // Getting only valid data
-        $validData = $validation->getValidData();
-        $this->assertEquals([
-            'is_active' => '0',
-            'is_enabled' => '1'
-        ], $validData);
-
-        // Getting only invalid data
-        $invalidData = $validation->getInvalidData();
-        $this->assertEquals([
-            'is_published' => 'invalid-value',
-        ], $invalidData);
-    }
-
-    public function testPreservesKeyInArrayValidation()
-    {
-        $validation = $this->validator->validate([
-            'cart' => [
-                [
-                    'qty' => 'xyz',
-                ],
-            ]
-        ], [
-            'cart.*.itemName' => 'required',
-            'cart.*.qty' => 'required|numeric'
-        ]);
-
-        $errors = $validation->errors();
-
-        $this->assertEquals('cart.0.qty must be numeric', $errors->first('cart.*.qty'));
-        $this->assertEquals('cart.0.itemName is required', $errors->first('cart.*.itemName'));
-    }
-
-    public function testCustomMessageInArrayValidation()
-    {
-        $validation = $this->validator->make([
-            'cart' => [
-                [
-                    'qty' => 'xyz',
-                    'itemName' => 'Lorem ipsum'
-                ],
-                [
-                    'qty' => 10,
-                    'attributes' => [
-                        [
-                            'name' => 'color',
-                            'value' => null
-                        ]
-                    ]
-                ],
-            ]
-        ], [
-            'cart.*.itemName' => 'required',
-            'cart.*.qty' => 'required|numeric',
-            'cart.*.attributes.*.value' => 'required'
-        ]);
-
-        $validation->messages()->add('en', [
-            'cart.*.itemName:required' => 'Item [0] name is required',
-            'cart.*.qty:numeric' => 'Item {0} qty is not a number',
-            'cart.*.attributes.*.value' => 'Item {0} attribute {1} value is required',
-        ]);
-
-        $validation->validate();
-
-        $errors = $validation->errors();
-
-        $this->assertEquals('Item 1 qty is not a number', $errors->first('cart.*.qty'));
-        $this->assertEquals('Item 1 name is required', $errors->first('cart.*.itemName'));
-        $this->assertEquals('Item 2 attribute 1 value is required', $errors->first('cart.*.attributes.*.value'));
-    }
-
-    public function testRequiredIfOnArrayAttribute()
-    {
-        $validation = $this->validator->validate([
-            'products' => [
-                // invalid because has_notes is not empty
-                '10' => [
-                    'quantity' => 8,
-                    'has_notes' => 1,
-                    'notes' => ''
-                ],
-                // valid because has_notes is null
-                '12' => [
-                    'quantity' => 0,
-                    'has_notes' => null,
-                    'notes' => ''
-                ],
-                // valid because no has_notes
-                '14' => [
-                    'quantity' => 0,
-                    'notes' => ''
-                ],
-            ]
-        ], [
-            'products.*.notes' => 'required_if:products.*.has_notes,1',
-        ]);
-
-        $this->assertFalse($validation->passes());
-
-        $errors = $validation->errors();
-        $this->assertNotNull($errors->first('products.10.notes'));
-        $this->assertNull($errors->first('products.12.notes'));
-        $this->assertNull($errors->first('products.14.notes'));
-    }
-
-    public function testRequiredUnlessOnArrayAttribute()
-    {
-        $validation = $this->validator->validate([
-            'products' => [
-                // valid because has_notes is 1
-                '10' => [
-                    'quantity' => 8,
-                    'has_notes' => 1,
-                    'notes' => ''
-                ],
-                // invalid because has_notes is not 1
-                '12' => [
-                    'quantity' => 0,
-                    'has_notes' => null,
-                    'notes' => ''
-                ],
-                // invalid because no has_notes
-                '14' => [
-                    'quantity' => 0,
-                    'notes' => ''
-                ],
-            ]
-        ], [
-            'products.*.notes' => 'required_unless:products.*.has_notes,1',
-        ]);
-
-        $this->assertFalse($validation->passes());
-
-        $errors = $validation->errors();
-        $this->assertNull($errors->first('products.10.notes'));
-        $this->assertNotNull($errors->first('products.12.notes'));
-        $this->assertNotNull($errors->first('products.14.notes'));
-    }
-
-    public function testSameRuleOnArrayAttribute()
-    {
-        $validation = $this->validator->validate([
-            'users' => [
-                [
-                    'password' => 'foo',
-                    'password_confirmation' => 'foo'
-                ],
-                [
-                    'password' => 'foo',
-                    'password_confirmation' => 'bar'
-                ],
-            ]
-        ], [
-            'users.*.password_confirmation' => 'required|same:users.*.password',
-        ]);
-
-        $this->assertFalse($validation->passes());
-
-        $errors = $validation->errors();
-        $this->assertNull($errors->first('users.0.password_confirmation:same'));
-        $this->assertNotNull($errors->first('users.1.password_confirmation:same'));
     }
 
     public function testGetValidData()
@@ -1041,90 +723,6 @@ class ValidatorTest extends TestCase
         $stuffs = $invalidData['stuffs'];
         $this->assertFalse(isset($stuffs['one']));
         $this->assertFalse(isset($stuffs['two']));
-    }
-
-    public function testRuleInInvalidMessages()
-    {
-        $validation = $this->validator->validate([
-            'number' => 1
-        ], [
-            'number' => 'in:7,8,9',
-        ]);
-
-        $this->assertEquals('number must be one of "7","8","9"', $validation->errors()->first('number'));
-    }
-
-    public function testRuleNotInInvalidMessages()
-    {
-        $validation = $this->validator->validate([
-            'number' => 1
-        ], [
-            'number' => 'not_in:1,2,3',
-        ]);
-
-        $this->assertEquals('number must not be one of "1","2","3"', $validation->errors()->first('number'));
-    }
-
-    public function testIgnoreNextRulesWithNullableRule()
-    {
-        $emptyFile = [
-            'name' => '',
-            'type' => '',
-            'size' => '',
-            'tmp_name' => '',
-            'error' => UPLOAD_ERR_NO_FILE
-        ];
-
-        $invalidFile = [
-            'name' => 'sample.txt',
-            'type' => 'plain/text',
-            'tmp_name' => __FILE__,
-            'size' => 1000,
-            'error' => UPLOAD_ERR_OK,
-        ];
-
-        $data1 = [
-            'file' => $emptyFile,
-            'name' => ''
-        ];
-
-        $data2 = [
-            'file' => $invalidFile,
-            'name' => 'a@b.c'
-        ];
-
-        $rules = [
-            'file' => 'nullable|uploaded_file:0,500K,png,jpeg',
-            'name' => 'nullable|email'
-        ];
-
-        $validation1 = $this->validator->validate($data1, $rules);
-        $validation2 = $this->validator->validate($data2, $rules);
-
-        $this->assertTrue($validation1->passes());
-        $this->assertFalse($validation2->passes());
-    }
-
-    public function testNumericStringSizeWithoutNumericRule()
-    {
-        $validation = $this->validator->validate([
-            'number' => '1.2345'
-        ], [
-            'number' => 'max:2',
-        ]);
-
-        $this->assertFalse($validation->passes());
-    }
-
-    public function testNumericStringSizeWithNumericRule()
-    {
-        $validation = $this->validator->validate([
-            'number' => '1.2345'
-        ], [
-            'number' => 'numeric|max:2',
-        ]);
-
-        $this->assertTrue($validation->passes());
     }
 
     public function testArrayOfRules()

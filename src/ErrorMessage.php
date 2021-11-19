@@ -69,7 +69,7 @@ class ErrorMessage
         $ret = [];
 
         foreach ($params as $key => $value) {
-            $prefix = (str_starts_with($key, '[') || str_starts_with($key, '{')) ? '' : ':';
+            $prefix              = (str_starts_with($key, '[') || str_starts_with($key, '{')) ? '' : ':';
             $ret[$prefix . $key] = $this->stringify($value);
         }
 
@@ -78,14 +78,12 @@ class ErrorMessage
 
     private function stringify(mixed $value): string
     {
-        if (is_string($value) || is_numeric($value)) {
-            return (string)$value;
-        } elseif (is_array($value) && array_is_list($value)) {
-            return Helper::flattenValues($value);
-        } elseif (is_array($value) || is_object($value)) {
-            return json_encode($value);
-        } else {
-            return '';
-        }
+        return match (true) {
+            is_string($value), is_numeric($value)     => (string)$value,
+            is_array($value) && array_is_list($value) => Helper::join(Helper::wraps($value, '"'), ', ', ', '),
+            is_array($value) || is_object($value)     => json_encode($value),
+
+            default => '',
+        };
     }
 }

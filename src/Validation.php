@@ -10,6 +10,7 @@ use Somnambulist\Components\Validation\Rules\Required;
 use function array_merge;
 use function array_splice;
 use function array_unique;
+use function dump;
 use function explode;
 use function get_class;
 use function gettype;
@@ -17,6 +18,7 @@ use function is_numeric;
 use function is_object;
 use function is_scalar;
 use function is_string;
+use function spl_object_hash;
 use function sprintf;
 use function str_contains;
 use function str_getcsv;
@@ -29,14 +31,11 @@ use function str_getcsv;
  */
 class Validation
 {
+    private AttributeBag $attributes;
     private ErrorBag $errors;
     private Factory $factory;
-    private MessageBag $messages;
     private InputBag $input;
-    /**
-     * @var array|Attribute[]
-     */
-    private array $attributes = [];
+    private MessageBag $messages;
     private array $aliases = [];
     private array $validData = [];
     private array $invalidData = [];
@@ -44,10 +43,11 @@ class Validation
 
     public function __construct(Factory $factory, array $inputs, array $rules)
     {
-        $this->factory  = $factory;
-        $this->messages = clone $factory->messages();
-        $this->input    = new InputBag($inputs);
-        $this->errors   = new ErrorBag();
+        $this->factory    = $factory;
+        $this->messages   = clone $factory->messages();
+        $this->errors     = new ErrorBag();
+        $this->input      = new InputBag($inputs);
+        $this->attributes = new AttributeBag();
 
         foreach ($rules as $attributeKey => $rule) {
             $this->addAttribute($attributeKey, $rule);
@@ -59,13 +59,7 @@ class Validation
         $this->errors = new ErrorBag();
         $this->input->merge($inputs);
 
-        foreach ($this->attributes as $attribute) {
-            foreach ($attribute->rules() as $rule) {
-                if ($rule instanceof BeforeValidate) {
-                    $rule->beforeValidate();
-                }
-            }
-        }
+        $this->attributes->beforeValidate();
 
         foreach ($this->attributes as $attribute) {
             $this->validateAttribute($attribute);
@@ -86,7 +80,7 @@ class Validation
 
         $value        = $this->input->get($attribute->key());
         $isEmptyValue = $this->isEmptyValue($value);
-        $rules        = ($attribute->hasRule('nullable') && $isEmptyValue) ? [] : $attribute->rules();
+        $rules        = ($attribute->rules()->has('nullable') && $isEmptyValue) ? [] : $attribute->rules();
 
         $isValid = true;
 
@@ -128,7 +122,7 @@ class Validation
             $this->aliases[$key] = $alias;
         }
 
-        $this->attributes[$key] = new Attribute($this, $key, $this->alias($key), $this->resolveRules($rules));
+        $this->attributes->add($key, new Attribute($this, $key, $this->alias($key), $this->resolveRules($rules)));
     }
 
     protected function resolveRules(array|string $rules): array
@@ -196,12 +190,7 @@ class Validation
         return $this;
     }
 
-    public function attribute(string $attributeKey): ?Attribute
-    {
-        return $this->attributes[$attributeKey] ?? null;
-    }
-
-    public function attributes(): array
+    public function attributes(): AttributeBag
     {
         return $this->attributes;
     }
@@ -232,9 +221,9 @@ class Validation
 
         foreach ($data as $key => $value) {
             if (preg_match('/^' . $pattern . '\z/', $key, $match)) {
-                $attr = new Attribute($this, $key, null, $attribute->rules());
+                $attr = new Attribute($this, $key, null, $attribute->rules()->all());
                 $attr->setParent($attribute);
-                $attr->setKeyIndexes(array_slice($match, 1));
+                $attr->setIndexes(array_slice($match, 1));
                 $attributes[] = $attr;
             }
         }
@@ -360,7 +349,7 @@ class Validation
         $message->setMessage($this->messages->firstOf($messageKeys));
 
         // Replace key indexes
-        $keyIndexes = $attribute->getKeyIndexes();
+        $keyIndexes = $attribute->indexes();
 
         // add placeholders for [0] or {1} to params set
         foreach ($keyIndexes as $pathIndex => $index) {

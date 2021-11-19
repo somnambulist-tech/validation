@@ -101,7 +101,7 @@ class ProhibitedTest extends TestCase
         );
 
         $this->assertFalse($res->passes());
-        $this->assertEquals('bar is not allowed if foo has value(s) "bar","baz","foo"', $res->errors()->get('bar')['prohibited_if']);
+        $this->assertEquals('bar is not allowed if foo has value(s) "bar", "baz", "foo"', $res->errors()->get('bar')['prohibited_if']);
     }
 
     public function testProhibitedUnless()
@@ -170,6 +170,6 @@ class ProhibitedTest extends TestCase
         );
 
         $this->assertFalse($res->passes());
-        $this->assertEquals('bar is not allowed if foo does not have value(s) "bar","baz","foo"', $res->errors()->get('bar')['prohibited_unless']);
+        $this->assertEquals('bar is not allowed if foo does not have value(s) "bar", "baz", "foo"', $res->errors()->get('bar')['prohibited_unless']);
     }
 }
