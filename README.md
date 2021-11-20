@@ -6,7 +6,10 @@
 [![PHP Version](https://img.shields.io/packagist/php-v/somnambulist/validation?logo=php&logoColor=white)](https://packagist.org/packages/somnambulist/validation)
 [![Current Version](https://img.shields.io/packagist/v/somnambulist/validation?logo=packagist&logoColor=white)](https://packagist.org/packages/somnambulist/validation)
 
-A port of [rakit/validation](https://github.com/rakit/validation), a standalone validator like Laravel Validation.
+This is a re-write of [rakit/validation](https://github.com/rakit/validation), a standalone validator like Laravel Validation.
+In keeping with rakit/validation, this library does not have any other dependencies for usage.
+
+Please note that the internal API is substantially different to rakit/validation.
 
 ## Requirements
 

@@ -1,7 +1,7 @@
 {
     "name": "somnambulist/validation",
     "type": "library",
-    "description": "A port of rakit/validation providing Laravel like validation as a standalone library",
+    "description": "A re-write of rakit/validation providing Laravel like validation as a standalone library",
     "keywords": [
         "php",
         "validation",
