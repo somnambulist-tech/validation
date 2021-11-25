@@ -4,7 +4,6 @@ namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Helper;
 use Somnambulist\Components\Validation\Rule;
-use Somnambulist\Components\Validation\Rules\Behaviours\FlattenValues;
 
 /**
  * Class In
@@ -33,7 +32,7 @@ class In extends Rule
         return $this;
     }
 
-    public function in(array $values): self
+    public function values(array $values): self
     {
         $this->params['allowed_values'] = $values;
 

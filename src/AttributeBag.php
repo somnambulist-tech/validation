@@ -3,7 +3,6 @@
 namespace Somnambulist\Components\Validation;
 
 use InvalidArgumentException;
-use Somnambulist\Components\Validation\Rules\Contracts\BeforeValidate;
 
 /**
  * Class AttributeBag

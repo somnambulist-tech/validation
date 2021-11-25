@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+2021-11-24
+----------
+
+ * add readme contents based on rakit/validation readme
+ * add setting validation language on Validation
+ * clean up imports
+ * rename `In`, `NotIn` to use `values()` as the method to set values
+
 2021-11-19
 ----------
 

@@ -3,7 +3,6 @@
 namespace Somnambulist\Components\Validation;
 
 use Somnambulist\Components\Validation\Exceptions\MessageException;
-use function str_starts_with;
 
 /**
  * Class MessageBag

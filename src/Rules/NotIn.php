@@ -32,7 +32,7 @@ class NotIn extends Rule
         return $this;
     }
 
-    public function notIn(array $values): self
+    public function values(array $values): self
     {
         $this->params['disallowed_values'] = $values;
 

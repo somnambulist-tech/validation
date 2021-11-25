@@ -194,4 +194,9 @@ class ErrorBag implements Countable, IteratorAggregate
     {
         return $this->errors;
     }
+
+    public function toDataBag(): DataBag
+    {
+        return new DataBag($this->errors);
+    }
 }

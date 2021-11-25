@@ -2,7 +2,6 @@
 
 namespace Somnambulist\Components\Validation\Rules;
 
-use Somnambulist\Components\Validation\Helper;
 use Somnambulist\Components\Validation\Rule;
 
 /**

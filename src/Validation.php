@@ -4,13 +4,11 @@ namespace Somnambulist\Components\Validation;
 
 use Closure;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
-use Somnambulist\Components\Validation\Rules\Contracts\BeforeValidate;
 use Somnambulist\Components\Validation\Rules\Contracts\ModifyValue;
 use Somnambulist\Components\Validation\Rules\Required;
 use function array_merge;
 use function array_splice;
 use function array_unique;
-use function dump;
 use function explode;
 use function get_class;
 use function gettype;
@@ -18,7 +16,6 @@ use function is_numeric;
 use function is_object;
 use function is_scalar;
 use function is_string;
-use function spl_object_hash;
 use function sprintf;
 use function str_contains;
 use function str_getcsv;
@@ -40,6 +37,7 @@ class Validation
     private array $validData = [];
     private array $invalidData = [];
     private string $separator = ':';
+    private ?string $lang = null;
 
     public function __construct(Factory $factory, array $inputs, array $rules)
     {
@@ -186,6 +184,13 @@ class Validation
     public function setAlias(string $attributeKey, string $alias): self
     {
         $this->aliases[$attributeKey] = $alias;
+
+        return $this;
+    }
+
+    public function setLanguage(string $lang): self
+    {
+        $this->lang = $lang;
 
         return $this;
     }
@@ -346,7 +351,7 @@ class Validation
             array_splice($messageKeys, 3, 0, $primaryAttributeKey);
         }
 
-        $message->setMessage($this->messages->firstOf($messageKeys));
+        $message->setMessage($this->messages->firstOf($messageKeys, $this->lang));
 
         // Replace key indexes
         $keyIndexes = $attribute->indexes();

@@ -9,6 +9,8 @@ use function array_filter;
 use function array_keys;
 use function array_merge;
 use function array_values;
+use function in_array;
+use function reset;
 use const ARRAY_FILTER_USE_BOTH;
 
 /**
@@ -41,6 +43,22 @@ class DataBag implements Countable, IteratorAggregate
         return $this->data;
     }
 
+    public function contains(mixed $value): bool
+    {
+        return in_array($value, $this->data, true);
+    }
+
+    public function containsAnyOf(mixed ...$value): bool
+    {
+        foreach ($value as $test) {
+            if ($this->contains($test)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function each(callable $callback): static
     {
         foreach ($this->data as $key => $value) {
@@ -52,9 +70,21 @@ class DataBag implements Countable, IteratorAggregate
         return $this;
     }
 
+    public function excludes(mixed $value): bool
+    {
+        return !$this->contains($value);
+    }
+
     public function filter(?callable $callback): self
     {
         return new self(array_filter($this->data, $callback, ARRAY_FILTER_USE_BOTH));
+    }
+
+    public function first(): mixed
+    {
+        $ret = reset($this->data);
+
+        return $ret;
     }
 
     public function get(?string $key, mixed $default = null): mixed
@@ -81,6 +111,13 @@ class DataBag implements Countable, IteratorAggregate
     public function keys(): self
     {
         return new self(array_keys($this->data));
+    }
+
+    public function last(): mixed
+    {
+        $ret = end($this->data);
+
+        return $ret;
     }
 
     public function map(callable $callable): self

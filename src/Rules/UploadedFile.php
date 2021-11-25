@@ -5,8 +5,8 @@ namespace Somnambulist\Components\Validation\Rules;
 use Somnambulist\Components\Validation\Contracts\MimeTypeGuesser as MimeTypeGuesserContract;
 use Somnambulist\Components\Validation\MimeTypeGuesser;
 use Somnambulist\Components\Validation\Rule;
-use Somnambulist\Components\Validation\Rules\Behaviours\CanValidateFiles;
 use Somnambulist\Components\Validation\Rules\Behaviours\CanObtainSizeValue;
+use Somnambulist\Components\Validation\Rules\Behaviours\CanValidateFiles;
 use Somnambulist\Components\Validation\Rules\Contracts\BeforeValidate;
 
 /**

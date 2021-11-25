@@ -2,7 +2,6 @@
 
 namespace Somnambulist\Components\Validation\Rules;
 
-use Somnambulist\Components\Validation\Helper;
 use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Rules\Behaviours\CanConvertValuesToBooleans;
 use function array_merge;
@@ -29,6 +28,20 @@ class ProhibitedUnless extends Rule
     {
         $this->params['field']  = array_shift($params);
         $this->params['values'] = $this->convertStringsToBoolean($params);
+
+        return $this;
+    }
+
+    public function field(string $field): self
+    {
+        $this->params['field'] = $field;
+
+        return $this;
+    }
+
+    public function values(array $values): self
+    {
+        $this->params['values'] = $values;
 
         return $this;
     }
