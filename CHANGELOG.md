@@ -5,6 +5,7 @@ Change Log
 ----------
 
  * some additional cleanup from code inspections
+ * add `Exists` and `Unique` database rules (uses DBAL)
 
 2021-11-24
 ----------

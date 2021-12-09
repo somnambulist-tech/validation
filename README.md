@@ -420,6 +420,443 @@ $invalidData = $validation->getInvalidData();
 
 > Click to show details.
 
+<details><summary><strong>accepted</strong></summary>
+
+The field under this rule must be one of `'on'`, `'yes'`, `'1'`, `'true'` (the string "true"), or `true`.
+
+</details>
+
+<details><summary><strong>after</strong>:tomorrow</summary>
+
+The field under this rule must be a date after the given minimum.
+
+The parameter should be any valid string that can be parsed by `strtotime`. For example:
+
+* after:next week
+* after:2016-12-31
+* after:2016
+* after:2016-12-31 09:56:02
+
+</details>
+
+<details><summary><strong>alpha</strong></summary>
+
+The field under this rule must be entirely alphabetic characters.
+
+</details>
+
+<details><summary><strong>alpha_num</strong></summary>
+
+The field under this rule must be entirely alpha-numeric characters.
+
+</details>
+
+<details><summary><strong>alpha_dash</strong></summary>
+
+The field under this rule may have alpha-numeric characters, as well as dashes and underscores.
+
+</details>
+
+<details><summary><strong>alpha_spaces</strong></summary>
+
+The field under this rule may have alpha characters, as well as spaces.
+
+</details>
+
+<details><summary><strong>array</strong></summary>
+
+The field under this rule must be an array.
+
+</details>
+
+<details><summary><strong>before</strong>:yesterday</summary>
+
+The field under this rule must be a date before the given maximum.
+
+This also works the same way as the [after rule](#after). Pass anything that can be parsed by `strtotime`
+
+</details>
+
+<details><summary><strong>between</strong>:min,max</summary>
+
+The field under this rule must have a size between min and max params.
+Value size is calculated in the same way as `min` and `max` rule.
+
+You can also validate the size of uploaded files using this rule:
+
+```php
+$validation = $validator->validate([
+    'photo' => $_FILES['photo']
+], [
+    'photo' => 'required|between:1M,2M'
+]);
+```
+
+</details>
+
+<details><summary><strong>boolean</strong></summary>
+
+The field under this rule must be boolean. Accepted inputs are `true`, `false`, `1`, `0`, `"1"`, and `"0"`.
+
+</details>
+
+<details><summary><strong>callback</strong></summary>
+
+Define a custom callback to validate the value. This rule cannot be registered using the string syntax.
+To use this rule, you must use the array syntax and either explicitly specify `callback`, or pass the
+closure:
+
+```php
+$validation = $validator->validate($_POST, [
+    'even_number' => [
+        'required',
+        function ($value) {
+            // false = invalid
+            return (is_numeric($value) AND $value % 2 === 0);
+        },
+        'callback' => fn ($v) => is_numeric($v) && $v % 2 === 0,
+    ]
+]);
+```
+
+You can set a custom message by returning a string instead of false:
+
+```php
+$validation = $validator->validate($_POST, [
+    'even_number' => [
+        'required',
+        function ($value) {
+            if (!is_numeric($value)) {
+                return ":attribute must be numeric.";
+            }
+            if ($value % 2 !== 0) {
+                return ":attribute is not even number.";
+            }
+            
+            return true; // always return true if validation passes
+        }
+    ]
+]);
+```
+
+> Note: callback closures are bound to the rule instance allowing access to rule properties via $this.
+
+</details>
+
+<details><summary><strong>date</strong>:format</summary>
+
+The field under this rule must be valid date following a given format. Parameter `format` is
+optional, default format is `Y-m-d`.
+
+</details>
+
+<details><summary><strong>default/defaults</strong></summary>
+
+If the attribute has no value, this default will be used in place in the validated data.
+
+For example if you have validation like this
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validation = (new Factory)->validate([
+    'enabled' => null
+], [
+    'enabled' => 'default:1|required|in:0,1'
+    'published' => 'default:0|required|in:0,1'
+]);
+
+$validation->passes(); // true
+
+// Get the valid/default data
+$valid_data = $validation->getValidData();
+
+$enabled = $valid_data['enabled'];
+$published = $valid_data['published'];
+```
+
+Validation passes because the default value for `enabled` and `published` is set to `1` and `0` which is valid.
+
+</details>
+
+<details><summary><strong>different</strong>:another_field</summary>
+
+Opposite of `same`; the field value under this rule must be different to `another_field` value.
+
+</details>
+
+<details><summary><strong>digits</strong>:value</summary>
+
+The field under validation must be numeric and must have an exact length of `value`.
+
+</details>
+
+<details><summary><strong>digits_between</strong>:min,max</summary>
+
+The field under validation must be numeric and have a length between the given `min` and `max`.
+
+</details>
+
+<details><summary><strong>email</strong></summary>
+
+The field under this validation must be a valid email address according to the built-in PHP filter extension.
+
+See [FILTER_VALIDATE_EMAIL](https://www.php.net/manual/en/filter.filters.validate.php) for details.
+
+</details>
+
+<details><summary><strong>exists</strong>:table,column (database)</summary>
+
+The field under this validation must exist in the given table. This does not check for uniqueness,
+only that at least one record for the provided value and column in the table is there. 
+
+> To use this rule, you must provide a DBAL connection. This should be done via dependency injection. 
+
+For example:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validation = (new Factory)->validate([
+    'country' => 'GBR'
+], [
+    'country' => 'exists:countries,id',
+]);
+
+$validation->passes(); // true if table countries has a record with id GBR
+```
+
+For more refined validation, the underlying query may be modified by setting a closure by
+calling `->where()`. The closure will be passed a `Doctrine\DBAL\Query\QueryBuilder` instance.
+
+```php
+use Doctrine\DBAL\Query\QueryBuilder;
+use Somnambulist\Components\Validation\Factory;
+use Somnambulist\Components\Validation\Rules\Exists;
+
+$factory    = new Factory;
+$factory->addRule('exists', new Exists($dbalConn));
+
+$validation = $factory->validate([
+    'country' => 'GBR'
+], [
+    'country' => $factory->rule('exists')->table('countries')->column('id')->where(fn (QueryBuilder $qb) => $qb->andWhere('active = 1')),
+]);
+
+$validation->passes(); // true if table countries has a record with id GBR and it is active
+```
+
+</details>
+
+<details><summary><strong>extension</strong>:extension_a,extension_b,...</summary>
+
+The field under this rule must end with an extension corresponding to one of those listed.
+
+This is useful for validating a file type for a given path or url. The `mimes` rule should be used
+for validating uploads.
+
+> If you require strict mime checking you should implement a custom `MimeTypeGuesser` that
+can make use of a server side file checker that uses a mime library.
+
+</details>
+
+<details><summary><strong>float</strong></summary>
+
+The field under this rule must be a floating point number, for example: 0.0 12.3456 etc. The value may be a
+string containing a float. Note that integers and 0 (zero) will fail validation with this rule.
+
+</details>
+
+<details><summary><strong>in</strong>:value_1,value_2,...</summary>
+
+The field under this rule must be included in the given list of values.
+
+To help build the string rule, the `In` (and `NotIn`) rules have a helper method:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+use Somnambulist\Components\Validation\Rules\In;
+
+$factory = new Factory();
+$validation = $factory->validate($data, [
+    'enabled' => [
+        'required',
+        In::make([true, 1])
+    ]
+]);
+```
+
+This rule uses `in_array` to perform the validation and by default does not perform strict checking.
+If you require strict checking, you can invoke the rule like this:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$factory = new Factory();
+$validation = $factory->validate($data, [
+    'enabled' => [
+        'required',
+        $factory->rule('in')->values([true, 1])->strict()
+    ]
+]);
+```
+
+Then 'enabled' value should be boolean `true`, or int `1`.
+
+</details>
+
+<details><summary><strong>integer</strong></summary>
+
+The field under validation must be an integer.
+
+</details>
+
+<details><summary><strong>ip</strong></summary>
+
+The field under this rule must be a valid ipv4 or ipv6 address.
+
+</details>
+
+<details><summary><strong>ipv4</strong></summary>
+
+The field under this rule must be a valid ipv4 address.
+
+</details>
+
+<details><summary><strong>ipv6</strong></summary>
+
+The field under this rule must be a valid ipv6 address.
+
+</details>
+
+<details><summary><strong>json</strong></summary>
+
+The field under this validation must be a valid JSON string.
+
+</details>
+
+<details><summary><strong>lowercase</strong></summary>
+
+The field under this validation must be in lowercase.
+
+</details>
+
+<details><summary><strong>max</strong>:number</summary>
+
+The field under this rule must have a size less than or equal to the given number.
+Value size is calculated in the same way as the `min` rule.
+
+You can also validate the maximum size of uploaded files using this rule:
+
+```php
+$validation = $validator->validate([
+    'photo' => $_FILES['photo']
+], [
+    'photo' => 'required|max:2M'
+]);
+```
+
+</details>
+
+<details><summary><strong>mimes</strong>:extension_a,extension_b,...</summary>
+
+The `$_FILES` item under validation must have a MIME type corresponding to one of the listed extensions.
+
+> This works on file extension and not client sent headers or embedded file type. If you require
+strict mime type validation you are recommended to implement a custom `MimeTypeGuesser` that uses a full
+mime-type lookup library and replace the built-in mime rule.
+
+Additional mime types can be added to the existing guesser by using dependency injection and keeping the
+mime type guesser as a service.
+
+</details>
+
+<details><summary><strong>min</strong>:number</summary>
+
+The field under this rule must have a size greater than or equal to the given number.
+
+For string values, the size corresponds to the number of characters. For integer or float values, size
+corresponds to its numerical value. For an array, size corresponds to the count of the array. If your
+value is numeric string, you can use the `numeric` rule to treat its size as a numeric value instead of
+the number of characters.
+
+You can also validate the minimum size of uploaded files using this rule:
+
+```php
+$validation = $validator->validate([
+    'photo' => $_FILES['photo']
+], [
+    'photo' => 'required|min:1M'
+]);
+```
+
+</details>
+
+<details><summary><strong>not_in</strong>:value_1,value_2,...</summary>
+
+The field under this rule must not be included in the given list of values.
+
+This rule also uses `in_array` and can have strict checks enabled the same way as `In`.
+
+</details>
+
+<details><summary><strong>nullable</strong></summary>
+
+The field under this rule may be empty.
+
+</details>
+
+<details><summary><strong>numeric</strong></summary>
+
+The field under this rule must be numeric.
+
+</details>
+
+<details><summary><strong>present</strong></summary>
+
+The field under this rule must be in the set of inputs, whatever the value is.
+
+</details>
+
+<details><summary><strong>prohibited</strong></summary>
+
+The field under this rule is not allowed.
+
+</details>
+
+<details><summary><strong>prohibited_if</strong></summary>
+
+The field under this rule is not allowed if `another_field` is provided with any of the value(s).
+
+</details>
+
+<details><summary><strong>prohibited_unless</strong></summary>
+
+The field under this rule is not allowed unless `another_field` has one of these values. This is
+the inverse of `prohibited_if`.
+
+</details>
+
+<details><summary><strong>regex</strong>:/your-regex/</summary>
+
+The field under this rule must match the given regex. Note: if you require the use of `|`, then
+the regex rule must be written in array format instead of as a string. For example:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validation = (new Factory())->validate([
+    'field' => 'value'
+], [
+    'field' => [
+        'required',
+        'regex' => '/(this|that|value)/'
+    ]
+])
+```
+
+</details>
+
 <details><summary><strong>required</strong></summary>
 
 The field under this validation must be present and not 'empty'.
@@ -476,6 +913,75 @@ The field under validation must be present and not empty only if all of the othe
 <details><summary><strong>required_without_all</strong>:field_1,field_2,...</summary>
 
 The field under validation must be present and not empty only when all of the other specified fields are not present.
+
+</details>
+
+<details><summary><strong>same</strong>:another_field</summary>
+
+The field value under this rule must have the same value as `another_field`.
+
+</details>
+
+<details><summary><strong>string</strong></summary>
+
+The field under this rule must be a PHP string.
+
+</details>
+
+<details><summary><strong>unique</strong>:table,column,ignore,ignore_column (database)</summary>
+
+The field under this validation must be unique in the given table. Optionally: a value may be
+ignored and this could be an alternative column value if the ignore_column is given.
+
+> To use this rule, you must provide a DBAL connection. This should be done via dependency injection.
+
+For example:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validation = (new Factory)->validate([
+    'email' => 'foo@example.org'
+], [
+    'email' => 'email|unique:users,email',
+]);
+
+$validation->passes(); // true if table users does not contain the email
+```
+
+Ignore the current users email address:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validation = (new Factory)->validate([
+    'email' => 'foo@example.org'
+], [
+    'email' => 'email|unique:users,email,10,id',
+]);
+
+$validation->passes(); // true if table users ignoring id 10, does not contain email
+```
+
+For more refined validation, the underlying query may be modified by setting a closure by
+calling `->where()`. The closure will be passed a `Doctrine\DBAL\Query\QueryBuilder` instance.
+
+```php
+use Doctrine\DBAL\Query\QueryBuilder;
+use Somnambulist\Components\Validation\Factory;
+use Somnambulist\Components\Validation\Rules\Unique;
+
+$factory    = new Factory;
+$factory->addRule('unique', new Unique($dbalConn));
+
+$validation = $factory->validate([
+    'email' => 'foo@example.org'
+], [
+    'email' => $factory->rule('unique')->table('users')->column('email')->where(fn (QueryBuilder $qb) => $qb->andWhere('active = 1')),
+]);
+
+$validation->passes(); // true if table users does not contain an active email
+```
 
 </details>
 
@@ -547,211 +1053,9 @@ $validation = (new Factory)->validate($_FILES, [
 ```
 </details>
 
-<details><summary><strong>mimes</strong>:extension_a,extension_b,...</summary>
-
-The `$_FILES` item under validation must have a MIME type corresponding to one of the listed extensions.
-
-> This works on file extension and not client sent headers or embedded file type. If you require
-strict mime type validation you are recommended to implement a custom `MimeTypeGuesser` that uses a full
-mime-type lookup library and replace the built-in mime rule.
-
-Additional mime types can be added to the existing guesser by using dependency injection and keeping the
-mime type guesser as a service.
-
-</details>
-
-<details><summary><strong>default/defaults</strong></summary>
-
-If the attribute has no value, this default will be used in place in the validated data.
-
-For example if you have validation like this
-
-```php
-$validation = (new Factory)->validate([
-    'enabled' => null
-], [
-    'enabled' => 'default:1|required|in:0,1'
-    'published' => 'default:0|required|in:0,1'
-]);
-
-$validation->passes(); // true
-
-// Get the valid/default data
-$valid_data = $validation->getValidData();
-
-$enabled = $valid_data['enabled'];
-$published = $valid_data['published'];
-```
-
-Validation passes because the default value for `enabled` and `published` is set to `1` and `0` which is valid.
-
-</details>
-
-<details><summary><strong>email</strong></summary>
-
-The field under this validation must be a valid email address according to the built-in PHP filter extension.
-
-See [FILTER_VALIDATE_EMAIL](https://www.php.net/manual/en/filter.filters.validate.php) for details.
-
-</details>
-
 <details><summary><strong>uppercase</strong></summary>
 
 The field under this validation must be in uppercase.
-
-</details>
-
-<details><summary><strong>lowercase</strong></summary>
-
-The field under this validation must be in lowercase.
-
-</details>
-
-<details><summary><strong>json</strong></summary>
-
-The field under this validation must be a valid JSON string.
-
-</details>
-
-<details><summary><strong>alpha</strong></summary>
-
-The field under this rule must be entirely alphabetic characters.
-
-</details>
-
-<details><summary><strong>numeric</strong></summary>
-
-The field under this rule must be numeric.
-
-</details>
-
-<details><summary><strong>alpha_num</strong></summary>
-
-The field under this rule must be entirely alpha-numeric characters.
-
-</details>
-
-<details><summary><strong>alpha_dash</strong></summary>
-
-The field under this rule may have alpha-numeric characters, as well as dashes and underscores.
-
-</details>
-
-<details><summary><strong>alpha_spaces</strong></summary>
-
-The field under this rule may have alpha characters, as well as spaces.
-
-</details>
-
-<details><summary><strong>in</strong>:value_1,value_2,...</summary>
-
-The field under this rule must be included in the given list of values.
-
-To help build the string rule, the `In` (and `NotIn`) rules have a helper method:
-
-```php
-use Somnambulist\Components\Validation\Factory;use Somnambulist\Components\Validation\Rules\In;
-
-$factory = new Factory();
-$validation = $factory->validate($data, [
-    'enabled' => [
-        'required',
-        In::make([true, 1])
-    ]
-]);
-```
-
-This rule uses `in_array` to perform the validation and by default does not perform strict checking.
-If you require strict checking, you can invoke the rule like this:
-
-```php
-use Somnambulist\Components\Validation\Factory;
-
-$factory = new Factory();
-$validation = $factory->validate($data, [
-    'enabled' => [
-        'required',
-        $factory->rule('in')->values([true, 1])->strict()
-    ]
-]);
-```
-
-Then 'enabled' value should be boolean `true`, or int `1`.
-
-</details>
-
-<details><summary><strong>not_in</strong>:value_1,value_2,...</summary>
-
-The field under this rule must not be included in the given list of values.
-
-This rule also uses `in_array` and can have strict checks enabled the same way as `In`.
-
-</details>
-
-<details><summary><strong>min</strong>:number</summary>
-
-The field under this rule must have a size greater than or equal to the given number.
-
-For string values, the size corresponds to the number of characters. For integer or float values, size
-corresponds to its numerical value. For an array, size corresponds to the count of the array. If your
-value is numeric string, you can use the `numeric` rule to treat its size as a numeric value instead of
-the number of characters.
-
-You can also validate the minimum size of uploaded files using this rule:
-
-```php
-$validation = $validator->validate([
-    'photo' => $_FILES['photo']
-], [
-    'photo' => 'required|min:1M'
-]);
-```
-
-</details>
-
-<details><summary><strong>max</strong>:number</summary>
-
-The field under this rule must have a size less than or equal to the given number.
-Value size is calculated in the same way as the `min` rule.
-
-You can also validate the maximum size of uploaded files using this rule:
-
-```php
-$validation = $validator->validate([
-    'photo' => $_FILES['photo']
-], [
-    'photo' => 'required|max:2M'
-]);
-```
-
-</details>
-
-<details><summary><strong>between</strong>:min,max</summary>
-
-The field under this rule must have a size between min and max params.
-Value size is calculated in the same way as `min` and `max` rule.
-
-You can also validate the size of uploaded files using this rule:
-
-```php
-$validation = $validator->validate([
-    'photo' => $_FILES['photo']
-], [
-    'photo' => 'required|between:1M,2M'
-]);
-```
-
-</details>
-
-<details><summary><strong>digits</strong>:value</summary>
-
-The field under validation must be numeric and must have an exact length of `value`.
-
-</details>
-
-<details><summary><strong>digits_between</strong>:min,max</summary>
-
-The field under validation must be numeric and have a length between the given `min` and `max`.
 
 </details>
 
@@ -773,207 +1077,6 @@ $validation = (new Factory)->validate($inputs, [
 ```
 
 > Unlike `rakit`, mailto and JDBC are not supported. Implement a custom rule or a regex to validate these.
-
-</details>
-
-<details><summary><strong>array</strong></summary>
-
-The field under this rule must be an array.
-
-</details>
-
-<details><summary><strong>boolean</strong></summary>
-
-The field under this rule must be boolean. Accepted inputs are `true`, `false`, `1`, `0`, `"1"`, and `"0"`.
-
-</details>
-
-<details><summary><strong>float</strong></summary>
-
-The field under this rule must be a floating point number, for example: 0.0 12.3456 etc. The value may be a
-string containing a float. Note that integers and 0 (zero) will fail validation with this rule.
-
-</details>
-
-<details><summary><strong>integer</strong></summary>
-
-The field under validation must be an integer.
-
-</details>
-
-<details><summary><strong>string</strong></summary>
-
-The field under this rule must be a PHP string.
-
-</details>
-
-<details><summary><strong>ip</strong></summary>
-
-The field under this rule must be a valid ipv4 or ipv6 address.
-
-</details>
-
-<details><summary><strong>ipv4</strong></summary>
-
-The field under this rule must be a valid ipv4 address.
-
-</details>
-
-<details><summary><strong>ipv6</strong></summary>
-
-The field under this rule must be a valid ipv6 address.
-
-</details>
-
-<details><summary><strong>extension</strong>:extension_a,extension_b,...</summary>
-
-The field under this rule must end with an extension corresponding to one of those listed.
-
-This is useful for validating a file type for a given path or url. The `mimes` rule should be used
-for validating uploads.
-
-> If you require strict mime checking you should implement a custom `MimeTypeGuesser` that
-can make use of a server side file checker that uses a mime library.
-
-</details>
-
-<details><summary><strong>same</strong>:another_field</summary>
-
-The field value under this rule must have the same value as `another_field`.
-
-</details>
-
-<details><summary><strong>regex</strong>:/your-regex/</summary>
-
-The field under this rule must match the given regex. Note: if you require the use of `|`, then
-the regex rule must be written in array format instead of as a string. For example:
-
-```php
-use Somnambulist\Components\Validation\Factory;
-
-$validation = (new Factory())->validate([
-    'field' => 'value'
-], [
-    'field' => [
-        'required',
-        'regex' => '/(this|that|value)/'
-    ]
-])
-```
-
-</details>
-
-<details><summary><strong>date</strong>:format</summary>
-
-The field under this rule must be valid date following a given format. Parameter `format` is
-optional, default format is `Y-m-d`.
-
-</details>
-
-<details><summary><strong>accepted</strong></summary>
-
-The field under this rule must be one of `'on'`, `'yes'`, `'1'`, `'true'` (the string "true"), or `true`.
-
-</details>
-
-<details><summary><strong>present</strong></summary>
-
-The field under this rule must be in the set of inputs, whatever the value is.
-
-</details>
-
-<details><summary><strong>different</strong>:another_field</summary>
-
-Opposite of `same`; the field value under this rule must be different to `another_field` value.
-
-</details>
-
-<details><summary><strong>after</strong>:tomorrow</summary>
-
-The field under this rule must be a date after the given minimum.
-
-The parameter should be any valid string that can be parsed by `strtotime`. For example:
-
-* after:next week
-* after:2016-12-31
-* after:2016
-* after:2016-12-31 09:56:02
-
-</details>
-
-<details><summary><strong>before</strong>:yesterday</summary>
-
-The field under this rule must be a date before the given maximum.
-
-This also works the same way as the [after rule](#after). Pass anything that can be parsed by `strtotime`
-
-</details>
-
-<details><summary><strong>callback</strong></summary>
-
-Define a custom callback to validate the value. This rule cannot be registered using the string syntax.
-To use this rule, you must use the array syntax and either explicitly specify `callback`, or pass the
-closure:
-
-```php
-$validation = $validator->validate($_POST, [
-    'even_number' => [
-        'required',
-        function ($value) {
-            // false = invalid
-            return (is_numeric($value) AND $value % 2 === 0);
-        },
-        'callback' => fn ($v) => is_numeric($v) && $v % 2 === 0,
-    ]
-]);
-```
-
-You can set a custom message by returning a string instead of false:
-
-```php
-$validation = $validator->validate($_POST, [
-    'even_number' => [
-        'required',
-        function ($value) {
-            if (!is_numeric($value)) {
-                return ":attribute must be numeric.";
-            }
-            if ($value % 2 !== 0) {
-                return ":attribute is not even number.";
-            }
-            
-            return true; // always return true if validation passes
-        }
-    ]
-]);
-```
-
-> Note: callback closures are bound to the rule instance allowing access to rule properties via $this.
-
-</details>
-
-<details><summary><strong>nullable</strong></summary>
-
-The field under this rule may be empty.
-
-</details>
-
-<details><summary><strong>prohibited</strong></summary>
-
-The field under this rule is not allowed.
-
-</details>
-
-<details><summary><strong>prohibited_if</strong></summary>
-
-The field under this rule is not allowed if `another_field` is provided with any of the value(s).
-
-</details>
-
-<details><summary><strong>prohibited_unless</strong></summary>
-
-The field under this rule is not allowed unless `another_field` has one of these values. This is
-the inverse of `prohibited_if`.
 
 </details>
 
@@ -1008,7 +1111,7 @@ class UniqueRule extends Rule
     public function check($value): bool
     {
         // make sure required parameters exists
-        $this->requireParameters(['table', 'column']);
+        $this->assertHasRequiredParameters(['table', 'column']);
 
         // getting parameters
         $column = $this->parameter('column');
