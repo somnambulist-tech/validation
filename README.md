@@ -11,6 +11,8 @@ In keeping with rakit/validation, this library does not have any other dependenc
 
 Please note that the internal API is substantially different to rakit/validation.
 
+Jump to [rules](#available-rules)
+
 ## Requirements
 
  * PHP 8.0+
