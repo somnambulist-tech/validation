@@ -40,7 +40,7 @@ class UniqueTest extends TestCase
         SQL);
 
         $rule = new Unique($conn);
-        $rule->in('users')->for('email');
+        $rule->table('users')->column('email');
 
         $this->assertFalse($rule->check('foo@example.org'));
         $this->assertTrue($rule->check('foo@example.com'));
@@ -71,7 +71,7 @@ class UniqueTest extends TestCase
         SQL);
 
         $rule = new Unique($conn);
-        $rule->in('users')->for('email')->ignore('foo@example.org');
+        $rule->table('users')->column('email')->ignore('foo@example.org');
 
         $this->assertTrue($rule->check('foo@example.org'));
         $this->assertFalse($rule->check('bar@example.org'));
@@ -102,7 +102,7 @@ class UniqueTest extends TestCase
         SQL);
 
         $rule = new Unique($conn);
-        $rule->in('users')->for('email')->ignore('a93059e2-7964-4378-9f2a-cce67169061f', 'id');
+        $rule->table('users')->column('email')->ignore('a93059e2-7964-4378-9f2a-cce67169061f', 'id');
 
         $this->assertTrue($rule->check('foo@example.org'));
         $this->assertFalse($rule->check('bar@example.org'));
@@ -133,7 +133,7 @@ class UniqueTest extends TestCase
         SQL);
 
         $rule = new Unique($conn);
-        $rule->in('users')->for('email')->where(fn (QueryBuilder $qb) => $qb->andWhere('is_active = 1'));
+        $rule->table('users')->column('email')->where(fn (QueryBuilder $qb) => $qb->andWhere('is_active = 1'));
 
         $this->assertTrue($rule->check('foo@example.org'));
         $this->assertTrue($rule->check('foo@example.com'));
