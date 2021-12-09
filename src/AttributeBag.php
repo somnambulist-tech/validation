@@ -29,7 +29,7 @@ class AttributeBag extends DataBag
     public function set(string $key, mixed $value): static
     {
         if (!$value instanceof Attribute) {
-            throw new InvalidArgumentException(sprintf('Value must be an instance of ' . Attribute::class));
+            throw new InvalidArgumentException(sprintf('Value must be an instance of %s', Attribute::class));
         }
 
         return parent::set($key, $value);

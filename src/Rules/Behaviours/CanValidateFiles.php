@@ -62,9 +62,9 @@ trait CanValidateFiles
         foreach ($arrayDots as $key => $val) {
             // Move first key to last key
             // name.foo.bar -> foo.bar.name
-            $splits   = explode(".", $key);
+            $splits   = explode('.', $key);
             $firstKey = array_shift($splits);
-            $key      = count($splits) ? implode(".", $splits) . ".{$firstKey}" : $firstKey;
+            $key      = count($splits) ? implode(".", $splits) . '.' . $firstKey : $firstKey;
 
             Helper::arraySet($results, $key, $val);
         }

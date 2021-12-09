@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2021-12-09
+----------
+
+ * some additional cleanup from code inspections
+
 2021-11-24
 ----------
 

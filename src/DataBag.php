@@ -28,12 +28,12 @@ class DataBag implements Countable, IteratorAggregate
         $this->data = $data;
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->data);
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->data);
     }
@@ -82,9 +82,7 @@ class DataBag implements Countable, IteratorAggregate
 
     public function first(): mixed
     {
-        $ret = reset($this->data);
-
-        return $ret;
+        return reset($this->data);
     }
 
     public function get(?string $key, mixed $default = null): mixed
@@ -115,9 +113,7 @@ class DataBag implements Countable, IteratorAggregate
 
     public function last(): mixed
     {
-        $ret = end($this->data);
-
-        return $ret;
+        return end($this->data);
     }
 
     public function map(callable $callable): self

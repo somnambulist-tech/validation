@@ -73,7 +73,7 @@ class Helper
     }
 
     /**
-     * Flatten a multi-dimensional associative array with dots.
+     * Flatten a multidimensional associative array with dots.
      * Adapted from: https://github.com/illuminate/support/blob/v5.3.23/Arr.php#L81
      *
      * @param array  $array

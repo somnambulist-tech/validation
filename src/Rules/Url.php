@@ -25,7 +25,7 @@ class Url extends Rule
 
     public function forScheme(string ...$scheme): self
     {
-        $this->params['schemes'] = (array)$scheme;
+        $this->params['schemes'] = $scheme;
 
         return $this;
     }
@@ -52,11 +52,11 @@ class Url extends Rule
      */
     private function validateCommonScheme(string $value, string $scheme = null): bool
     {
-        if (!$scheme) {
-            return $this->validateBasic($value) && preg_match("/^\w+:\/\//i", $value);
-        } else {
-            return $this->validateBasic($value) && preg_match("/^{$scheme}:\/\//", $value);
+        if ($scheme) {
+            return $this->validateBasic($value) && preg_match("/^$scheme:\/\//", $value);
         }
+
+        return $this->validateBasic($value) && preg_match("/^\w+:\/\//i", $value);
     }
 
     /**

@@ -275,7 +275,7 @@ class Validation
      *
      * Adapted from: https://github.com/illuminate/validation/blob/v5.3.23/Validator.php#L2830
      *
-     * Used to extract a sub-section of the data for faster iteration.
+     * Used to extract a subsection of the data for faster iteration.
      */
     protected function extractDataFromPath(?string $attributeKey): array
     {

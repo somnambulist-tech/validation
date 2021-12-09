@@ -39,7 +39,7 @@ class ErrorBag implements Countable, IteratorAggregate
         return count($this->all());
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->all());
     }
@@ -119,7 +119,7 @@ class ErrorBag implements Countable, IteratorAggregate
         return $filteredMessages;
     }
 
-    public function first(string $key): mixed
+    public function first(string $key): ?string
     {
         [$key, $ruleName] = $this->parsekey($key);
 
