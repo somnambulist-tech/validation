@@ -1082,6 +1082,12 @@ $validation = (new Factory)->validate($inputs, [
 
 </details>
 
+<details><summary><strong>uuid</strong></summary>
+
+The field under this validation must be a valid UUID and not the nil UUID string.
+
+</details>
+
 ## Register/Override Rules
 
 By default, all built-in rules are registered automatically to the `Factory` instance. Some of these
