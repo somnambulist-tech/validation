@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2022-01-11
+----------
+
+ * fix strict type check on `Date` rule where value is sometimes null
+
 2021-12-09
 ----------
 

@@ -24,4 +24,10 @@ class DateTest extends TestCase
         $this->assertFalse($this->rule->check("10-10-2010"));
         $this->assertFalse($this->rule->fillParameters(['Y-m-d'])->check("2010-10-10 10:10"));
     }
+
+    public function testNull()
+    {
+        $this->assertFalse($this->rule->check(null));
+        $this->assertFalse($this->rule->check(''));
+    }
 }

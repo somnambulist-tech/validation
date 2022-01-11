@@ -24,6 +24,6 @@ class Date extends Rule
 
         $format = $this->parameter('format');
 
-        return date_create_from_format($format, $value) !== false;
+        return date_create_from_format($format, (string)$value) !== false;
     }
 }
