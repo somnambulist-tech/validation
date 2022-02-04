@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+2022-02-03
+----------
+
+ * add `rejected` rule
+ * add `number` as alias of `integer` rule
+
 2022-01-11
 ----------
 
