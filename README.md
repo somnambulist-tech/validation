@@ -859,6 +859,13 @@ $validation = (new Factory())->validate([
 
 </details>
 
+<details><summary><strong>rejected</strong></summary>
+
+The field under this rule must have a value that corresponds to rejection i.e. 0 (zero), "0", false, no,
+"false", off. This is the inverse of the `accepted` rule.
+
+</details>
+
 <details><summary><strong>required</strong></summary>
 
 The field under this validation must be present and not 'empty'.

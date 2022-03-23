@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2022-03-23
+----------
+
+ * add `rejected` to readme (previously missed)
+
 2022-02-03
 ----------
 
