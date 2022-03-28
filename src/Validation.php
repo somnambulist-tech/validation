@@ -76,6 +76,10 @@ class Validation
             return;
         }
 
+        if ($attribute->rules()->has('sometimes') && !$this->input->has($attribute->key())) {
+            return;
+        }
+
         $value        = $this->input->get($attribute->key());
         $isEmptyValue = $this->isEmptyValue($value);
         $rules        = ($attribute->rules()->has('nullable') && $isEmptyValue) ? [] : $attribute->rules();
@@ -317,9 +321,11 @@ class Validation
 
     protected function ruleIsOptional(Attribute $attribute, Rule $rule): bool
     {
-        return false === $attribute->isRequired() and
-               false === $rule->isImplicit() and
-               false === $rule instanceof Required;
+        return
+            false === $attribute->isRequired() &&
+            false === $rule->isImplicit() &&
+            false === $rule instanceof Required
+        ;
     }
 
     protected function addError(Attribute $attribute, Rule $rule, mixed $value): void

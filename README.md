@@ -465,6 +465,32 @@ The field under this rule may have alpha characters, as well as spaces.
 
 </details>
 
+<details><summary><strong>any_of</strong>:value,value,value</summary>
+
+A variation of `in`: here the values (separated by default with a `,`) must all be in the given values.
+For example: `order => 'name,date'` with the rule `any_of:name,id` would fail validation as `date` is not
+part of the allowed values. The separator can be changed by calling `separator()` on the rule instance.
+
+```php
+use Somnambulist\Components\Validation\Factory;
+use Somnambulist\Components\Validation\Rules\AnyOf;
+
+$validation = $factory->validate([
+    'field' => 'foo;bar;example'
+], [
+    'field' => $factory->rule('any_of')->separator(';')->values(['foo', 'bar']),
+]);
+
+$validation->passes(); // true if field only contains the values in any_of
+```
+
+Like `in`, comparisons can be performed use strict matching by calling `->strict(true)` on the rule.
+
+This rule is useful for APIs that allow comma separated data as a single parameter e.g. JsonAPI include,
+order etc. If the source is already an array, then `array|in:...` can be used instead.
+
+</details>
+
 <details><summary><strong>array</strong></summary>
 
 The field under this rule must be an array.
@@ -928,6 +954,12 @@ The field under validation must be present and not empty only when all of the ot
 <details><summary><strong>same</strong>:another_field</summary>
 
 The field value under this rule must have the same value as `another_field`.
+
+</details>
+
+<details><summary><strong>sometimes</strong></summary>
+
+The field should only be validated if present in the input data. For example: `field => sometimes|required|email`
 
 </details>
 

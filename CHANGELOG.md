@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2022-03-28
+----------
+
+ * add `any_of` and `sometimes` rules
+ * remove calls to deprecated mock methods
+ * move some test classes to `Rules` namespace
+
 2022-03-23
 ----------
 

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\Components\Validation\Tests;
+namespace Somnambulist\Components\Validation\Tests\Rules;
 
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Factory;
@@ -11,7 +11,7 @@ use Somnambulist\Components\Validation\Factory;
  * @package    Somnambulist\Components\Validation\Tests
  * @subpackage Somnambulist\Components\Validation\Tests\ValidatorTest
  */
-class RequiredTest extends TestCase
+class RequiredRulesTest extends TestCase
 {
     protected ?Factory $validator = null;
 
