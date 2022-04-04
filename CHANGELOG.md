@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2022-04-04
+----------
+
+ * add German translation with thanks to [xJuvi](https://github.com/xJuvi)
+
 2022-03-28
 ----------
 
