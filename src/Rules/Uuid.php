@@ -20,8 +20,8 @@ class Uuid extends Rule
      *
      * Taken from Ramsey\Uuid\Validator\GenericValidator
      */
-    private const VALID_PATTERN = '\A[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\z';
-    private const NIL = '00000000-0000-0000-0000-000000000000';
+    protected const VALID_PATTERN = '\A[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\z';
+    protected const NIL = '00000000-0000-0000-0000-000000000000';
 
     protected string $message = 'rule.uuid';
     protected bool $implicit = true;

@@ -17,16 +17,16 @@ use function str_replace;
  */
 class Attribute
 {
-    private Validation $validation;
-    private ?Attribute $parent = null;
-    private RuleBag $rules;
-    private string $key;
-    private ?string $alias;
-    private bool $required = false;
-    private array $indexes = [];
+    protected Validation $validation;
+    protected ?Attribute $parent = null;
+    protected RuleCollection $rules;
+    protected string $key;
+    protected ?string $alias;
+    protected bool $required = false;
+    protected array $indexes = [];
 
     public function __construct(
-        Validation $validation,
+        protectedValidation $validation,
         string $key,
         string $alias = null,
         array $rules = []
@@ -34,7 +34,7 @@ class Attribute
         $this->validation = $validation;
         $this->alias      = $alias;
         $this->key        = $key;
-        $this->rules      = new RuleBag($this, $rules);
+        $this->rules      = new RuleCollection($this, $rules);
     }
 
     public function makeRequired(): void
@@ -108,7 +108,7 @@ class Attribute
         $this->parent = $parent;
     }
 
-    public function rules(): RuleBag
+    public function rules(): RuleCollection
     {
         return $this->rules;
     }

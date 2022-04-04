@@ -28,11 +28,11 @@ use function str_getcsv;
  */
 class Validation
 {
-    private AttributeBag $attributes;
-    private ErrorBag $errors;
+    private AttributeCollection $attributes;
+    private ErrorCollection $errors;
     private Factory $factory;
     private InputBag $input;
-    private MessageBag $messages;
+    private MessageCollection $messages;
     private array $aliases = [];
     private array $validData = [];
     private array $invalidData = [];
@@ -43,9 +43,9 @@ class Validation
     {
         $this->factory    = $factory;
         $this->messages   = clone $factory->messages();
-        $this->errors     = new ErrorBag();
+        $this->errors     = new ErrorCollection();
         $this->input      = new InputBag($inputs);
-        $this->attributes = new AttributeBag();
+        $this->attributes = new AttributeCollection();
 
         foreach ($rules as $attributeKey => $rule) {
             $this->addAttribute($attributeKey, $rule);
@@ -54,7 +54,7 @@ class Validation
 
     public function validate(array $inputs = []): void
     {
-        $this->errors = new ErrorBag();
+        $this->errors = new ErrorCollection();
         $this->input->merge($inputs);
 
         $this->attributes->beforeValidate();
@@ -195,7 +195,7 @@ class Validation
         return $this;
     }
 
-    public function attributes(): AttributeBag
+    public function attributes(): AttributeCollection
     {
         return $this->attributes;
     }
@@ -375,12 +375,12 @@ class Validation
         return $this->input;
     }
 
-    public function messages(): MessageBag
+    public function messages(): MessageCollection
     {
         return $this->messages;
     }
 
-    public function errors(): ErrorBag
+    public function errors(): ErrorCollection
     {
         return $this->errors;
     }

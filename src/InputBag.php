@@ -8,7 +8,7 @@ namespace Somnambulist\Components\Validation;
  * @package    Somnambulist\Components\Validation
  * @subpackage Somnambulist\Components\Validation\InputBag
  */
-class InputBag extends DataBag
+class InputBag extends Collection
 {
 
 }

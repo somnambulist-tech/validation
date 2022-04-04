@@ -3,7 +3,7 @@
 namespace Somnambulist\Components\Validation\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Somnambulist\Components\Validation\ErrorBag;
+use Somnambulist\Components\Validation\ErrorCollection;
 use Somnambulist\Components\Validation\ErrorMessage;
 
 /**
@@ -17,7 +17,7 @@ class ErrorBagTest extends TestCase
 
     public function testCount()
     {
-        $errors = new ErrorBag([
+        $errors = new ErrorCollection([
             'email' => [
                 'email'  => new ErrorMessage('foo'),
                 'unique' => new ErrorMessage('bar'),
@@ -33,7 +33,7 @@ class ErrorBagTest extends TestCase
 
     public function testAdd()
     {
-        $errors = new ErrorBag();
+        $errors = new ErrorCollection();
 
         $errors->add('email', 'email', $a = new ErrorMessage('foo'));
         $errors->add('email', 'unique', $b = new ErrorMessage('bar'));
@@ -54,7 +54,7 @@ class ErrorBagTest extends TestCase
 
     public function testHas()
     {
-        $errors = new ErrorBag([
+        $errors = new ErrorCollection([
             'email'              => [
                 'email'  => new ErrorMessage('foo'),
                 'unique' => new ErrorMessage('bar'),
@@ -87,7 +87,7 @@ class ErrorBagTest extends TestCase
 
     public function testFirst()
     {
-        $errors = new ErrorBag([
+        $errors = new ErrorCollection([
             'email'              => [
                 'email'  => new ErrorMessage('1'),
                 'unique' => new ErrorMessage('2'),
@@ -122,7 +122,7 @@ class ErrorBagTest extends TestCase
 
     public function testGet()
     {
-        $errors = new ErrorBag([
+        $errors = new ErrorCollection([
             'email' => [
                 'email'  => new ErrorMessage('1'),
                 'unique' => new ErrorMessage('2'),
@@ -213,7 +213,7 @@ class ErrorBagTest extends TestCase
 
     public function testAll()
     {
-        $errors = new ErrorBag([
+        $errors = new ErrorCollection([
             'email'              => [
                 'email'  => new ErrorMessage('1'),
                 'unique' => new ErrorMessage('2'),
@@ -250,7 +250,7 @@ class ErrorBagTest extends TestCase
 
     public function testFirstOfAll()
     {
-        $errors = new ErrorBag([
+        $errors = new ErrorCollection([
             'email'              => [
                 'email'  => new ErrorMessage('1'),
                 'unique' => new ErrorMessage('2'),
@@ -288,7 +288,7 @@ class ErrorBagTest extends TestCase
 
     public function testFirstOfAllDotNotation()
     {
-        $errors = new ErrorBag([
+        $errors = new ErrorCollection([
             'email'              => [
                 'email'  => new ErrorMessage('1'),
                 'unique' => new ErrorMessage('2'),

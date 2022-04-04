@@ -10,7 +10,7 @@ use Somnambulist\Components\Validation\Exceptions\MessageException;
  * @package    Somnambulist\Components\Validation
  * @subpackage Somnambulist\Components\Validation\MessageBag
  */
-class MessageBag
+class MessageCollection
 {
     private array $messages;
     private string $defaultLang = 'en';

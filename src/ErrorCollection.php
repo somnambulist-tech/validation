@@ -18,7 +18,7 @@ use function str_replace;
  * @package    Somnambulist\Components\Validation
  * @subpackage Somnambulist\Components\Validation\ErrorBag
  */
-class ErrorBag implements Countable, IteratorAggregate
+class ErrorCollection implements Countable, IteratorAggregate
 {
     public function __construct(private array $errors = [])
     {
@@ -195,8 +195,8 @@ class ErrorBag implements Countable, IteratorAggregate
         return $this->errors;
     }
 
-    public function toDataBag(): DataBag
+    public function toDataBag(): Collection
     {
-        return new DataBag($this->errors);
+        return new Collection($this->errors);
     }
 }

@@ -13,11 +13,11 @@ use Somnambulist\Components\Validation\Exceptions\RuleException;
 class Factory
 {
     private array $rules = [];
-    private MessageBag $messages;
+    private MessageCollection $messages;
 
     public function __construct()
     {
-        $this->messages = new MessageBag();
+        $this->messages = new MessageCollection();
 
         $this->registerDefaultRules();
         $this->registerDefaultMessages();
@@ -134,7 +134,7 @@ class Factory
         $rule->setName($key);
     }
 
-    public function messages(): MessageBag
+    public function messages(): MessageCollection
     {
         return $this->messages;
     }

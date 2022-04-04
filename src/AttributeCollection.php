@@ -12,7 +12,7 @@ use InvalidArgumentException;
  *
  * @property array<string, Attribute> $data
  */
-class AttributeBag extends DataBag
+class AttributeCollection extends Collection
 {
     public function add(string $key, Attribute $attribute): self
     {

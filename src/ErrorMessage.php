@@ -20,11 +20,11 @@ use function strtr;
  */
 class ErrorMessage
 {
-    private ?string $message = null;
+    protected ?string $message = null;
 
     public function __construct(
-        private string $key,
-        private array $params = []
+        protected string $key,
+        protected array $params = []
     ) {
     }
 

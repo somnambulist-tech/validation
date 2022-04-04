@@ -10,10 +10,8 @@ use Somnambulist\Components\Validation\Rules\Contracts\BeforeValidate;
  *
  * @package    Somnambulist\Components\Validation
  * @subpackage Somnambulist\Components\Validation\RuleBag
- *
- * @property array<int, Rule>
  */
-class RuleBag extends DataBag
+class RuleCollection extends Collection
 {
     public function __construct(private Attribute $attribute, array $data = [])
     {

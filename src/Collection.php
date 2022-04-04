@@ -19,7 +19,7 @@ use const ARRAY_FILTER_USE_BOTH;
  * @package    Somnambulist\Components\Validation
  * @subpackage Somnambulist\Components\Validation\DataBag
  */
-class DataBag implements Countable, IteratorAggregate
+class Collection implements Countable, IteratorAggregate
 {
     protected array $data;
 

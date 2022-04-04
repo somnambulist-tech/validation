@@ -105,7 +105,7 @@ class Helper
      * @param mixed             $value
      * @param bool              $overwrite
      *
-     * @return mixed
+     * @return array
      */
     public static function arraySet(mixed &$target, mixed $key, mixed $value, bool $overwrite = true): array
     {
@@ -144,7 +144,7 @@ class Helper
                 $target[$segment] = $value;
             }
         } else {
-            $target = [];
+            $target = [$segment];
 
             if ($segments) {
                 static::arraySet($target[$segment], $segments, $value, $overwrite);
