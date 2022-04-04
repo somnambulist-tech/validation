@@ -1,26 +1,69 @@
-name: tests
+name: CI
 
-on:
-    push:
-        branches: [ main ]
-    pull_request:
-        branches: [ main ]
-    workflow_dispatch:
-    create:
-        tags:
-            - '*'
+on: [push, pull_request]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
+  testsuite:
+    name: Unittests
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.0', '8.1']
 
-            - name: Validate composer.json and composer.lock
-              run: composer validate
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
 
-            - name: Install dependencies
-              run: composer install --prefer-dist --no-progress
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: json, pdo, ldap
+        tools: pecl
+        coverage: pcov
 
-            - name: Run test suite
-              run: vendor/bin/phpunit
+    - name: Composer install
+      run: |
+        if [[ ${{ matrix.prefer-lowest == '8.0' }} ]]; then
+          composer update --prefer-lowest --prefer-stable
+        else
+          composer install
+        fi
+    - name: Run PHPUnit
+      run: |
+        if [[ ${{ matrix.php-version }} == '8.0' ]]; then
+          bin/phpunit --coverage-clover=coverage.xml
+        else
+          bin/phpunit
+        fi
+    - name: Code Coverage Report
+      if: success() && matrix.php-version == '8.0'
+      uses: codecov/codecov-action@v2
+
+  validation:
+    name: Coding Standard & Static Analysis
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+        extensions: json, pdo, ldap
+        coverage: none
+        tools: pecl
+
+    - name: Composer install
+      run: composer update --prefer-stable
+
+    - name: Run phpcs
+      run: bin/phpcs --version && bin/phpcs --report=checkstyle --standard=phpcs.xml src/ tests/
+
+    - name: Run phpstan
+      run: bin/phpstan -V && bin/phpstan --error-format=github

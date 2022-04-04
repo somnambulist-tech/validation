@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
@@ -14,10 +16,9 @@ use Somnambulist\Components\Validation\Factory;
 class RequiredTest extends TestCase
 {
     protected ?Factory $validator = null;
-
     protected function setUp(): void
     {
-        $this->validator = new Factory;
+        $this->validator = new Factory();
     }
 
     public function testRequiredIfRule()
@@ -28,16 +29,13 @@ class RequiredTest extends TestCase
         ], [
             'b' => 'required_if:a,1'
         ]);
-
         $this->assertTrue($v1->passes());
-
         $v2 = $this->validator->validate([
             'a' => '1',
             'b' => '',
         ], [
             'b' => 'required_if:a,1'
         ]);
-
         $this->assertFalse($v2->passes());
     }
 
@@ -49,16 +47,13 @@ class RequiredTest extends TestCase
         ], [
             'b' => 'required_unless:a,1'
         ]);
-
         $this->assertFalse($v1->passes());
-
         $v2 = $this->validator->validate([
             'a' => '1',
             'b' => '',
         ], [
             'b' => 'required_unless:a,1'
         ]);
-
         $this->assertTrue($v2->passes());
     }
 
@@ -69,16 +64,13 @@ class RequiredTest extends TestCase
         ], [
             'b' => 'required_with:a'
         ]);
-
         $this->assertTrue($v1->passes());
-
         $v2 = $this->validator->validate([
             'a' => '1',
             'b' => '',
         ], [
             'b' => 'required_with:a'
         ]);
-
         $this->assertFalse($v2->passes());
     }
 
@@ -89,16 +81,13 @@ class RequiredTest extends TestCase
         ], [
             'b' => 'required_without:a'
         ]);
-
         $this->assertFalse($v1->passes());
-
         $v2 = $this->validator->validate([
             'a' => '1',
             'b' => '',
         ], [
             'b' => 'required_without:a'
         ]);
-
         $this->assertTrue($v2->passes());
     }
 
@@ -110,9 +99,7 @@ class RequiredTest extends TestCase
         ], [
             'b' => 'required_with_all:a,c'
         ]);
-
         $this->assertTrue($v1->passes());
-
         $v2 = $this->validator->validate([
             'a' => '1',
             'b' => '',
@@ -120,7 +107,6 @@ class RequiredTest extends TestCase
         ], [
             'b' => 'required_with_all:a,c'
         ]);
-
         $this->assertFalse($v2->passes());
     }
 
@@ -132,15 +118,12 @@ class RequiredTest extends TestCase
         ], [
             'b' => 'required_without_all:a,c'
         ]);
-
         $this->assertTrue($v1->passes());
-
         $v2 = $this->validator->validate([
             'b' => '',
         ], [
             'b' => 'required_without_all:a,c'
         ]);
-
         $this->assertFalse($v2->passes());
     }
 
@@ -154,9 +137,7 @@ class RequiredTest extends TestCase
             'optional_field' => 'required|ipv4|in:127.0.0.1',
             'required_if_field' => 'required_if:some_value,1|email'
         ]);
-
         $errors = $validation->errors();
-
         $this->assertEquals(3, $errors->count());
         $this->assertNotNull($errors->first('optional_field:ipv4'));
         $this->assertNotNull($errors->first('optional_field:in'));
@@ -188,9 +169,7 @@ class RequiredTest extends TestCase
         ], [
             'products.*.notes' => 'required_if:products.*.has_notes,1',
         ]);
-
         $this->assertFalse($validation->passes());
-
         $errors = $validation->errors();
         $this->assertNotNull($errors->first('products.10.notes'));
         $this->assertNull($errors->first('products.12.notes'));
@@ -222,9 +201,7 @@ class RequiredTest extends TestCase
         ], [
             'products.*.notes' => 'required_unless:products.*.has_notes,1',
         ]);
-
         $this->assertFalse($validation->passes());
-
         $errors = $validation->errors();
         $this->assertNull($errors->first('products.10.notes'));
         $this->assertNotNull($errors->first('products.12.notes'));

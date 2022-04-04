@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules\Behaviours;
 
@@ -56,16 +58,13 @@ trait CanValidateFiles
         // or for nested array:
         // ['name.foo.bar' => string, 'name.foo.baz' => string, 'type.foo.bar' => string, 'type.foo.baz' => string, ...]
         $arrayDots = Helper::arrayDot($value);
-
         $results = [];
-
         foreach ($arrayDots as $key => $val) {
-            // Move first key to last key
+        // Move first key to last key
             // name.foo.bar -> foo.bar.name
             $splits   = explode('.', $key);
             $firstKey = array_shift($splits);
             $key      = count($splits) ? implode(".", $splits) . '.' . $firstKey : $firstKey;
-
             Helper::arraySet($results, $key, $val);
         }
 

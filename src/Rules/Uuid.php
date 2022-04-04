@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
+
 use function is_null;
 use function preg_match;
 use function str_replace;

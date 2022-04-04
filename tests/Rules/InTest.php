@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -8,10 +10,9 @@ use PHPUnit\Framework\TestCase;
 
 class InTest extends TestCase
 {
-
     public function setUp(): void
     {
-        $this->rule = new In;
+        $this->rule = new In();
     }
 
     public function testValids()
@@ -30,8 +31,7 @@ class InTest extends TestCase
         // Not strict
         $this->assertTrue($this->rule->fillParameters(['1', '2', '3'])->check(1));
         $this->assertTrue($this->rule->fillParameters(['1', '2', '3'])->check(true));
-
-        // Strict
+// Strict
         $this->rule->strict();
         $this->assertFalse($this->rule->fillParameters(['1', '2', '3'])->check(1));
         $this->assertFalse($this->rule->fillParameters(['1', '2', '3'])->check(1));
@@ -40,12 +40,7 @@ class InTest extends TestCase
     public function testWithCommasInStrings()
     {
         $validator = new Factory();
-
-        $res = $validator->validate(
-            ['foo' => 'there\'s something'],
-            ['foo' => 'in:"there\'s something",that,another,"value\'s here"']
-        );
-
+        $res = $validator->validate(['foo' => 'there\'s something'], ['foo' => 'in:"there\'s something",that,another,"value\'s here"']);
         $this->assertTrue($res->passes());
     }
 }

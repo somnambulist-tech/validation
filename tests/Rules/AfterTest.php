@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -10,12 +11,10 @@ use DateTime;
 
 class AfterTest extends TestCase
 {
-
     /**
      * @var \Somnambulist\Components\Validation\Rules\After
      */
     protected $validator;
-
     public function setUp(): void
     {
         $this->validator = new After();
@@ -26,9 +25,7 @@ class AfterTest extends TestCase
      */
     public function testOnlyAWellFormedDateCanBeValidated($date)
     {
-        $this->assertTrue(
-            $this->validator->fillParameters(["3 years ago"])->check($date)
-        );
+        $this->assertTrue($this->validator->fillParameters(["3 years ago"])->check($date));
     }
 
     /**
@@ -37,21 +34,18 @@ class AfterTest extends TestCase
     public function testANonWellFormedDateCannotBeValidated($date)
     {
         $this->expectException(ParameterException::class);
-
         $this->validator->fillParameters(["tomorrow"])->check($date);
     }
 
     public function testUserProvidedParamCannotBeValidatedBecauseItIsInvalid()
     {
         $this->expectException(ParameterException::class);
-
         $this->validator->fillParameters(["to,morrow"])->check("now");
     }
 
     public function getInvalidDates()
     {
         $now = new DateTime();
-
         return [
             ["12"], //12 instead of 2012
             ["09"], //like '09 instead of 2009
@@ -65,7 +59,6 @@ class AfterTest extends TestCase
     public function getValidDates()
     {
         $now = new DateTime();
-
         return [
             ['2016'],
             [$now->format("Y-m-d")],
@@ -81,13 +74,7 @@ class AfterTest extends TestCase
 
         $now = (new DateTime("today"))->format("Y-m-d");
         $today = "today";
-
-        $this->assertFalse(
-            $this->validator->fillParameters(['tomorrow'])->check($now)
-        );
-
-        $this->assertFalse(
-            $this->validator->fillParameters(['tomorrow'])->check($today)
-        );
+        $this->assertFalse($this->validator->fillParameters(['tomorrow'])->check($now));
+        $this->assertFalse($this->validator->fillParameters(['tomorrow'])->check($today));
     }
 }

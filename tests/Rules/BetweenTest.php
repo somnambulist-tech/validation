@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -8,10 +10,9 @@ use PHPUnit\Framework\TestCase;
 class BetweenTest extends TestCase
 {
     private ?Between $rule = null;
-
     public function setUp(): void
     {
-        $this->rule = new Between;
+        $this->rule = new Between();
     }
 
     public function testValids()
@@ -35,9 +36,9 @@ class BetweenTest extends TestCase
     public function testUploadedFileValue()
     {
         $mb = function ($n) {
+
             return $n * 1024 * 1024;
         };
-
         $sampleFile = [
             'name' => pathinfo(__FILE__, PATHINFO_BASENAME),
             'type' => 'text/plain',
@@ -45,12 +46,10 @@ class BetweenTest extends TestCase
             'tmp_name' => __FILE__,
             'error' => 0
         ];
-
         $this->assertTrue($this->rule->fillParameters([$mb(2), $mb(5)])->check($sampleFile));
         $this->assertTrue($this->rule->fillParameters(['2M', '5M'])->check($sampleFile));
         $this->assertTrue($this->rule->fillParameters([$mb(1), $mb(2)])->check($sampleFile));
         $this->assertTrue($this->rule->fillParameters(['1M', '2M'])->check($sampleFile));
-
         $this->assertFalse($this->rule->fillParameters([$mb(2.1), $mb(5)])->check($sampleFile));
         $this->assertFalse($this->rule->fillParameters(['2.1M', '5M'])->check($sampleFile));
         $this->assertFalse($this->rule->fillParameters([$mb(1), $mb(1.9)])->check($sampleFile));

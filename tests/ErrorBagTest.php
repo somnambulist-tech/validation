@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
@@ -14,7 +16,6 @@ use Somnambulist\Components\Validation\ErrorMessage;
  */
 class ErrorBagTest extends TestCase
 {
-
     public function testCount()
     {
         $errors = new ErrorCollection([

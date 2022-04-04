@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -15,13 +17,12 @@ class Required extends Rule
 {
     use CanValidateFiles;
 
+
     protected bool $implicit = true;
     protected string $message = 'rule.required';
-
     public function check($value): bool
     {
         $this->setAttributeAsRequired();
-
         if ($this->attribute?->rules()->has('uploaded_file')) {
             return $this->isValueFromUploadedFiles($value) && $value['error'] != UPLOAD_ERR_NO_FILE;
         }

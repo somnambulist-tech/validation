@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -13,7 +15,6 @@ use Somnambulist\Components\Validation\Rule;
 class Url extends Rule
 {
     protected string $message = 'rule.url';
-
     public function fillParameters(array $params): self
     {
         if (count($params) == 1 && is_array($params[0])) {
@@ -26,14 +27,12 @@ class Url extends Rule
     public function forScheme(string ...$scheme): self
     {
         $this->params['schemes'] = $scheme;
-
         return $this;
     }
 
     public function check($value): bool
     {
         $schemes = $this->parameter('schemes');
-
         if (!$schemes) {
             return $this->validateCommonScheme($value);
         } else {

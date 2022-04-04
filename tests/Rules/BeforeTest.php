@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -9,12 +11,10 @@ use DateTime;
 
 class BeforeTest extends TestCase
 {
-
     /**
      * @var Before
      */
     protected $validator;
-
     public function setUp(): void
     {
         $this->validator = new Before();
@@ -25,15 +25,12 @@ class BeforeTest extends TestCase
      */
     public function testOnlyAWellFormedDateCanBeValidated($date)
     {
-        $this->assertTrue(
-            $this->validator->fillParameters(["next week"])->check($date)
-        );
+        $this->assertTrue($this->validator->fillParameters(["next week"])->check($date));
     }
 
     public function getValidDates()
     {
         $now = new DateTime();
-
         return [
             ['2016'],
             [$now->format("Y-m-d")],
@@ -50,14 +47,12 @@ class BeforeTest extends TestCase
     public function testANonWellFormedDateCannotBeValidated($date)
     {
         $this->expectException(ParameterException::class);
-
         $this->validator->fillParameters(["tomorrow"])->check($date);
     }
 
     public function getInvalidDates()
     {
         $now = new DateTime();
-
         return [
             ['12'], //12 instead of 2012
             ["09"], //like '09 instead of 2009
@@ -72,20 +67,13 @@ class BeforeTest extends TestCase
     {
         $now = (new DateTime("today"))->format("Y-m-d");
         $today = "today";
-
-        $this->assertFalse(
-            $this->validator->fillParameters(['yesterday'])->check($now)
-        );
-
-        $this->assertFalse(
-            $this->validator->fillParameters(['yesterday'])->check($today)
-        );
+        $this->assertFalse($this->validator->fillParameters(['yesterday'])->check($now));
+        $this->assertFalse($this->validator->fillParameters(['yesterday'])->check($today));
     }
 
     public function testUserProvidedParamCannotBeValidatedBecauseItIsInvalid()
     {
         $this->expectException(ParameterException::class);
-
         $this->validator->fillParameters(["to,morrow"])->check("now");
     }
 }

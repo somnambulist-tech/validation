@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -7,11 +9,11 @@ use PHPUnit\Framework\TestCase;
 
 class CallbackTest extends TestCase
 {
-
     public function setUp(): void
     {
-        $this->rule = new Callback;
+        $this->rule = new Callback();
         $this->rule->through(function ($value) {
+
             return (is_numeric($value) and $value % 2 === 0);
         });
     }

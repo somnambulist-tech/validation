@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation;
 
@@ -782,7 +784,6 @@ class MimeTypeGuesser implements Contracts\MimeTypeGuesser
         'video/x-smv'                                                               => 'smv',
         'x-conference/x-cooltalk'                                                   => 'ice',
     ];
-
     public function getExtension(string $mimeType): ?string
     {
         return $this->mimeTypes[$mimeType] ?? null;

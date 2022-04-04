@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -7,10 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 class MinTest extends TestCase
 {
-
     public function setUp(): void
     {
-        $this->rule = new Min;
+        $this->rule = new Min();
     }
 
     public function testValids()
@@ -25,7 +26,6 @@ class MinTest extends TestCase
         $this->assertFalse($this->rule->fillParameters([7])->check('foobar'));
         $this->assertFalse($this->rule->fillParameters([4])->check([1,2,3]));
         $this->assertFalse($this->rule->fillParameters([200])->check(123));
-
         $this->assertFalse($this->rule->fillParameters([4])->check('мин'));
         $this->assertFalse($this->rule->fillParameters([5])->check('كلمة'));
         $this->assertFalse($this->rule->fillParameters([4])->check('ワード'));
@@ -42,10 +42,8 @@ class MinTest extends TestCase
             'tmp_name' => __FILE__,
             'error' => 0
         ];
-
         $this->assertTrue($this->rule->fillParameters([$twoMega])->check($sampleFile));
         $this->assertTrue($this->rule->fillParameters(['2M'])->check($sampleFile));
-
         $this->assertFalse($this->rule->fillParameters([$twoMega + 1])->check($sampleFile));
         $this->assertFalse($this->rule->fillParameters(['2.1M'])->check($sampleFile));
     }

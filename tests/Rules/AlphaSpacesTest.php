@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -8,10 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 class AlphaSpacesTest extends TestCase
 {
-
     public function setUp(): void
     {
-        $this->rule = new AlphaSpaces;
+        $this->rule = new AlphaSpaces();
     }
 
     public function testValids()

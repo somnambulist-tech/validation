@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules\Behaviours;
 
@@ -17,7 +19,8 @@ trait CanObtainSizeValue
      */
     protected function getValueSize(mixed $value): float
     {
-        if ($this->attribute()
+        if (
+            $this->attribute()
             && ($this->attribute()->rules()->hasAnyOf('numeric', 'integer'))
             && is_numeric($value)
         ) {
@@ -47,7 +50,6 @@ trait CanObtainSizeValue
         }
 
         $keys = ['name', 'type', 'tmp_name', 'size', 'error'];
-
         foreach ($keys as $key) {
             if (!array_key_exists($key, $value)) {
                 return false;
@@ -76,7 +78,6 @@ trait CanObtainSizeValue
 
         $number = (float)$match['number'];
         $format = $match['format'] ?? '';
-
         return match (strtoupper($format)) {
             "KB", "K" => $number * 1024,
             "MB", "M" => $number * pow(1024, 2),

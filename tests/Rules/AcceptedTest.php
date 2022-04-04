@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -9,7 +11,7 @@ class AcceptedTest extends TestCase
 {
     public function setUp(): void
     {
-        $this->rule = new Accepted;
+        $this->rule = new Accepted();
     }
 
     public function testValids()

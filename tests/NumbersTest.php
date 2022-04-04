@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
@@ -14,10 +16,9 @@ use Somnambulist\Components\Validation\Factory;
 class NumbersTest extends TestCase
 {
     protected ?Factory $validator = null;
-
     protected function setUp(): void
     {
-        $this->validator = new Factory;
+        $this->validator = new Factory();
     }
 
     public function testNumericStringSizeWithoutNumericRule()
@@ -27,7 +28,6 @@ class NumbersTest extends TestCase
         ], [
             'number' => 'max:2',
         ]);
-
         $this->assertFalse($validation->passes());
     }
 
@@ -38,7 +38,6 @@ class NumbersTest extends TestCase
         ], [
             'number' => 'numeric|max:2',
         ]);
-
         $this->assertTrue($validation->passes());
     }
 }

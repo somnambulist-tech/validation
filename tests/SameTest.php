@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
@@ -14,10 +16,9 @@ use Somnambulist\Components\Validation\Factory;
 class SameTest extends TestCase
 {
     protected ?Factory $validator = null;
-
     protected function setUp(): void
     {
-        $this->validator = new Factory;
+        $this->validator = new Factory();
     }
 
     public function testSameRuleOnArrayAttribute()
@@ -36,9 +37,7 @@ class SameTest extends TestCase
         ], [
             'users.*.password_confirmation' => 'required|same:users.*.password',
         ]);
-
         $this->assertFalse($validation->passes());
-
         $errors = $validation->errors();
         $this->assertNull($errors->first('users.0.password_confirmation:same'));
         $this->assertNotNull($errors->first('users.1.password_confirmation:same'));

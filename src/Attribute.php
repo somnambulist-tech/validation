@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation;
 
@@ -26,7 +28,7 @@ class Attribute
     protected array $indexes = [];
 
     public function __construct(
-        protectedValidation $validation,
+        Validation $validation,
         string $key,
         string $alias = null,
         array $rules = []

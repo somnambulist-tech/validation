@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -7,10 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 class NotInTest extends TestCase
 {
-
     public function setUp(): void
     {
-        $this->rule = new NotIn;
+        $this->rule = new NotIn();
     }
 
     public function testValids()
@@ -29,8 +30,7 @@ class NotInTest extends TestCase
         // Not strict
         $this->assertFalse($this->rule->fillParameters(['1', '2', '3'])->check(1));
         $this->assertFalse($this->rule->fillParameters(['1', '2', '3'])->check(true));
-
-        // Strict
+// Strict
         $this->rule->strict();
         $this->assertTrue($this->rule->fillParameters(['1', '2', '3'])->check(1));
         $this->assertTrue($this->rule->fillParameters(['1', '2', '3'])->check(1));

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation;
 
@@ -119,7 +121,8 @@ class Helper
 
         $segments = is_array($key) ? $key : explode('.', $key);
 
-        if (($segment = array_shift($segments)) === '*') {
+        $segment = array_shift($segments);
+        if ($segment === '*') {
             if (!is_array($target)) {
                 $target = [];
             }
@@ -173,7 +176,7 @@ class Helper
         $segments = is_array($key) ? $key : explode('.', $key);
         $segment  = array_shift($segments);
 
-        if ($segment == '*') {
+        if ($segment === '*') {
             $target = [];
         } elseif ($segments) {
             if (array_key_exists($segment, $target)) {
@@ -237,7 +240,7 @@ class Helper
             $suffix = $prefix;
         }
 
-        return array_map(function ($str) use ($prefix, $suffix) {
+        return array_map(static function ($str) use ($prefix, $suffix) {
             return $prefix . $str . $suffix;
         }, $strings);
     }

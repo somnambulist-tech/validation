@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -7,10 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 class RegexTest extends TestCase
 {
-
     public function setUp(): void
     {
-        $this->rule = new Regex;
+        $this->rule = new Regex();
     }
 
     public function testValids()

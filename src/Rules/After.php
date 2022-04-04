@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -21,12 +23,9 @@ class After extends Rule
     public function check($value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
-
         $time = $this->parameter('time');
-
         $this->assertDate($value);
         $this->assertDate($time);
-
         return $this->getTimeStamp($time) < $this->getTimeStamp($value);
     }
 }

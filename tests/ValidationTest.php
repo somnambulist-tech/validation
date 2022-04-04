@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
@@ -26,9 +28,7 @@ class ValidationTest extends TestCase
         $class = new ReflectionClass(Validation::class);
         $method = $class->getMethod('parseRule');
         $method->setAccessible(true);
-
         $validation = new Validation(new Factory(), [], []);
-
         $result = $method->invokeArgs($validation, [$rules]);
         $this->assertSame($expectedResult, $result);
     }

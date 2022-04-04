@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -15,7 +17,6 @@ class In extends Rule
 {
     protected string $message = 'rule.in';
     protected bool $strict = false;
-
     public static function make(array $values): string
     {
         return sprintf('in:%s', Helper::flattenValues($values));
@@ -28,28 +29,24 @@ class In extends Rule
         }
 
         $this->params['allowed_values'] = $params;
-
         return $this;
     }
 
     public function values(array $values): self
     {
         $this->params['allowed_values'] = $values;
-
         return $this;
     }
 
     public function strict(bool $strict = true): self
     {
         $this->strict = $strict;
-
         return $this;
     }
 
     public function check($value): bool
     {
         $this->assertHasRequiredParameters(['allowed_values']);
-
         return in_array($value, $this->parameter('allowed_values'), $this->strict);
     }
 }

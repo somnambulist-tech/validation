@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -18,11 +20,11 @@ use Somnambulist\Components\Validation\Rules\Contracts\BeforeValidate;
 class UploadedFile extends Rule implements BeforeValidate
 {
     use CanValidateFiles;
-    use CanObtainSizeValue;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             use CanObtainSizeValue;
+
 
     protected string $message = 'rule.uploaded_file';
     protected MimeTypeGuesserContract $guesser;
-
     public function __construct(MimeTypeGuesserContract $guesser = null)
     {
         $this->guesser = $guesser ?? new MimeTypeGuesser();
@@ -37,7 +39,6 @@ class UploadedFile extends Rule implements BeforeValidate
         $this->minSize(array_shift($params));
         $this->maxSize(array_shift($params));
         $this->types($params);
-
         return $this;
     }
 
@@ -47,7 +48,6 @@ class UploadedFile extends Rule implements BeforeValidate
     public function minSize(int|string $size): self
     {
         $this->params['min_size'] = $size;
-
         return $this;
     }
 
@@ -57,7 +57,6 @@ class UploadedFile extends Rule implements BeforeValidate
     public function maxSize(int|string $size): self
     {
         $this->params['max_size'] = $size;
-
         return $this;
     }
 
@@ -68,7 +67,6 @@ class UploadedFile extends Rule implements BeforeValidate
     {
         $this->minSize($min);
         $this->maxSize($max);
-
         return $this;
     }
 
@@ -82,15 +80,13 @@ class UploadedFile extends Rule implements BeforeValidate
         }
 
         $this->params['allowed_types'] = $types;
-
         return $this;
     }
 
     public function beforeValidate(): void
     {
         $attribute = $this->attribute();
-
-        // We only resolve uploaded file value
+// We only resolve uploaded file value
         // from complex attribute such as 'files.photo', 'images.*', 'images.foo.bar', etc.
         if (!$attribute->isUsingDotNotation()) {
             return;
@@ -99,10 +95,8 @@ class UploadedFile extends Rule implements BeforeValidate
         $keys          = explode(".", $attribute->key());
         $firstKey      = array_shift($keys);
         $firstKeyValue = $this->validation->input()->get($firstKey);
-
         $resolvedValue = $this->resolveUploadedFileValue($firstKeyValue);
-
-        // Return original value if $value can't be resolved as uploaded file value
+// Return original value if $value can't be resolved as uploaded file value
         if (!$resolvedValue) {
             return;
         }
@@ -115,8 +109,7 @@ class UploadedFile extends Rule implements BeforeValidate
         $minSize      = $this->parameter('min_size');
         $maxSize      = $this->parameter('max_size');
         $allowedTypes = $this->parameter('allowed_types');
-
-        // below is Required rule job
+// below is Required rule job
         if (!$this->isValueFromUploadedFiles($value) || $value['error'] == UPLOAD_ERR_NO_FILE) {
             return true;
         }
@@ -132,19 +125,16 @@ class UploadedFile extends Rule implements BeforeValidate
 
         if ($minSize && $value['size'] < $this->getSizeInBytes($minSize)) {
             $this->message = 'rule.uploaded_file.min_size';
-
             return false;
         }
 
         if ($maxSize && $value['size'] > $this->getSizeInBytes($maxSize)) {
             $this->message = 'rule.uploaded_file.max_size';
-
             return false;
         }
 
         if (!empty($allowedTypes) && !in_array($this->guesser->getExtension($value['type']), $allowedTypes)) {
             $this->message = 'rule.uploaded_file.type';
-
             return false;
         }
 

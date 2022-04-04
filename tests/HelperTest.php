@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
@@ -13,7 +15,6 @@ use PHPUnit\Framework\TestCase;
  */
 class HelperTest extends TestCase
 {
-
     public function testArrayHas()
     {
         $array = [
@@ -24,12 +25,10 @@ class HelperTest extends TestCase
             ],
             'one.two.three' => null
         ];
-
         $this->assertTrue(Helper::arrayHas($array, 'foo'));
         $this->assertTrue(Helper::arrayHas($array, 'foo.bar'));
         $this->assertTrue(Helper::arrayHas($array, 'foo.bar.baz'));
         $this->assertTrue(Helper::arrayHas($array, 'one.two.three'));
-
         $this->assertFalse(Helper::arrayHas($array, 'foo.baz'));
         $this->assertFalse(Helper::arrayHas($array, 'bar.baz'));
         $this->assertFalse(Helper::arrayHas($array, 'foo.bar.qux'));
@@ -46,12 +45,10 @@ class HelperTest extends TestCase
             ],
             'one.two.three' => 123
         ];
-
         $this->assertEquals(Helper::arrayGet($array, 'foo'), $array['foo']);
         $this->assertEquals(Helper::arrayGet($array, 'foo.bar'), $array['foo']['bar']);
         $this->assertEquals(Helper::arrayGet($array, 'foo.bar.baz'), $array['foo']['bar']['baz']);
         $this->assertEquals(123, Helper::arrayGet($array, 'one.two.three'));
-
         $this->assertNull(Helper::arrayGet($array, 'foo.bar.baz.qux'));
         $this->assertNull(Helper::arrayGet($array, 'one.two'));
     }
@@ -72,7 +69,6 @@ class HelperTest extends TestCase
             ],
             'one.two.three' => 789
         ];
-
         $this->assertEquals([
             'foo.bar.baz' => 123,
             'foo.bar.qux' => 456,
@@ -95,10 +91,8 @@ class HelperTest extends TestCase
                 ['id' => 3, 'text' => 'baz'],
             ]
         ];
-
         Helper::arraySet($array, 'comments.*.id', null, false);
         Helper::arraySet($array, 'comments.*.x.y', 1, false);
-
         $this->assertEquals([
             'comments' => [
                 ['id' => null, 'text' => 'foo', 'x' => ['y' => 1]],
@@ -118,7 +112,6 @@ class HelperTest extends TestCase
             'stuffs' => [1, 'two', ['three'], null, false, true],
             'message' => "lorem ipsum",
         ];
-
         Helper::arrayUnset($array, 'users.one');
         $this->assertEquals([
             'users' => [
@@ -127,7 +120,6 @@ class HelperTest extends TestCase
             'stuffs' => [1, 'two', ['three'], null, false, true],
             'message' => "lorem ipsum",
         ], $array);
-
         Helper::arrayUnset($array, 'stuffs.*');
         $this->assertEquals([
             'users' => [
@@ -144,10 +136,8 @@ class HelperTest extends TestCase
         $pieces1 = [1];
         $pieces2 = [1, 2];
         $pieces3 = [1, 2, 3];
-
         $separator = ', ';
         $lastSeparator = ', and ';
-
         $this->assertEquals('', Helper::join($pieces0, $separator, $lastSeparator));
         $this->assertEquals('1', Helper::join($pieces1, $separator, $lastSeparator));
         $this->assertEquals('1, and 2', Helper::join($pieces2, $separator, $lastSeparator));
@@ -157,7 +147,6 @@ class HelperTest extends TestCase
     public function testWraps()
     {
         $inputs = [1, 2, 3];
-
         $this->assertEquals(['-1-', '-2-', '-3-'], Helper::wraps($inputs, '-'));
         $this->assertEquals(['-1+', '-2+', '-3+'], Helper::wraps($inputs, '-', '+'));
     }

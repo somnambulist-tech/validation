@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation;
 
@@ -6,6 +8,7 @@ use Closure;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
 use Somnambulist\Components\Validation\Rules\Contracts\ModifyValue;
 use Somnambulist\Components\Validation\Rules\Required;
+
 use function array_merge;
 use function array_splice;
 use function array_unique;
@@ -31,7 +34,7 @@ class Validation
     private AttributeCollection $attributes;
     private ErrorCollection $errors;
     private Factory $factory;
-    private InputBag $input;
+    private InputCollection $input;
     private MessageCollection $messages;
     private array $aliases = [];
     private array $validData = [];
@@ -44,7 +47,7 @@ class Validation
         $this->factory    = $factory;
         $this->messages   = clone $factory->messages();
         $this->errors     = new ErrorCollection();
-        $this->input      = new InputBag($inputs);
+        $this->input      = new InputCollection($inputs);
         $this->attributes = new AttributeCollection();
 
         foreach ($rules as $attributeKey => $rule) {
@@ -312,7 +315,7 @@ class Validation
 
     protected function isEmptyValue(mixed $value): bool
     {
-        return false === (new Required)->check($value);
+        return false === (new Required())->check($value);
     }
 
     protected function ruleIsOptional(Attribute $attribute, Rule $rule): bool
@@ -370,7 +373,7 @@ class Validation
         return $message;
     }
 
-    public function input(): InputBag
+    public function input(): InputCollection
     {
         return $this->input;
     }

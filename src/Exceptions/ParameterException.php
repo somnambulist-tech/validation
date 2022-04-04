@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Exceptions;
 
@@ -14,7 +16,7 @@ class ParameterException extends Exception
 {
     public static function missing(string $rule, string $param): self
     {
-        return new self(sprintf('Missing required parameter "%s" on rule "%s"', $param , $rule));
+        return new self(sprintf('Missing required parameter "%s" on rule "%s"', $param, $rule));
     }
 
     public static function invalidDate(string $value): self

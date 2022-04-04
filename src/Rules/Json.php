@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -13,7 +15,6 @@ use Somnambulist\Components\Validation\Rule;
 class Json extends Rule
 {
     protected string $message = 'rule.json';
-
     public function check($value): bool
     {
         if (!is_string($value) || empty($value)) {
@@ -21,7 +22,6 @@ class Json extends Rule
         }
 
         json_decode($value);
-
         if (json_last_error() !== JSON_ERROR_NONE) {
             return false;
         }

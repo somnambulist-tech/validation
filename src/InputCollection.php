@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation;
 
@@ -8,7 +10,6 @@ namespace Somnambulist\Components\Validation;
  * @package    Somnambulist\Components\Validation
  * @subpackage Somnambulist\Components\Validation\InputBag
  */
-class InputBag extends Collection
+class InputCollection extends Collection
 {
-
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
@@ -14,10 +16,9 @@ use Somnambulist\Components\Validation\Factory;
 class PresentTest extends TestCase
 {
     protected ?Factory $validator = null;
-
     protected function setUp(): void
     {
-        $this->validator = new Factory;
+        $this->validator = new Factory();
     }
 
     public function testRulePresent()
@@ -27,7 +28,6 @@ class PresentTest extends TestCase
             'something' => 'present'
         ]);
         $this->assertFalse($v1->passes());
-
         $v2 = $this->validator->validate([
             'something' => 10
         ], [

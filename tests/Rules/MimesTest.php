@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -21,15 +23,12 @@ class MimesTest extends TestCase
             'tmp_name' => __FILE__,
             'error' => UPLOAD_ERR_OK
         ];
-
         $uploadedFileRule = $this->getMockBuilder(Mimes::class)
             ->setMethods(['isUploadedFile'])
             ->getMock();
-
         $uploadedFileRule->expects($this->once())
             ->method('isUploadedFile')
             ->willReturn(true);
-
         $this->assertTrue($uploadedFileRule->check($file));
     }
 
@@ -78,13 +77,10 @@ class MimesTest extends TestCase
         $rule = $this->getMockBuilder(Mimes::class)
             ->setMethods(['isUploadedFile'])
             ->getMock();
-
         $rule->expects($this->exactly(3))
             ->method('isUploadedFile')
             ->willReturn(true);
-
         $rule->types('png,jpeg');
-
         $this->assertFalse($rule->check([
             'name' => pathinfo(__FILE__, PATHINFO_BASENAME),
             'type' => 'text/plain',
@@ -92,7 +88,6 @@ class MimesTest extends TestCase
             'tmp_name' => __FILE__,
             'error' => 0
         ]));
-
         $this->assertTrue($rule->check([
             'name' => pathinfo(__FILE__, PATHINFO_BASENAME),
             'type' => 'image/png',
@@ -100,7 +95,6 @@ class MimesTest extends TestCase
             'tmp_name' => __FILE__,
             'error' => 0
         ]));
-
         $this->assertTrue($rule->check([
             'name' => pathinfo(__FILE__, PATHINFO_BASENAME),
             'type' => 'image/jpeg',
@@ -122,24 +116,21 @@ class MimesTest extends TestCase
             'tmp_name' => __FILE__,
             'error' => 0
         ]));
-
-        // missing type
+// missing type
         $this->assertTrue($this->rule->check([
             'name' => pathinfo(__FILE__, PATHINFO_BASENAME),
             'size' => filesize(__FILE__),
             'tmp_name' => __FILE__,
             'error' => 0
         ]));
-
-        // missing size
+// missing size
         $this->assertTrue($this->rule->check([
             'name' => pathinfo(__FILE__, PATHINFO_BASENAME),
             'type' => 'text/plain',
             'tmp_name' => __FILE__,
             'error' => 0
         ]));
-
-        // missing tmp_name
+// missing tmp_name
         $this->assertTrue($this->rule->check([
             'name' => pathinfo(__FILE__, PATHINFO_BASENAME),
             'type' => 'text/plain',

@@ -42,8 +42,7 @@
     "scripts": {
         "test": [
             "phpunit",
-            "phpcs",
-            "phpstan"
+            "phpcs"
         ]
     },
     "config": {

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -15,18 +17,15 @@ class Between extends Rule
 {
     use CanObtainSizeValue;
 
+
     protected string $message = 'rule.between';
     protected array $fillableParams = ['min', 'max'];
-
     public function check($value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
-
         $min = $this->getSizeInBytes($this->parameter('min'));
         $max = $this->getSizeInBytes($this->parameter('max'));
-
         $valueSize = $this->getValueSize($value);
-
         if (!is_numeric($valueSize)) {
             return false;
         }

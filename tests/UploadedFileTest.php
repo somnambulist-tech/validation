@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Factory;
 use Somnambulist\Components\Validation\Rules\UploadedFile;
+
 use const UPLOAD_ERR_NO_FILE;
 use const UPLOAD_ERR_OK;
 
@@ -17,10 +20,9 @@ use const UPLOAD_ERR_OK;
 class UploadedFileTest extends TestCase
 {
     protected ?Factory $validator = null;
-
     protected function setUp(): void
     {
-        $this->validator = new Factory;
+        $this->validator = new Factory();
     }
 
     public function testRequiredUploadedFile()
@@ -32,13 +34,11 @@ class UploadedFileTest extends TestCase
             'tmp_name' => '',
             'error' => UPLOAD_ERR_NO_FILE
         ];
-
         $validation = $this->validator->validate([
             'file' => $empty_file
         ], [
             'file' => 'required|uploaded_file'
         ]);
-
         $errors = $validation->errors();
         $this->assertFalse($validation->passes());
         $this->assertNotNull($errors->first('file:required'));
@@ -53,7 +53,6 @@ class UploadedFileTest extends TestCase
             'tmp_name' => '',
             'error' => UPLOAD_ERR_NO_FILE
         ];
-
         $validation = $this->validator->validate([
             'file' => $emptyFile
         ], [
@@ -72,7 +71,6 @@ class UploadedFileTest extends TestCase
         ], [
             'file' => 'required|uploaded_file'
         ]);
-
         $errors = $validation->errors();
         $this->assertFalse($validation->passes());
         $this->assertNotNull($errors->first('file:required'));
@@ -87,9 +85,7 @@ class UploadedFileTest extends TestCase
             'tmp_name' => __FILE__,
             'error' => UPLOAD_ERR_OK
         ];
-
         $samples = [];
-
         foreach ($validUploadedFile as $key => $value) {
             $uploadedFile = $validUploadedFile;
             unset($uploadedFile[$key]);
@@ -119,8 +115,8 @@ class UploadedFileTest extends TestCase
                     2000,
                 ],
                 'tmp_name' => [
-                    __DIR__.'/a.png',
-                    __DIR__.'/b.jpeg',
+                    __DIR__ . '/a.png',
+                    __DIR__ . '/b.jpeg',
                 ],
                 'error' => [
                     UPLOAD_ERR_OK,
@@ -128,13 +124,10 @@ class UploadedFileTest extends TestCase
                 ]
             ]
         ];
-
         $uploadedFileRule = $this->getMockedUploadedFileRule()->types('jpeg');
-
         $validation = $this->validator->validate($sampleInputFiles, [
             'photos.*' => ['required', $uploadedFileRule]
         ]);
-
         $this->assertFalse($validation->passes());
         $this->assertEquals($validation->getValidData(), [
             'photos' => [
@@ -142,7 +135,7 @@ class UploadedFileTest extends TestCase
                     'name' => 'b.jpeg',
                     'type' => 'image/jpeg',
                     'size' => 2000,
-                    'tmp_name' => __DIR__.'/b.jpeg',
+                    'tmp_name' => __DIR__ . '/b.jpeg',
                     'error' => UPLOAD_ERR_OK,
                 ]
             ]
@@ -153,7 +146,7 @@ class UploadedFileTest extends TestCase
                     'name' => 'a.png',
                     'type' => 'image/png',
                     'size' => 1000,
-                    'tmp_name' => __DIR__.'/a.png',
+                    'tmp_name' => __DIR__ . '/a.png',
                     'error' => UPLOAD_ERR_OK,
                 ]
             ]
@@ -180,8 +173,8 @@ class UploadedFileTest extends TestCase
                     'bar' => 2000,
                 ],
                 'tmp_name' => [
-                    'foo' => __DIR__.'/a.png',
-                    'bar' => __DIR__.'/b.jpeg',
+                    'foo' => __DIR__ . '/a.png',
+                    'bar' => __DIR__ . '/b.jpeg',
                 ],
                 'error' => [
                     'foo' => UPLOAD_ERR_OK,
@@ -189,14 +182,11 @@ class UploadedFileTest extends TestCase
                 ]
             ]
         ];
-
         $uploadedFileRule = $this->getMockedUploadedFileRule()->types('jpeg');
-
         $validation = $this->validator->validate($sampleInputFiles, [
             'photos.foo' => ['required', clone $uploadedFileRule],
             'photos.bar' => ['required', clone $uploadedFileRule],
         ]);
-
         $this->assertFalse($validation->passes());
         $this->assertEquals($validation->getValidData(), [
             'photos' => [
@@ -204,7 +194,7 @@ class UploadedFileTest extends TestCase
                     'name' => 'b.jpeg',
                     'type' => 'image/jpeg',
                     'size' => 2000,
-                    'tmp_name' => __DIR__.'/b.jpeg',
+                    'tmp_name' => __DIR__ . '/b.jpeg',
                     'error' => UPLOAD_ERR_OK,
                 ]
             ]
@@ -215,7 +205,7 @@ class UploadedFileTest extends TestCase
                     'name' => 'a.png',
                     'type' => 'image/png',
                     'size' => 1000,
-                    'tmp_name' => __DIR__.'/a.png',
+                    'tmp_name' => __DIR__ . '/a.png',
                     'error' => UPLOAD_ERR_OK,
                 ]
             ]
@@ -270,13 +260,13 @@ class UploadedFileTest extends TestCase
                 'tmp_name' => [
                     'foo' => [
                         'bar' => [
-                            'baz' => __DIR__.'/foo-bar-baz.jpeg',
-                            'qux' => __DIR__.'/foo-bar-qux.png',
+                            'baz' => __DIR__ . '/foo-bar-baz.jpeg',
+                            'qux' => __DIR__ . '/foo-bar-qux.png',
                         ]
                     ],
                     'photos' => [
-                        __DIR__.'/photos-0.png',
-                        __DIR__.'/photos-1.jpeg',
+                        __DIR__ . '/photos-0.png',
+                        __DIR__ . '/photos-1.jpeg',
                     ]
                 ],
                 'error' => [
@@ -293,15 +283,12 @@ class UploadedFileTest extends TestCase
                 ]
             ]
         ];
-
         $uploadedFileRule = $this->getMockedUploadedFileRule()->types('jpeg');
-
         $validation = $this->validator->validate($sampleInputFiles, [
             'files.foo.bar.baz' => ['required', clone $uploadedFileRule],
             'files.foo.bar.qux' => ['required', clone $uploadedFileRule],
             'files.photos.*' => ['required', clone $uploadedFileRule],
         ]);
-
         $this->assertFalse($validation->passes());
         $this->assertEquals($validation->getValidData(), [
             'files' => [
@@ -311,7 +298,7 @@ class UploadedFileTest extends TestCase
                             'name' => 'foo-bar-baz.jpeg',
                             'type' => 'image/jpeg',
                             'size' => 500,
-                            'tmp_name' => __DIR__.'/foo-bar-baz.jpeg',
+                            'tmp_name' => __DIR__ . '/foo-bar-baz.jpeg',
                             'error' => UPLOAD_ERR_OK,
                         ]
                     ]
@@ -321,7 +308,7 @@ class UploadedFileTest extends TestCase
                         'name' => 'photos-1.jpeg',
                         'type' => 'image/jpeg',
                         'size' => 2000,
-                        'tmp_name' => __DIR__.'/photos-1.jpeg',
+                        'tmp_name' => __DIR__ . '/photos-1.jpeg',
                         'error' => UPLOAD_ERR_OK,
                     ]
                 ]
@@ -335,7 +322,7 @@ class UploadedFileTest extends TestCase
                             'name' => 'foo-bar-qux.png',
                             'type' => 'image/png',
                             'size' => 750,
-                            'tmp_name' => __DIR__.'/foo-bar-qux.png',
+                            'tmp_name' => __DIR__ . '/foo-bar-qux.png',
                             'error' => UPLOAD_ERR_OK,
                         ]
                     ]
@@ -345,7 +332,7 @@ class UploadedFileTest extends TestCase
                         'name' => 'photos-0.png',
                         'type' => 'image/png',
                         'size' => 1000,
-                        'tmp_name' => __DIR__.'/photos-0.png',
+                        'tmp_name' => __DIR__ . '/photos-0.png',
                         'error' => UPLOAD_ERR_OK,
                     ],
                 ]
@@ -358,9 +345,7 @@ class UploadedFileTest extends TestCase
         $rule = $this->getMockBuilder(UploadedFile::class)
             ->onlyMethods(['isUploadedFile'])
             ->getMock();
-
         $rule->method('isUploadedFile')->willReturn(true);
-
         return $rule;
     }
 
@@ -373,13 +358,11 @@ class UploadedFileTest extends TestCase
             'size' => 1000,
             'error' => UPLOAD_ERR_OK,
         ];
-
         $validation = $this->validator->validate([
             'sample' => $file,
         ], [
             'sample' => 'mimes:jpeg,png,bmp',
         ]);
-
         $expectedMessage = 'sample file type must be "jpeg", "png", "bmp"';
         $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
     }
@@ -393,46 +376,37 @@ class UploadedFileTest extends TestCase
             'size' => 1024 * 1024 * 2, // 2M
             'error' => UPLOAD_ERR_OK,
         ];
-
         $rule = $this->getMockedUploadedFileRule();
-
-        // Invalid uploaded file (!is_uploaded_file($file['tmp_name']))
+// Invalid uploaded file (!is_uploaded_file($file['tmp_name']))
         $validation = $this->validator->validate([
             'sample' => $file,
         ], [
             'sample' => 'uploaded_file',
         ]);
-
         $expectedMessage = "sample is not a valid uploaded file";
         $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
-
-        // Invalid min size
+// Invalid min size
         $validation = $this->validator->validate([
             'sample' => $file,
         ], [
             'sample' => [(clone $rule)->minSize('3M')],
         ]);
-
         $expectedMessage = "sample file is too small, minimum size is 3M";
         $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
-
-        // Invalid max size
+// Invalid max size
         $validation = $this->validator->validate([
             'sample' => $file,
         ], [
             'sample' => [(clone $rule)->maxSize('1M')],
         ]);
-
         $expectedMessage = "sample file is too large, maximum size is 1M";
         $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
-
-        // Invalid file types
+// Invalid file types
         $validation = $this->validator->validate([
             'sample' => $file,
         ], [
             'sample' => [(clone $rule)->types(['jpeg', 'png', 'bmp'])],
         ]);
-
         $expectedMessage = 'sample file type must be "jpeg", "png", "bmp"';
         $this->assertEquals($expectedMessage, $validation->errors()->first('sample'));
     }
@@ -444,16 +418,13 @@ class UploadedFileTest extends TestCase
         ], [
             'a' => 'required_if:b,foo|uploaded_file:0,10M,pdf,jpeg,jpg'
         ]);
-
         $this->assertTrue($v1->passes());
-
         $v2 = $this->validator->validate([
             'a' => '',
             'b' => 'foo',
         ], [
             'a' => 'required_if:b,foo|uploaded_file:0,10M,pdf,jpeg,jpg'
         ]);
-
         $this->assertFalse($v2->passes());
         $this->assertEquals('a is required if b has a value of "foo"', $v2->errors()->first('a'));
     }
@@ -466,16 +437,13 @@ class UploadedFileTest extends TestCase
             'b' => 'nullable',
             'a' => 'required_with:b|uploaded_file:0,10M,pdf,jpeg,jpg',
         ]);
-
         $this->assertTrue($v1->passes());
-
         $v2 = $this->validator->validate([
             'a' => '',
             'b' => 'foo',
         ], [
             'a' => 'required_with:b|uploaded_file:0,10M,pdf,jpeg,jpg'
         ]);
-
         $this->assertFalse($v2->passes());
         $this->assertEquals('a is required with "b"', $v2->errors()->first('a'));
     }

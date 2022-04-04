@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -17,9 +19,9 @@ class Mimes extends Rule
 {
     use CanValidateFiles;
 
+
     protected string $message = 'rule.mimes';
     protected MimeTypeGuesserContract $guesser;
-
     public function __construct(MimeTypeGuesserContract $guesser = null)
     {
         $this->guesser = $guesser ?? new MimeTypeGuesser();
@@ -28,7 +30,6 @@ class Mimes extends Rule
     public function fillParameters(array $params): self
     {
         $this->types($params);
-
         return $this;
     }
 
@@ -39,15 +40,13 @@ class Mimes extends Rule
         }
 
         $this->params['allowed_types'] = $types;
-
         return $this;
     }
 
     public function check($value): bool
     {
         $allowedTypes = $this->parameter('allowed_types');
-
-        // below is Required rule job
+// below is Required rule job
         if (!$this->isValueFromUploadedFiles($value) || $value['error'] == UPLOAD_ERR_NO_FILE) {
             return true;
         }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -15,11 +17,9 @@ class Defaults extends Rule implements ModifyValue
 {
     protected string $message = 'rule.default_value';
     protected array $fillableParams = ['default'];
-
     public function check($value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
-
         return true;
     }
 
@@ -30,6 +30,6 @@ class Defaults extends Rule implements ModifyValue
 
     protected function isEmptyValue($value): bool
     {
-        return false === (new Required)->check($value);
+        return false === (new Required())->check($value);
     }
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -14,11 +16,9 @@ class Present extends Rule
 {
     protected bool $implicit = true;
     protected string $message = 'rule.present';
-
     public function check($value): bool
     {
         $this->setAttributeAsRequired();
-
         return $this->validation->input()->has($this->attribute->key());
     }
 

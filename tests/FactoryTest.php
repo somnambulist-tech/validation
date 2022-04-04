@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
@@ -7,6 +9,7 @@ use Somnambulist\Components\Validation\Exceptions\RuleException;
 use Somnambulist\Components\Validation\Factory;
 use Somnambulist\Components\Validation\Tests\Fixtures\Even;
 use Somnambulist\Components\Validation\Tests\Fixtures\Required;
+
 use const UPLOAD_ERR_OK;
 
 /**
@@ -18,10 +21,9 @@ use const UPLOAD_ERR_OK;
 class FactoryTest extends TestCase
 {
     protected ?Factory $validator = null;
-
     protected function setUp(): void
     {
-        $this->validator = new Factory;
+        $this->validator = new Factory();
     }
 
     public function testPasses()
@@ -31,13 +33,10 @@ class FactoryTest extends TestCase
         ], [
             'email' => 'required|email'
         ]);
-
         $this->assertTrue($validation->passes());
-
         $validation = $this->validator->validate([], [
             'email' => 'required|email'
         ]);
-
         $this->assertFalse($validation->passes());
     }
 
@@ -48,13 +47,10 @@ class FactoryTest extends TestCase
         ], [
             'email' => 'required|email'
         ]);
-
         $this->assertFalse($validation->fails());
-
         $validation = $this->validator->validate([], [
             'email' => 'required|email'
         ]);
-
         $this->assertTrue($validation->fails());
     }
 
@@ -68,46 +64,35 @@ class FactoryTest extends TestCase
                 'email'
             ]
         ]);
-
         $this->assertTrue($validation->passes());
     }
 
     public function testNonExistentValidationRule()
     {
         $this->expectException(RuleException::class);
-
         $validation = $this->validator->make([
             'name' => "some name"
         ], [
             'name' => 'required|xxx'
         ]);
-
         $validation->validate();
     }
 
     public function testNewValidationRuleCanBeAdded()
     {
         $this->validator->addRule('even', new Even());
-
         $data = [4, 6, 8, 10 ];
-
         $validation = $this->validator->make($data, ['s' => 'even'], []);
-
         $validation->validate();
-
         $this->assertTrue($validation->passes());
     }
 
     public function testInternalValidationRuleCanBeOverridden()
     {
         $this->validator->addRule('required', new Required());
-
         $data = ['s' => json_encode(['name' => 'space x', 'human' => false])];
-
         $validation = $this->validator->make($data, ['s' => 'required']);
-
         $validation->validate();
-
         $this->assertTrue($validation->passes());
     }
 
@@ -121,23 +106,17 @@ class FactoryTest extends TestCase
             'must_present_field' => 'present|numeric|min:6',
             'must_accepted_field' => 'accepted|numeric|min:6'
         ]);
-
         $errors = $validation->errors();
-
         $this->assertEquals(4, $errors->count());
-
         $this->assertNotNull($errors->first('required_field:required'));
         $this->assertNull($errors->first('required_field:numeric'));
         $this->assertNull($errors->first('required_field:min'));
-
         $this->assertNotNull($errors->first('required_if_field:required_if'));
         $this->assertNull($errors->first('required_if_field:numeric'));
         $this->assertNull($errors->first('required_if_field:min'));
-
         $this->assertNotNull($errors->first('must_present_field:present'));
         $this->assertNull($errors->first('must_present_field:numeric'));
         $this->assertNull($errors->first('must_present_field:min'));
-
         $this->assertNotNull($errors->first('must_accepted_field:accepted'));
         $this->assertNull($errors->first('must_accepted_field:numeric'));
         $this->assertNull($errors->first('must_accepted_field:min'));
@@ -150,11 +129,8 @@ class FactoryTest extends TestCase
         ], [
             'must_present_field' => 'present|array',
         ]);
-
         $errors = $validation->errors();
-
         $this->assertEquals(1, $errors->count());
-
         $this->assertNull($errors->first('must_present_field:present'));
         $this->assertNotNull($errors->first('must_present_field:array'));
     }
@@ -175,7 +151,6 @@ class FactoryTest extends TestCase
             'required_if_field' => 'required_if:some_value,1|email',
             'an_empty_file' => 'uploaded_file'
         ]);
-
         $this->assertTrue($validation->passes());
     }
 
@@ -196,7 +171,6 @@ class FactoryTest extends TestCase
             'optional_field' => 'ipv4|in:127.0.0.1',
             'required_if_field' => 'required_if:some_value,1|email'
         ]);
-
         $this->assertEquals(4, $validation->errors()->count());
     }
 
@@ -210,9 +184,7 @@ class FactoryTest extends TestCase
             'optional_field' => 'required|ipv4|in:127.0.0.1',
             'required_if_field' => 'required_if:some_value,1|email'
         ]);
-
         $errors = $validation->errors();
-
         $this->assertEquals(3, $errors->count());
         $this->assertNotNull($errors->first('optional_field:ipv4'));
         $this->assertNotNull($errors->first('optional_field:in'));
@@ -254,7 +226,6 @@ class FactoryTest extends TestCase
                 $validator('uploaded_file', 20000)
             ]
         ]);
-
         $errors = $validation->errors();
         $this->assertCount(10, $errors);
     }
@@ -272,11 +243,8 @@ class FactoryTest extends TestCase
             'user.name' => 'required',
             'user.age' => 'required|min:18'
         ]);
-
         $errors = $validation->errors();
-
         $this->assertEquals(2, $errors->count());
-
         $this->assertNotNull($errors->first('user.email:email'));
         $this->assertNotNull($errors->first('user.age:min'));
         $this->assertNull($errors->first('user.name:required'));
@@ -285,10 +253,9 @@ class FactoryTest extends TestCase
     public function testEmptyArrayAssocValidation()
     {
         $validation = $this->validator->validate([], [
-            'user'=> 'required',
+            'user' => 'required',
             'user.email' => 'email',
         ]);
-
         $this->assertFalse($validation->passes());
     }
 
@@ -371,11 +338,8 @@ class FactoryTest extends TestCase
             'cart_items.*.id_product' => 'required|numeric',
             'cart_items.*.qty' => 'required|numeric'
         ]);
-
         $errors = $validation->errors();
-
         $this->assertEquals(4, $errors->count());
-
         $this->assertNotNull($errors->first('cart_items.1.id_product:required'));
         $this->assertNotNull($errors->first('cart_items.2.qty:required'));
         $this->assertNotNull($errors->first('cart_items.3.qty:numeric'));
@@ -396,16 +360,12 @@ class FactoryTest extends TestCase
             'cart_items.*.id_product:Product ID' => 'required|numeric',
             'cart_items.*.qty:Quantity' => 'required|numeric'
         ]);
-
         $errors = $validation->errors();
-
         $this->assertEquals(4, $errors->count());
-
         $this->assertNotNull($errors->first('cart_items.1.id_product:required'));
         $this->assertNotNull($errors->first('cart_items.2.qty:required'));
         $this->assertNotNull($errors->first('cart_items.3.qty:numeric'));
         $this->assertNotNull($errors->first('cart_items.4.id_product:numeric'));
-
         $this->assertEquals('Product ID is required', $errors->all()[0]);
         $this->assertEquals('Product ID must be numeric', $errors->all()[1]);
     }
@@ -422,9 +382,7 @@ class FactoryTest extends TestCase
             'cart.*.itemName' => 'required',
             'cart.*.qty' => 'required|numeric'
         ]);
-
         $errors = $validation->errors();
-
         $this->assertEquals('cart.0.qty must be numeric', $errors->first('cart.*.qty'));
         $this->assertEquals('cart.0.itemName is required', $errors->first('cart.*.itemName'));
     }
@@ -437,7 +395,6 @@ class FactoryTest extends TestCase
             'comments.*.text' => 'baz',
             'rule.numeric' => 'baz'
         ]);
-
         $validation = $this->validator->validate([
             'foo' => null,
             'email' => 'invalid email',
@@ -452,7 +409,6 @@ class FactoryTest extends TestCase
             'something' => 'numeric',
             'comments.*.text' => 'required'
         ]);
-
         $errors = $validation->errors();
         $this->assertEquals('foo', $errors->first('foo:required'));
         $this->assertEquals('bar', $errors->first('email:email'));
@@ -476,16 +432,13 @@ class FactoryTest extends TestCase
             'something' => 'numeric',
             'comments.*.text' => 'required'
         ]);
-
         $validation->messages()->add('en', [
             'rule.required' => 'foo',
             'rule.email' => 'bar',
             'comments.*.text' => 'baz',
             'rule.numeric' => 'baz'
         ]);
-
         $validation->validate();
-
         $errors = $validation->errors();
         $this->assertEquals('foo', $errors->first('foo:required'));
         $this->assertEquals('bar', $errors->first('email:email'));
@@ -496,21 +449,19 @@ class FactoryTest extends TestCase
     public function testCustomMessageInCallbackRule()
     {
         $evenNumberValidator = function ($value) {
+
             if (!is_numeric($value) or $value % 2 !== 0) {
                 return 'custom.rule.even_number';
             }
             return true;
         };
-
         $validation = $this->validator->make([
             'foo' => 'abc',
         ], [
             'foo' => [$evenNumberValidator],
         ]);
         $validation->messages()->replace('en', 'custom.rule.even_number', ':attribute must be even number');
-
         $validation->validate();
-
         $errors = $validation->errors();
         $this->assertEquals("foo must be even number", $errors->first('foo:callback'));
     }
@@ -538,17 +489,13 @@ class FactoryTest extends TestCase
             'cart.*.qty' => 'required|numeric',
             'cart.*.attributes.*.value' => 'required'
         ]);
-
         $validation->messages()->add('en', [
             'cart.*.itemName:required' => 'Item [0] name is required',
             'cart.*.qty:numeric' => 'Item {0} qty is not a number',
             'cart.*.attributes.*.value' => 'Item {0} attribute {1} value is required',
         ]);
-
         $validation->validate();
-
         $errors = $validation->errors();
-
         $this->assertEquals('Item 1 qty is not a number', $errors->first('cart.*.qty'));
         $this->assertEquals('Item 1 name is required', $errors->first('cart.*.itemName'));
         $this->assertEquals('Item 2 attribute 1 value is required', $errors->first('cart.*.attributes.*.value'));
@@ -561,15 +508,12 @@ class FactoryTest extends TestCase
         ], [
             'something' => 'email|max:3|numeric',
         ]);
-
         $validation->messages()->add('en', [
             'something:email' => 'foo',
             'something:numeric' => 'bar',
             'something:max' => 'baz',
         ]);
-
         $validation->validate();
-
         $errors = $validation->errors();
         $this->assertEquals('foo', $errors->first('something:email'));
         $this->assertEquals('bar', $errors->first('something:numeric'));
@@ -592,22 +536,17 @@ class FactoryTest extends TestCase
             'something' => 'numeric',
             'comments.*.text' => 'required'
         ]);
-
         $validation->messages()->add('en', [
             'rule.required' => ':attribute foo',
             'rule.email' => ':attribute bar',
             'rule.numeric' => ':attribute baz',
             'comments.*.text' => ':attribute qux'
         ]);
-
         $validation->setAlias('foo', 'Foo');
         $validation->setAlias('email', 'Bar');
-
         $validation->setAlias('something', 'Baz');
         $validation->setAlias('comments.*.text', 'Qux');
-
         $validation->validate();
-
         $errors = $validation->errors();
         $this->assertEquals('Foo foo', $errors->first('foo:required'));
         $this->assertEquals('Bar bar', $errors->first('email:email'));
@@ -646,9 +585,7 @@ class FactoryTest extends TestCase
             'stuffs.two' => 'required|numeric',
             'stuffs.three' => 'required|numeric',
         ]);
-
         $validData = $validation->getValidData();
-
         $this->assertEquals([
             'items' => [
                 [
@@ -666,7 +603,6 @@ class FactoryTest extends TestCase
                 'two' => '2',
             ]
         ], $validData);
-
         $stuffs = $validData['stuffs'];
         $this->assertFalse(isset($stuffs['three']));
     }
@@ -702,9 +638,7 @@ class FactoryTest extends TestCase
             'stuffs.two' => 'numeric',
             'stuffs.three' => 'numeric',
         ]);
-
         $invalidData = $validation->getInvalidData();
-
         $this->assertEquals([
             'items' => [
                 [
@@ -719,7 +653,6 @@ class FactoryTest extends TestCase
                 'three' => 'three',
             ]
         ], $invalidData);
-
         $stuffs = $invalidData['stuffs'];
         $this->assertFalse(isset($stuffs['one']));
         $this->assertFalse(isset($stuffs['two']));
@@ -732,7 +665,6 @@ class FactoryTest extends TestCase
         ], [
             'number' => ['numeric', 'max' => 2],
         ]);
-
         $this->assertTrue($validation->passes());
     }
 }

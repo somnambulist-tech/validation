@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -7,10 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 class UrlTest extends TestCase
 {
-
     public function setUp(): void
     {
-        $this->rule = new Url;
+        $this->rule = new Url();
     }
 
     public function testValids()
@@ -21,16 +22,14 @@ class UrlTest extends TestCase
         $this->assertTrue($this->rule->check('http://foobar.com'));
         $this->assertTrue($this->rule->check('https://foobar.com'));
         $this->assertTrue($this->rule->check('https://foobar.com/path?a=123&b=blah'));
-
-        // Using specific schemes
+// Using specific schemes
         $this->assertTrue($this->rule->fillParameters(['ftp'])->check('ftp://foobar.com'));
         $this->assertTrue($this->rule->fillParameters(['any'])->check('any://foobar.com'));
         $this->assertTrue($this->rule->fillParameters(['http'])->check('http://foobar.com'));
         $this->assertTrue($this->rule->fillParameters(['https'])->check('https://foobar.com'));
         $this->assertTrue($this->rule->fillParameters(['http', 'https'])->check('https://foobar.com'));
         $this->assertTrue($this->rule->fillParameters(['foo', 'bar'])->check('bar://foobar.com'));
-
-        // Using forScheme
+// Using forScheme
         $this->assertTrue($this->rule->forScheme('ftp')->check('ftp://foobar.com'));
         $this->assertTrue($this->rule->forScheme('http')->check('http://foobar.com'));
         $this->assertTrue($this->rule->forScheme('https')->check('https://foobar.com'));

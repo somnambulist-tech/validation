@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
@@ -14,10 +16,9 @@ use Somnambulist\Components\Validation\Factory;
 class DefaultsTest extends TestCase
 {
     protected ?Factory $validator = null;
-
     protected function setUp(): void
     {
-        $this->validator = new Factory;
+        $this->validator = new Factory();
     }
 
     public function testUsingDefaults()
@@ -30,30 +31,25 @@ class DefaultsTest extends TestCase
             'is_enabled' => 'defaults:1|required|in:0,1',
             'is_published' => 'required|in:0,1'
         ]);
-
         $this->assertFalse($validation->passes());
-
         $errors = $validation->errors();
         $this->assertNull($errors->first('is_active'));
         $this->assertNull($errors->first('is_enabled'));
         $this->assertNotNull($errors->first('is_published'));
-
-        // Getting (all) validated data
+// Getting (all) validated data
         $validatedData = $validation->getValidatedData();
         $this->assertEquals([
             'is_active' => '0',
             'is_enabled' => '1',
             'is_published' => 'invalid-value'
         ], $validatedData);
-
-        // Getting only valid data
+// Getting only valid data
         $validData = $validation->getValidData();
         $this->assertEquals([
             'is_active' => '0',
             'is_enabled' => '1'
         ], $validData);
-
-        // Getting only invalid data
+// Getting only invalid data
         $invalidData = $validation->getInvalidData();
         $this->assertEquals([
             'is_published' => 'invalid-value',

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
@@ -38,10 +40,8 @@ class ExistsTest extends TestCase
                 ('245a7999-96a6-4523-94eb-0a09e24552e6', 'eep', 1, 'eep@example.org', 'password'),
                 ('f4757b37-35eb-46db-b2b5-c9269e7d218c', 'alpha', 1, 'alpha@example.org', 'password')
         SQL);
-
         $rule = new Exists($conn);
         $rule->table('users')->column('email');
-
         $this->assertTrue($rule->check('foo@example.org'));
         $this->assertFalse($rule->check('foo@example.com'));
     }
@@ -69,10 +69,8 @@ class ExistsTest extends TestCase
                 ('245a7999-96a6-4523-94eb-0a09e24552e6', 'eep', 1, 'eep@example.org', 'password'),
                 ('f4757b37-35eb-46db-b2b5-c9269e7d218c', 'alpha', 1, 'alpha@example.org', 'password')
         SQL);
-
         $rule = new Exists($conn);
         $rule->table('users')->column('email')->where(fn (QueryBuilder $qb) => $qb->andWhere('is_active = 1'));
-
         $this->assertFalse($rule->check('foo@example.org'));
         $this->assertFalse($rule->check('foo@example.com'));
         $this->assertTrue($rule->check('bar@example.org'));

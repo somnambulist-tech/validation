@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Tests;
 
@@ -14,10 +16,9 @@ use Somnambulist\Components\Validation\Factory;
 class InNotInTest extends TestCase
 {
     protected ?Factory $validator = null;
-
     protected function setUp(): void
     {
-        $this->validator = new Factory;
+        $this->validator = new Factory();
     }
 
     public function testRuleInInvalidMessages()
@@ -27,7 +28,6 @@ class InNotInTest extends TestCase
         ], [
             'number' => 'in:7,8,9',
         ]);
-
         $this->assertEquals('number must be one of "7", "8", "9"', $validation->errors()->first('number'));
     }
 
@@ -38,7 +38,6 @@ class InNotInTest extends TestCase
         ], [
             'number' => 'not_in:1,2,3',
         ]);
-
         $this->assertEquals('number must not be one of "1", "2", "3"', $validation->errors()->first('number'));
     }
 }

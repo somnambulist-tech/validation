@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -13,7 +15,6 @@ use Somnambulist\Components\Validation\Rule;
 class AlphaDash extends Rule
 {
     protected string $message = 'rule.alpha_dash';
-
     public function check($value): bool
     {
         if (!is_string($value) && !is_numeric($value)) {
