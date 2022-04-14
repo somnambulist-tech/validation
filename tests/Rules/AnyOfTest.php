@@ -10,7 +10,6 @@ use Somnambulist\Components\Validation\Rules\AnyOf;
 
 class AnyOfTest extends TestCase
 {
-
     public function setUp(): void
     {
         $this->rule = new AnyOf();
