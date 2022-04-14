@@ -60,7 +60,7 @@ class ErrorCollection implements Countable, IteratorAggregate
         return $results;
     }
 
-    private function formatMessage(ErrorMessage $message, string $format): string
+    protected function formatMessage(ErrorMessage $message, string $format): string
     {
         return str_replace(':message', (string)$message, $format);
     }
@@ -84,7 +84,7 @@ class ErrorCollection implements Countable, IteratorAggregate
         }
     }
 
-    private function parseKey(string $key): array
+    protected function parseKey(string $key): array
     {
         $expl     = explode(':', $key, 2);
         $key      = $expl[0];
@@ -93,12 +93,12 @@ class ErrorCollection implements Countable, IteratorAggregate
         return [$key, $ruleName];
     }
 
-    private function isWildcardKey(string $key): bool
+    protected function isWildcardKey(string $key): bool
     {
         return str_contains($key, '*');
     }
 
-    private function filterMessagesForWildcardKey(string $key, $ruleName = null): array
+    protected function filterMessagesForWildcardKey(string $key, $ruleName = null): array
     {
         $messages = $this->errors;
         $pattern  = preg_quote($key, '#');

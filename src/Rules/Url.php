@@ -49,7 +49,7 @@ class Url extends Rule
     /**
      * Validate $value has a scheme or has the specified scheme
      */
-    private function validateCommonScheme(string $value, string $scheme = null): bool
+    protected function validateCommonScheme(string $value, string $scheme = null): bool
     {
         if ($scheme) {
             return $this->validateBasic($value) && preg_match("/^$scheme:\/\//", $value);
@@ -61,7 +61,7 @@ class Url extends Rule
     /**
      * Validate $value conforms to standard URL rules according to PHP filter_validate_url
      */
-    private function validateBasic(string $value): bool
+    protected function validateBasic(string $value): bool
     {
         return filter_var($value, FILTER_VALIDATE_URL) !== false;
     }

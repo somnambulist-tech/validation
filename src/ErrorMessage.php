@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation;
 
-use function array_is_list;
 use function array_merge;
 use function is_array;
 use function is_numeric;
@@ -66,7 +65,7 @@ class ErrorMessage
         return $this;
     }
 
-    private function toArrayOfStrings(array $params): array
+    protected function toArrayOfStrings(array $params): array
     {
         $ret = [];
 
@@ -78,14 +77,29 @@ class ErrorMessage
         return $ret;
     }
 
-    private function stringify(mixed $value): string
+    protected function stringify(mixed $value): string
     {
         return match (true) {
             is_string($value), is_numeric($value)     => (string)$value,
-            is_array($value) && array_is_list($value) => Helper::join(Helper::wraps($value, '"'), ', ', ', '),
+            is_array($value) && $this->arrayIsList($value) => Helper::join(Helper::wraps($value, '"'), ', ', ', '),
             is_array($value) || is_object($value)     => json_encode($value),
 
             default => '',
         };
+    }
+
+    protected function arrayIsList(array $array)
+    {
+        if (!function_exists('array_is_list')) {
+            $i = 0;
+            foreach ($array as $k => $v) {
+                if ($k !== $i++) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return \array_is_list($array);
     }
 }

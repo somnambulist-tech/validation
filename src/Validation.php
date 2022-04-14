@@ -298,7 +298,7 @@ class Validation
      *
      * Adapted from: https://github.com/illuminate/validation/blob/v5.3.23/Validator.php#L354
      */
-    private function extractValuesForWildcards(array $data, string $attributeKey): array
+    protected function extractValuesForWildcards(array $data, string $attributeKey): array
     {
         $keys = [];
 

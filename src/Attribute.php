@@ -72,7 +72,7 @@ class Attribute
         $this->indexes = $indexes;
     }
 
-    private function resolveSiblingKey(string $key): string
+    protected function resolveSiblingKey(string $key): string
     {
         $indexes        = $this->indexes();
         $keys           = explode("*", $key);

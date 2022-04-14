@@ -34,7 +34,7 @@ class Uuid extends Rule
         return !is_null($value) && $this->validate($value) && $value !== self::NIL;
     }
 
-    private function validate(string $uuid): bool
+    protected function validate(string $uuid): bool
     {
         $uuid = str_replace(['urn:', 'uuid:', 'URN:', 'UUID:', '{', '}'], '', $uuid);
 

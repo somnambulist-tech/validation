@@ -14,7 +14,7 @@ use function array_map;
  */
 trait CanConvertValuesToBooleans
 {
-    private function convertStringsToBoolean(array $values): array
+    protected function convertStringsToBoolean(array $values): array
     {
         return array_map(function ($value) {
 
@@ -28,7 +28,7 @@ trait CanConvertValuesToBooleans
         }, $values);
     }
 
-    private function convertBooleansToString(array $values): array
+    protected function convertBooleansToString(array $values): array
     {
         return array_map(function ($value) {
 
