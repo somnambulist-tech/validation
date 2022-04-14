@@ -83,6 +83,7 @@ class Factory
             'required_without'     => new Rules\RequiredWithout(),
             'required_without_all' => new Rules\RequiredWithoutAll(),
             'same'                 => new Rules\Same(),
+            'sometimes'            => new Rules\Sometimes(),
             'string'               => new Rules\TypeString(),
             'uploaded_file'        => new Rules\UploadedFile(),
             'uppercase'            => new Rules\Uppercase(),
