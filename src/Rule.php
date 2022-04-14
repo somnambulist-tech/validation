@@ -68,11 +68,11 @@ abstract class Rule
     }
 
     /**
-     * Get parameter from given $key, return null if it does not exist
+     * Get parameter from given $key, return $default if it does not exist (null)
      */
-    public function parameter(string $key): mixed
+    public function parameter(string $key, mixed $default = null): mixed
     {
-        return $this->params[$key] ?? null;
+        return $this->params[$key] ?? $default;
     }
 
     public function isImplicit(): bool

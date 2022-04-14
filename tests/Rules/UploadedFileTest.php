@@ -24,7 +24,7 @@ class UploadedFileTest extends TestCase
             'error' => UPLOAD_ERR_OK
         ];
         $uploadedFileRule = $this->getMockBuilder(UploadedFile::class)
-            ->setMethods(['isUploadedFile'])
+            ->onlyMethods(['isUploadedFile'])
             ->getMock();
         $uploadedFileRule->expects($this->once())
             ->method('isUploadedFile')
@@ -74,7 +74,7 @@ class UploadedFileTest extends TestCase
     public function testMaxSize()
     {
         $rule = $this->getMockBuilder(UploadedFile::class)
-            ->setMethods(['isUploadedFile'])
+            ->onlyMethods(['isUploadedFile'])
             ->getMock();
         $rule->expects($this->exactly(2))
             ->method('isUploadedFile')
@@ -99,7 +99,7 @@ class UploadedFileTest extends TestCase
     public function testMinSize()
     {
         $rule = $this->getMockBuilder(UploadedFile::class)
-            ->setMethods(['isUploadedFile'])
+            ->onlyMethods(['isUploadedFile'])
             ->getMock();
         $rule->expects($this->exactly(2))
             ->method('isUploadedFile')
@@ -124,7 +124,7 @@ class UploadedFileTest extends TestCase
     public function testFileTypes()
     {
         $rule = $this->getMockBuilder(UploadedFile::class)
-            ->setMethods(['isUploadedFile'])
+            ->onlyMethods(['isUploadedFile'])
             ->getMock();
         $rule->expects($this->exactly(3))
             ->method('isUploadedFile')

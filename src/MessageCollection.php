@@ -14,8 +14,8 @@ use Somnambulist\Components\Validation\Exceptions\MessageException;
  */
 class MessageCollection
 {
-    private array $messages;
-    private string $defaultLang = 'en';
+    protected array $messages;
+    protected string $defaultLang = 'en';
 
     public function __construct()
     {

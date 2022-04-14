@@ -18,7 +18,7 @@ class Exists extends Rule
 {
     protected string $message = 'rule.exists';
     protected array $fillableParams = ['table', 'column'];
-    public function __construct(private Connection $connection)
+    public function __construct(protected Connection $connection)
     {
     }
 

@@ -18,7 +18,8 @@ class Unique extends Rule
 {
     protected string $message = 'rule.unique';
     protected array $fillableParams = ['table', 'column', 'ignore', 'ignore_column'];
-    public function __construct(private Connection $connection)
+
+    public function __construct(protected Connection $connection)
     {
     }
 

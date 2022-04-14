@@ -24,7 +24,7 @@ class MimesTest extends TestCase
             'error' => UPLOAD_ERR_OK
         ];
         $uploadedFileRule = $this->getMockBuilder(Mimes::class)
-            ->setMethods(['isUploadedFile'])
+            ->onlyMethods(['isUploadedFile'])
             ->getMock();
         $uploadedFileRule->expects($this->once())
             ->method('isUploadedFile')
@@ -75,7 +75,7 @@ class MimesTest extends TestCase
     {
 
         $rule = $this->getMockBuilder(Mimes::class)
-            ->setMethods(['isUploadedFile'])
+            ->onlyMethods(['isUploadedFile'])
             ->getMock();
         $rule->expects($this->exactly(3))
             ->method('isUploadedFile')

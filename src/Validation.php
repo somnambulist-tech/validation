@@ -31,16 +31,16 @@ use function str_getcsv;
  */
 class Validation
 {
-    private AttributeCollection $attributes;
-    private ErrorCollection $errors;
-    private Factory $factory;
-    private InputCollection $input;
-    private MessageCollection $messages;
-    private array $aliases = [];
-    private array $validData = [];
-    private array $invalidData = [];
-    private string $separator = ':';
-    private ?string $lang = null;
+    protected AttributeCollection $attributes;
+    protected ErrorCollection $errors;
+    protected Factory $factory;
+    protected InputCollection $input;
+    protected MessageCollection $messages;
+    protected array $aliases = [];
+    protected array $validData = [];
+    protected array $invalidData = [];
+    protected string $separator = ':';
+    protected ?string $lang = null;
 
     public function __construct(Factory $factory, array $inputs, array $rules)
     {
@@ -76,6 +76,10 @@ class Validation
                 $this->validateAttribute($attr);
             }
 
+            return;
+        }
+
+        if ($attribute->rules()->has('sometimes') && !$this->input->has($attribute->key())) {
             return;
         }
 
@@ -320,9 +324,11 @@ class Validation
 
     protected function ruleIsOptional(Attribute $attribute, Rule $rule): bool
     {
-        return false === $attribute->isRequired() and
-               false === $rule->isImplicit() and
-               false === $rule instanceof Required;
+        return
+            false === $attribute->isRequired() &&
+            false === $rule->isImplicit() &&
+            false === $rule instanceof Required
+        ;
     }
 
     protected function addError(Attribute $attribute, Rule $rule, mixed $value): void

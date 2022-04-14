@@ -1,6 +1,23 @@
 Change Log
 ==========
 
+2022-04-04
+----------
+
+ * add German translation with thanks to [xJuvi](https://github.com/xJuvi)
+
+2022-03-28
+----------
+
+ * add `any_of` and `sometimes` rules
+ * remove calls to deprecated mock methods
+ * move some test classes to `Rules` namespace
+
+2022-03-23
+----------
+
+ * add `rejected` to readme (previously missed)
+
 2022-02-03
 ----------
 

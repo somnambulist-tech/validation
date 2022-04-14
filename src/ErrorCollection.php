@@ -23,7 +23,7 @@ use function str_replace;
  */
 class ErrorCollection implements Countable, IteratorAggregate
 {
-    public function __construct(private array $errors = [])
+    public function __construct(protected array $errors = [])
     {
         foreach ($errors as $key => $rules) {
             foreach ($rules as $rule => $error) {

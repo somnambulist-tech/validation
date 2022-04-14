@@ -13,6 +13,7 @@ return [
     'rule.alpha_dash'             => ':attribute only allows a-z, 0-9, _ and -',
     'rule.alpha_num'              => ':attribute only allows alphabetic and numeric characters',
     'rule.alpha_spaces'           => ':attribute may only contain alphabetic characters and spaces',
+    'rule.any_of'                 => 'Each value in :attribute must be one of :allowed_values',
     'rule.array'                  => ':attribute must be an array',
     'rule.before'                 => ':attribute must be a date before :time.',
     'rule.between'                => ':attribute must be between :min and :max',

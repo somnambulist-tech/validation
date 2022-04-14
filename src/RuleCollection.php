@@ -15,7 +15,7 @@ use Somnambulist\Components\Validation\Rules\Contracts\BeforeValidate;
  */
 class RuleCollection extends Collection
 {
-    public function __construct(private Attribute $attribute, array $data = [])
+    public function __construct(protected Attribute $attribute, array $data = [])
     {
         parent::__construct();
 

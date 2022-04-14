@@ -14,7 +14,7 @@ use Somnambulist\Components\Validation\ErrorMessage;
  * @package    Somnambulist\Components\Validation\Tests
  * @subpackage Somnambulist\Components\Validation\Tests\ErrorBagTest
  */
-class ErrorBagTest extends TestCase
+class ErrorCollectionTest extends TestCase
 {
     public function testCount()
     {
