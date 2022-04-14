@@ -14,8 +14,8 @@ use Somnambulist\Components\Validation\Exceptions\RuleException;
  */
 class Factory
 {
-    private array $rules = [];
-    private MessageCollection $messages;
+    protected array $rules = [];
+    protected MessageCollection $messages;
 
     public function __construct()
     {
@@ -123,7 +123,9 @@ class Factory
      */
     public function rule(string $rule): Rule
     {
-        if (null !== $v = $this->rules[$rule] ?? null) {
+        $v = $this->rules[$rule] ?? null;
+
+        if ($v !== null) {
             return clone $v;
         }
 
