@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2022-04-19
+----------
+
+ * fix PHP 8.0 compatibility calling PHP 8.1 function `array_is_list()` without a fallback
+
 2022-04-04
 ----------
 
