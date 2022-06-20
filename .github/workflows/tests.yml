@@ -9,18 +9,32 @@ on:
     create:
         tags:
             - '*'
-
 jobs:
-    build:
-        runs-on: ubuntu-latest
+    testsuite:
+        name: Unittests
+        runs-on: ubuntu-20.04
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: ['8.0', '8.1']
+
         steps:
             - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 1
 
-            - name: Validate composer.json and composer.lock
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
+                  extensions: json, pdo
+                  tools: pecl
+
+            - name: Validate composer.json
               run: composer validate
 
-            - name: Install dependencies
+            - name: Composer install
               run: composer install --prefer-dist --no-progress
 
-            - name: Run test suite
+            - name: Run PHPUnit
               run: vendor/bin/phpunit

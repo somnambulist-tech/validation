@@ -58,6 +58,7 @@ class Factory
             'ipv4'                 => new Rules\Ipv4,
             'ipv6'                 => new Rules\Ipv6,
             'json'                 => new Rules\Json,
+            'length'               => new Rules\Length,
             'lowercase'            => new Rules\Lowercase,
             'matches'              => new Rules\Regex,
             'max'                  => new Rules\Max,
