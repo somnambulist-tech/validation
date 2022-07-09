@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2022-06-20
+----------
+
+ * add `length` rule for testing strings of exact length (handles UTF8 strings)
+
 2022-04-19
 ----------
 

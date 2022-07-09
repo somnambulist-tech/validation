@@ -31,6 +31,7 @@ return [
     'rule.ipv4'                   => ':attribute must be a valid IPv4 address',
     'rule.ipv6'                   => ':attribute must be a valid IPv6 address',
     'rule.json'                   => ':attribute must be a valid JSON string',
+    'rule.length'                 => ':attribute must be a string of exactly :length characters',
     'rule.lowercase'              => ':attribute must be lowercase',
     'rule.max'                    => ':attribute maximum is :max',
     'rule.mimes'                  => ':attribute file type must be :allowed_types',

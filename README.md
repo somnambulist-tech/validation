@@ -262,7 +262,7 @@ $validation = (new Factory())->validate($inputs, $rules);
 $errors = $validation->errors();
 ```
 
-Now you can use the following methods to retrieve the messages messages:
+Now you can use the following methods to retrieve the messages:
 
 #### `all(string $format = ':message')`
 
@@ -760,6 +760,12 @@ The field under this rule must be a valid ipv6 address.
 <details><summary><strong>json</strong></summary>
 
 The field under this validation must be a valid JSON string.
+
+</details>
+
+<details><summary><strong>length</strong>:number</summary>
+
+The field under this validation must be a string of exactly the length specified.
 
 </details>
 
