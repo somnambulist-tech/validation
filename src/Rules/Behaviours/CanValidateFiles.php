@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Rules\Behaviours;
 
 use Somnambulist\Components\Validation\Helper;
 
-/**
- * Trait CanValidateFiles
- *
- * @package    Somnambulist\Components\Validation\Rules\Behaviours
- * @subpackage Somnambulist\Components\Validation\Rules\Behaviours\CanValidateFiles
- */
 trait CanValidateFiles
 {
     public function isUploadedFile(mixed $value): bool

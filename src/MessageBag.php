@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation;
 
 use Somnambulist\Components\Validation\Exceptions\MessageException;
 
-/**
- * Class MessageBag
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\MessageBag
- */
 class MessageBag
 {
     private array $messages;

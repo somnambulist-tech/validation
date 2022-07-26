@@ -13,12 +13,6 @@ use function in_array;
 use function reset;
 use const ARRAY_FILTER_USE_BOTH;
 
-/**
- * Class DataBag
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\DataBag
- */
 class DataBag implements Countable, IteratorAggregate
 {
     protected array $data;

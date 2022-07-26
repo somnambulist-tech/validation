@@ -5,16 +5,7 @@ namespace Somnambulist\Components\Validation\Tests\Rules;
 
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Factory;
-use Somnambulist\Components\Validation\Rules\ProhibitedIf;
-use Somnambulist\Components\Validation\Rules\Prohibited;
-use Somnambulist\Components\Validation\Rules\ProhibitedUnless;
 
-/**
- * Class ProhibitedTest
- *
- * @package    Somnambulist\Components\Validation\Tests\Rules
- * @subpackage Somnambulist\Components\Validation\Tests\Rules\ProhibitedTest
- */
 class ProhibitedTest extends TestCase
 {
     public function testProhibited()

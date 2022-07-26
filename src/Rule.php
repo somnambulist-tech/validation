@@ -7,12 +7,6 @@ use function array_merge;
 use function array_shift;
 use function get_class;
 
-/**
- * Class Rule
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\Rule
- */
 abstract class Rule
 {
     protected ?string $name = null;

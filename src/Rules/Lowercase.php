@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class Lowercase
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Lowercase
- */
 class Lowercase extends Rule
 {
     protected string $message = 'rule.lowercase';

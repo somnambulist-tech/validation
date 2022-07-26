@@ -7,12 +7,6 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Rules\Unique;
 
-/**
- * Class UniqueTest
- *
- * @package    Somnambulist\Components\Validation\Tests\Rules
- * @subpackage Somnambulist\Components\Validation\Tests\Rules\UniqueTest
- */
 class UniqueTest extends TestCase
 {
     public function testUnique()

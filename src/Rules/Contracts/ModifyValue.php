@@ -2,12 +2,6 @@
 
 namespace Somnambulist\Components\Validation\Rules\Contracts;
 
-/**
- * Interface ModifyValue
- *
- * @package    Somnambulist\Components\Validation\Rules\Contracts
- * @subpackage Somnambulist\Components\Validation\Rules\Contracts\ModifyValue
- */
 interface ModifyValue
 {
     /**

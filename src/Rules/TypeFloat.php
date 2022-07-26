@@ -5,12 +5,6 @@ namespace Somnambulist\Components\Validation\Rules;
 use Somnambulist\Components\Validation\Rule;
 use function gettype;
 
-/**
- * Class TypeFloatRule
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\TypeFloatRule
- */
 class TypeFloat extends Rule
 {
     protected string $message = 'rule.float';

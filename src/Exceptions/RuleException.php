@@ -5,12 +5,6 @@ namespace Somnambulist\Components\Validation\Exceptions;
 use Exception;
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class RuleException
- *
- * @package    Somnambulist\Components\Validation\Exceptions
- * @subpackage Somnambulist\Components\Validation\Exceptions\RuleException
- */
 class RuleException extends Exception
 {
     public static function notFound(string $rule): self

@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class Different
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Different
- */
 class Different extends Rule
 {
     protected string $message = 'rule.different';

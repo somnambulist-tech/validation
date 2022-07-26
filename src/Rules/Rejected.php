@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class Rejected
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Rejected
- */
 class Rejected extends Rule
 {
     protected bool $implicit = true;

@@ -7,12 +7,6 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Rules\Exists;
 
-/**
- * Class ExistsTest
- *
- * @package    Somnambulist\Components\Validation\Tests\Rules
- * @subpackage Somnambulist\Components\Validation\Tests\Rules\ExistsTest
- */
 class ExistsTest extends TestCase
 {
     public function testExists()

@@ -2,8 +2,8 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
-use Somnambulist\Components\Validation\Rules\Alpha;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\Rules\Alpha;
 use stdClass;
 
 class AlphaTest extends TestCase

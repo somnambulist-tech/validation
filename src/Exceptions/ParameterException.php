@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Exceptions;
 
 use Exception;
 
-/**
- * Class MissingRequiredParameterException
- *
- * @package    Somnambulist\Components\Validation\Exceptions
- * @subpackage Somnambulist\Components\Validation\Exceptions\MissingRequiredParameterException
- */
 class ParameterException extends Exception
 {
     public static function missing(string $rule, string $param): self

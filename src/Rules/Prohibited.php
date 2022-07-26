@@ -5,12 +5,7 @@ namespace Somnambulist\Components\Validation\Rules;
 use Somnambulist\Components\Validation\Rule;
 
 /**
- * Class ProhibitedRule
- *
  * Based on Laravel validators prohibited
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\ProhibitedRule
  */
 class Prohibited extends Rule
 {

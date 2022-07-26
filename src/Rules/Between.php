@@ -5,12 +5,6 @@ namespace Somnambulist\Components\Validation\Rules;
 use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Rules\Behaviours\CanObtainSizeValue;
 
-/**
- * Class Between
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Between
- */
 class Between extends Rule
 {
     use CanObtainSizeValue;

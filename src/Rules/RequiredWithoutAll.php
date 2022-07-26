@@ -2,12 +2,6 @@
 
 namespace Somnambulist\Components\Validation\Rules;
 
-/**
- * Class RequiredWithoutAll
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\RequiredWithoutAll
- */
 class RequiredWithoutAll extends Required
 {
     protected bool $implicit = true;

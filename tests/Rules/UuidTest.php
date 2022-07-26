@@ -6,12 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Somnambulist\Components\Validation\Factory;
 
-/**
- * Class UuidTest
- *
- * @package    Somnambulist\Components\Validation\Tests\Rules
- * @subpackage Somnambulist\Components\Validation\Tests\Rules\UuidTest
- */
 class UuidTest extends TestCase
 {
     public function testUuid()

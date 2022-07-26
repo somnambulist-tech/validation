@@ -9,12 +9,7 @@ use function in_array;
 use function is_bool;
 
 /**
- * Class ProhibitedIfRule
- *
  * Based on Laravel validators prohibited_if
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\ProhibitedIfRule
  */
 class ProhibitedIf extends Rule
 {

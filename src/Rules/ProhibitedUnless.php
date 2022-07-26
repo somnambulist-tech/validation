@@ -10,12 +10,7 @@ use function in_array;
 use function is_bool;
 
 /**
- * Class ProhibitedUnlessRule
- *
  * Based on Laravel validators prohibited_unless
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\ProhibitedUnlessRule
  */
 class ProhibitedUnless extends Rule
 {

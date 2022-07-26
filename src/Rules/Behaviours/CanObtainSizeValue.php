@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Rules\Behaviours;
 
 use InvalidArgumentException;
 
-/**
- * Trait CanValidateSize
- *
- * @package    Somnambulist\Components\Validation\Rules\Behaviours
- * @subpackage Somnambulist\Components\Validation\Rules\Behaviours\CanValidateSize
- */
 trait CanObtainSizeValue
 {
     /**

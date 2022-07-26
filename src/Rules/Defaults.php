@@ -5,12 +5,6 @@ namespace Somnambulist\Components\Validation\Rules;
 use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Rules\Contracts\ModifyValue;
 
-/**
- * Class Defaults
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Defaults
- */
 class Defaults extends Rule implements ModifyValue
 {
     protected string $message = 'rule.default_value';

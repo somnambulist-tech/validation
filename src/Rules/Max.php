@@ -5,12 +5,6 @@ namespace Somnambulist\Components\Validation\Rules;
 use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Rules\Behaviours\CanObtainSizeValue;
 
-/**
- * Class Max
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Max
- */
 class Max extends Rule
 {
     use CanObtainSizeValue;

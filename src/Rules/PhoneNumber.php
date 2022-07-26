@@ -5,12 +5,6 @@ namespace Somnambulist\Components\Validation\Rules;
 use Somnambulist\Components\Validation\Rule;
 use function preg_match;
 
-/**
- * Class PhoneNumber
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\PhoneNumber
- */
 class PhoneNumber extends Rule
 {
     protected string $message = 'rule.phone_number';

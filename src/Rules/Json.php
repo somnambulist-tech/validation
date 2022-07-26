@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class Json
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Json
- */
 class Json extends Rule
 {
     protected string $message = 'rule.json';

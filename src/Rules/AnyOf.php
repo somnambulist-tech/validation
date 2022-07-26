@@ -7,12 +7,6 @@ use Somnambulist\Components\Validation\Rule;
 use function explode;
 use function in_array;
 
-/**
- * Class AnyOf
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\AnyOf
- */
 class AnyOf extends Rule
 {
     protected string $message = 'rule.any_of';

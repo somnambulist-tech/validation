@@ -9,12 +9,6 @@ use Somnambulist\Components\Validation\Rules\Behaviours\CanObtainSizeValue;
 use Somnambulist\Components\Validation\Rules\Behaviours\CanValidateFiles;
 use Somnambulist\Components\Validation\Rules\Contracts\BeforeValidate;
 
-/**
- * Class UploadedFile
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\UploadedFile
- */
 class UploadedFile extends Rule implements BeforeValidate
 {
     use CanValidateFiles;

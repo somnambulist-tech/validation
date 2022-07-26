@@ -2,8 +2,8 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
-use Somnambulist\Components\Validation\Rules\Lowercase;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\Rules\Lowercase;
 
 class LowercaseTest extends TestCase
 {

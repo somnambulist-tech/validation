@@ -21,10 +21,13 @@ use function str_contains;
 use function str_getcsv;
 
 /**
- * Class Validation
+ * Holds the validation rules to apply to an input
  *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\Validation
+ * Validation instances are created by the {@link Factory} class, however can be directly
+ * instantiated if required. The rules are provided either as an array of strings, or nested
+ * arrays that can contain classes / closure for the rule to apply.
+ *
+ * See the main documentation for more on how to structure the rules / add validation rules.
  */
 class Validation
 {

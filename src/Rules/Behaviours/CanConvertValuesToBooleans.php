@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Rules\Behaviours;
 
 use function array_map;
 
-/**
- * Trait CanConvertValuesToBooleans
- *
- * @package    Somnambulist\Components\Validation\Rules\Behaviours
- * @subpackage Somnambulist\Components\Validation\Rules\Behaviours\CanConvertValuesToBooleans
- */
 trait CanConvertValuesToBooleans
 {
     private function convertStringsToBoolean(array $values): array

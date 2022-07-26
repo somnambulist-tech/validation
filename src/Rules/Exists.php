@@ -6,12 +6,6 @@ use Closure;
 use Doctrine\DBAL\Connection;
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class Exists
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Exists
- */
 class Exists extends Rule
 {
     protected string $message = 'rule.exists';

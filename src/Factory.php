@@ -5,10 +5,17 @@ namespace Somnambulist\Components\Validation;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
 
 /**
- * Class Validator
+ * Creates {@link Validation} instances based on the provided rules
  *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\Validator
+ * Rules are defined as service classes that may be overridden with an alternative
+ * implementation.
+ *
+ * Additionally: Factory provides a string resource for basic translation of validation
+ * messages. Additional languages may be loaded or any specific message overridden for
+ * your means.
+ *
+ * It is highly recommended to provide the Factory via a dependency injection container so
+ * that validation rules can be automatically registered.
  */
 class Factory
 {

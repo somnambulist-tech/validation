@@ -6,12 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Factory;
 use Somnambulist\Components\Validation\Rules\TypeFloat;
 
-/**
- * Class FloatTest
- *
- * @package    Somnambulist\Components\Validation\Tests\Rules
- * @subpackage Somnambulist\Components\Validation\Tests\Rules\FloatTest
- */
 class FloatTest extends TestCase
 {
     public function testFloat()

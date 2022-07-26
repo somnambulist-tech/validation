@@ -2,15 +2,9 @@
 
 namespace Somnambulist\Components\Validation\Tests;
 
-use Somnambulist\Components\Validation\Helper;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\Helper;
 
-/**
- * Class HelperTest
- *
- * @package    Somnambulist\Components\Validation\Tests
- * @subpackage Somnambulist\Components\Validation\Tests\HelperTest
- */
 class HelperTest extends TestCase
 {
 

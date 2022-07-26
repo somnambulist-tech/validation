@@ -2,8 +2,8 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
-use Somnambulist\Components\Validation\Rules\Regex;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\Rules\Regex;
 
 class RegexTest extends TestCase
 {

@@ -3,10 +3,10 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
+use DateTime;
+use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Exceptions\ParameterException;
 use Somnambulist\Components\Validation\Rules\After;
-use PHPUnit\Framework\TestCase;
-use DateTime;
 
 class AfterTest extends TestCase
 {

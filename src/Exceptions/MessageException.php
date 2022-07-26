@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Exceptions;
 
 use Exception;
 
-/**
- * Class MessageException
- *
- * @package    Somnambulist\Components\Validation\Exceptions
- * @subpackage Somnambulist\Components\Validation\Exceptions\MessageException
- */
 class MessageException extends Exception
 {
     public static function noMessageForKey(string $lang, string $key): self

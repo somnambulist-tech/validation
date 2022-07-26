@@ -2,8 +2,8 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
-use Somnambulist\Components\Validation\Rules\Ipv4;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\Rules\Ipv4;
 
 class Ipv4Test extends TestCase
 {

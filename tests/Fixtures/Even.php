@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Tests\Fixtures;
 
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class Even
- *
- * @package    Somnambulist\Components\Validation\Tests\Fixtures
- * @subpackage Somnambulist\Components\Validation\Tests\Fixtures\Even
- */
 class Even extends Rule
 {
     protected string $message = "The :attribute must be even";

@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class DigitsBetween
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\DigitsBetween
- */
 class DigitsBetween extends Rule
 {
     protected string $message = 'rule.digits_between';

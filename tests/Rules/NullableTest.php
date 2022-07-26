@@ -6,12 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Factory;
 use const UPLOAD_ERR_OK;
 
-/**
- * Class NullableTest
- *
- * @package    Somnambulist\Components\Validation\Tests
- * @subpackage Somnambulist\Components\Validation\Tests\Rules\NullableTest
- */
 class NullableTest extends TestCase
 {
     protected ?Factory $validator = null;

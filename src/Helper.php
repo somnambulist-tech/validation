@@ -7,12 +7,6 @@ use function implode;
 use function is_callable;
 use function str_replace;
 
-/**
- * Class Helper
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\Helper
- */
 class Helper
 {
     /**

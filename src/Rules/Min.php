@@ -5,12 +5,6 @@ namespace Somnambulist\Components\Validation\Rules;
 use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Rules\Behaviours\CanObtainSizeValue;
 
-/**
- * Class Min
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Min
- */
 class Min extends Rule
 {
     use CanObtainSizeValue;

@@ -6,12 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Factory;
 use const UPLOAD_ERR_NO_FILE;
 
-/**
- * Class SometimesTest
- *
- * @package    Somnambulist\Components\Validation\Tests
- * @subpackage Somnambulist\Components\Validation\Tests\Rules\SometimesTest
- */
 class SometimesTest extends TestCase
 {
     protected ?Factory $validator = null;

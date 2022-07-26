@@ -2,9 +2,9 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
+use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Factory;
 use Somnambulist\Components\Validation\Rules\In;
-use PHPUnit\Framework\TestCase;
 
 class InTest extends TestCase
 {

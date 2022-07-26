@@ -6,12 +6,6 @@ use Closure;
 use Doctrine\DBAL\Connection;
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class Unique
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Unique
- */
 class Unique extends Rule
 {
     protected string $message = 'rule.unique';

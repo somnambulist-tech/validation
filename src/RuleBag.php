@@ -6,11 +6,6 @@ use InvalidArgumentException;
 use Somnambulist\Components\Validation\Rules\Contracts\BeforeValidate;
 
 /**
- * Class RuleBag
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\RuleBag
- *
  * @property array<int, Rule>
  */
 class RuleBag extends DataBag

@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2022-07-26
+----------
+
+ * remove unnecessary docblocks
+
 2022-06-20
 ----------
 

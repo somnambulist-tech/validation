@@ -6,12 +6,6 @@ use Somnambulist\Components\Validation\Helper;
 use Somnambulist\Components\Validation\Rule;
 use function sprintf;
 
-/**
- * Class NotIn
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\NotIn
- */
 class NotIn extends Rule
 {
     protected string $message = 'rule.not_in';

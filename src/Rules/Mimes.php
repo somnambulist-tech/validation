@@ -7,12 +7,6 @@ use Somnambulist\Components\Validation\MimeTypeGuesser;
 use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Rules\Behaviours\CanValidateFiles;
 
-/**
- * Class Mimes
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Mimes
- */
 class Mimes extends Rule
 {
     use CanValidateFiles;

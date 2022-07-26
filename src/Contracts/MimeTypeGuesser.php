@@ -2,12 +2,6 @@
 
 namespace Somnambulist\Components\Validation\Contracts;
 
-/**
- * Class MimeTypeGuesser
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\MimeTypeGuesser
- */
 interface MimeTypeGuesser
 {
     public function getExtension(string $mimeType): ?string;

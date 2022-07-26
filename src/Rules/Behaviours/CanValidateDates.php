@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Rules\Behaviours;
 
 use Somnambulist\Components\Validation\Exceptions\ParameterException;
 
-/**
- * Trait CanValidateDates
- *
- * @package    Somnambulist\Components\Validation\Rules\Behaviours
- * @subpackage Somnambulist\Components\Validation\Rules\Behaviours\CanValidateDates
- */
 trait CanValidateDates
 {
     protected function assertDate(string $date): void

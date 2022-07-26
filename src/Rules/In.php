@@ -5,12 +5,6 @@ namespace Somnambulist\Components\Validation\Rules;
 use Somnambulist\Components\Validation\Helper;
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class In
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\In
- */
 class In extends Rule
 {
     protected string $message = 'rule.in';

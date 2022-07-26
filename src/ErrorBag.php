@@ -12,12 +12,6 @@ use function preg_quote;
 use function str_contains;
 use function str_replace;
 
-/**
- * Class ErrorBag
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\ErrorBag
- */
 class ErrorBag implements Countable, IteratorAggregate
 {
     public function __construct(private array $errors = [])

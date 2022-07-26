@@ -2,8 +2,8 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
-use Somnambulist\Components\Validation\Rules\Mimes;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\Rules\Mimes;
 
 class MimesTest extends TestCase
 {

@@ -5,11 +5,6 @@ namespace Somnambulist\Components\Validation;
 use InvalidArgumentException;
 
 /**
- * Class AttributeBag
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\AttributeBag
- *
  * @property array<string, Attribute> $data
  */
 class AttributeBag extends DataBag

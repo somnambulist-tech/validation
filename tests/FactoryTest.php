@@ -9,12 +9,6 @@ use Somnambulist\Components\Validation\Tests\Fixtures\Even;
 use Somnambulist\Components\Validation\Tests\Fixtures\Required;
 use const UPLOAD_ERR_OK;
 
-/**
- * Class FactoryTest
- *
- * @package    Somnambulist\Components\Validation\Tests
- * @subpackage Somnambulist\Components\Validation\Tests\FactoryTest
- */
 class FactoryTest extends TestCase
 {
     protected ?Factory $validator = null;

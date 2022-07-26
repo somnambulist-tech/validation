@@ -9,12 +9,6 @@ use function explode;
 use function str_contains;
 use function str_replace;
 
-/**
- * Class Attribute
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\Attribute
- */
 class Attribute
 {
     private Validation $validation;

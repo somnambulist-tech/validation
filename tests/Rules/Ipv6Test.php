@@ -2,8 +2,8 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
-use Somnambulist\Components\Validation\Rules\Ipv6;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\Rules\Ipv6;
 
 class Ipv6Test extends TestCase
 {

@@ -6,12 +6,6 @@ use Closure;
 use InvalidArgumentException;
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class Callback
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\Callback
- */
 class Callback extends Rule
 {
     protected string $message = 'rule.default';

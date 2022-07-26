@@ -3,10 +3,7 @@
 namespace Somnambulist\Components\Validation;
 
 /**
- * Class MimeTypeGuesser
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\MimeTypeGuesser
+ * A simple mime-type guesser using file extension to determine type
  */
 class MimeTypeGuesser implements Contracts\MimeTypeGuesser
 {

@@ -5,12 +5,6 @@ namespace Somnambulist\Components\Validation\Tests\Rules;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Factory;
 
-/**
- * Class NumbersTest
- *
- * @package    Somnambulist\Components\Validation\Tests
- * @subpackage Somnambulist\Components\Validation\Tests\Rules\NumbersTest
- */
 class NumbersTest extends TestCase
 {
     protected ?Factory $validator = null;

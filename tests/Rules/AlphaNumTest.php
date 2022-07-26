@@ -3,8 +3,8 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
-use Somnambulist\Components\Validation\Rules\AlphaNum;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\Rules\AlphaNum;
 
 class AlphaNumTest extends TestCase
 {

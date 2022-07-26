@@ -2,8 +2,8 @@
 
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
-use Somnambulist\Components\Validation\Rules\Ip;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\Rules\Ip;
 
 class IpTest extends TestCase
 {

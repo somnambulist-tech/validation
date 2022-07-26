@@ -4,12 +4,6 @@ namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
 
-/**
- * Class AlphaSpaces
- *
- * @package    Somnambulist\Components\Validation\Rules
- * @subpackage Somnambulist\Components\Validation\Rules\AlphaSpaces
- */
 class AlphaSpaces extends Rule
 {
     protected string $message = 'rule.alpha_spaces';

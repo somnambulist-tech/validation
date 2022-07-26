@@ -12,12 +12,6 @@ use function json_encode;
 use function str_starts_with;
 use function strtr;
 
-/**
- * Class ErrorMessage
- *
- * @package    Somnambulist\Components\Validation
- * @subpackage Somnambulist\Components\Validation\ErrorMessage
- */
 class ErrorMessage
 {
     private ?string $message = null;
