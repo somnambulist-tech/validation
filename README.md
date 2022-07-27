@@ -104,7 +104,7 @@ rules to be more easily managed.
 
 ### Attribute Aliases
 
-Unlike `rakit/validation`, attribute names are not transformed in any way; instead if you wish to name your
+Unlike `rakit/validation`, attribute names are not transformed in any way; instead, if you wish to name your
 attributes, aliases must be used.
 
 Aliases can be defined in several ways: on the rule itself, or by adding the alias to the validation. Note that
@@ -135,7 +135,7 @@ Validation messages are defined in `Resources/i18n/en.php`. Any message can be r
 string, or translated to another language. The English strings are always loaded during `Factory`
 instantiation.
 
-Depending on the failure type, various variables will be available to use, however the following are
+Depending on the failure type, various variables will be available to use, however, the following are
 always available for all messages:
 
 * `:attribute`: the attribute under validation, alias will be used if set,
@@ -211,7 +211,7 @@ $validation->validate();
 Some rules have several possible validation messages. These are all named as `rule.<name>.<check>`. To change
 the message, override or add the specific message.
 
-For example `uploaded_file` can have failures for the file, min/max size and type. These are bound to:
+For example, `uploaded_file` can have failures for the file, min/max size and type. These are bound to:
 
 * rule.uploaded_file
 * rule.uploaded_file.min_size
@@ -291,7 +291,7 @@ Get only the first message from all existing keys:
 ```php
 $messages = $errors->firstOfAll();
 // [
-//     'email' => Email is not valid email',
+//     'email' => 'Email is not valid email',
 //     'password' => 'Password minimum 6 character',
 // ]
 
@@ -327,7 +327,7 @@ $messages = $errors->firstOfAll(':message', true);
 
 #### `first(string $key)`
 
-Get the first message for the given key. It will return `string` if key has any error message, or `null` if key has no errors.
+Get the first message for the given key. It will return a `string` if key has any error message, or `null` if the key has no errors.
 
 For example:
 
@@ -1207,7 +1207,7 @@ $validation = $factory->validate($_POST, [
 In the `UniqueRule` above, the property `$message` is used for the invalid message. The property
 `$fillableParams` defines the order and names of the arguments for the rule. By default,
 `fillParameters` will fill parameters listed in `$fillableParams` from the string rules.
-For example `unique:users,email,exception@mail.com` in example above, will set:
+For example, `unique:users,email,exception@mail.com` in example above, will set:
 
 ```php
 $params['table'] = 'users';
@@ -1273,7 +1273,7 @@ $validation = $factory->validate($_POST, [
 
 ### Implicit Rule
 
-An implicit rule is a rule that if it's invalid, then next rules will be ignored. For example if
+An implicit rule is a rule that if it's invalid, the next rules will be ignored. For example, if
 the attribute didn't pass `required*` rules, the next rules will be invalid. To prevent unnecessary
 validation and error messages, we make `required*` rules to be implicit.
 
@@ -1318,7 +1318,7 @@ class YourCustomRule extends Rule implements ModifyValue
 
 ### Before Validation Hook
 
-You may want to do some preparation before running the validation. For example the
+You may want to do some preparation before running the validation. For example, the
 `uploaded_file` rule will resolve the attribute value that comes from `$_FILES`
 (undesirable) array structure to be a well-organized array.
 
