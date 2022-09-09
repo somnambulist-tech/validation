@@ -21,7 +21,7 @@ class Factory
 {
     private array $rules = [];
     private MessageBag $messages;
-    public string $ruleAttributeSeparator;
+    public string $ruleAttributeSeparator = ':';
 
     public function __construct($ruleAttributeSeparator = null)
     {
