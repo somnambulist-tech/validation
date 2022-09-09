@@ -144,7 +144,7 @@ class Validation
             }
 
             if (is_string($i) && is_scalar($rule)) {
-                $rule = sprintf('%s:%s', $i, $rule);
+                $rule = sprintf('%s'.$this->factory->ruleAttributeSeparator.'%s', $i, $rule);
             }
 
             if (is_string($rule)) {
@@ -166,7 +166,7 @@ class Validation
 
     protected function parseRule(string $rule): array
     {
-        $exp      = explode(':', $rule, 2);
+        $exp      = explode($this->factory->ruleAttributeSeparator, $rule, 2);
         $ruleName = $exp[0];
 
         if (in_array($ruleName, ['matches', 'regex'])) {
