@@ -21,13 +21,19 @@ class Factory
 {
     private array $rules = [];
     private MessageBag $messages;
+    public string $ruleAttributeSeparator;
 
-    public function __construct()
+    public function __construct($ruleAttributeSeparator = null)
     {
         $this->messages = new MessageBag();
 
         $this->registerDefaultRules();
         $this->registerDefaultMessages();
+        
+        if(!empty($ruleAttributeSeparator))
+        {
+            $this->ruleAttributeSeparator = $ruleAttributeSeparator;
+        }
     }
 
     public function __invoke(string $rule, ...$args): Rule
