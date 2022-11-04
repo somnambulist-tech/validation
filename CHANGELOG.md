@@ -1,6 +1,17 @@
 Change Log
 ==========
 
+2022-11-04
+----------
+
+ * better handle multiple file uploads when the attribute key has not been defined using dot notation
+ * add additional notes to readme regarding multiple file uploads and requirement for dot notation
+
+2022-09-11
+----------
+
+ * add additional tests to check `:` handling in rule attributes
+
 2022-07-26
 ----------
 

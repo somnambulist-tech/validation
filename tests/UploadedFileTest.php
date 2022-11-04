@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\Validation\Tests;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Somnambulist\Components\Validation\Factory;
 use Somnambulist\Components\Validation\Rules\UploadedFile;
 use const UPLOAD_ERR_NO_FILE;
@@ -151,6 +152,46 @@ class UploadedFileTest extends TestCase
                     'error' => UPLOAD_ERR_OK,
                 ]
             ]
+        ]);
+    }
+
+    public function testValidationRaisesExceptionIfMultipleFilesUploadedButRuleIsNotArrayRule()
+    {
+        // Test from input files:
+        // <input type="file" name="photos[]"/>
+        // <input type="file" name="photos[]"/>
+        $sampleInputFiles = [
+            'photos' => [
+                'name' => [
+                    'a.png',
+                    'b.jpeg',
+                ],
+                'type' => [
+                    'image/png',
+                    'image/jpeg',
+                ],
+                'size' => [
+                    1000,
+                    2000,
+                ],
+                'tmp_name' => [
+                    __DIR__.'/a.png',
+                    __DIR__.'/b.jpeg',
+                ],
+                'error' => [
+                    UPLOAD_ERR_OK,
+                    UPLOAD_ERR_OK,
+                ]
+            ]
+        ];
+
+        $uploadedFileRule = $this->validator->rule('uploaded_file')->types('jpeg');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Attribute "photos" has multiple files, use "photos.*" as the attribute key');
+
+        $this->validator->validate($sampleInputFiles, [
+            'photos' => ['required', $uploadedFileRule]
         ]);
     }
 

@@ -2,13 +2,24 @@
 
 namespace Somnambulist\Components\Validation\Rules\Behaviours;
 
+use RuntimeException;
 use Somnambulist\Components\Validation\Helper;
+use function is_uploaded_file;
 
 trait CanValidateFiles
 {
     public function isUploadedFile(mixed $value): bool
     {
-        return $this->isValueFromUploadedFiles($value) && is_uploaded_file($value['tmp_name']);
+        if (!$this->isValueFromUploadedFiles($value)) {
+            return false;
+        }
+        if (is_array($value['tmp_name'])) {
+            $attr = $this->attribute()?->key() ?? 'files';
+
+            throw new RuntimeException(sprintf('Attribute "%s" has multiple files, use "%s.*" as the attribute key', $attr, $attr));
+        }
+
+        return is_uploaded_file($value['tmp_name']);
     }
 
     protected function isValueFromUploadedFiles(mixed $value): bool

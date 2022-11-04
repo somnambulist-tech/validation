@@ -1052,8 +1052,11 @@ Here are some example definitions and explanations:
 * `required|uploaded_file:0,1M,png,jpeg`: uploaded file size must be between 0 - 1MB and mime types must be `image/jpeg` or `image/png`.
 
 For multiple file uploads, PHP uses the format `_FILES[key][name][0..n+1]` ([see PHP manual for more details](http://php.net/manual/en/features.file-upload.multiple.php#53240)).
-Instead the files array is automatically re-ordered to a nested array of related attributes. This allows multiple
-files to be validated using the same rule.
+Provided the attribute key is given using dot notation, the files array is automatically re-ordered to a
+nested array of related attributes. This allows multiple files to be validated using the same rule. This
+will only occur if the attribute name uses dot notation.
+
+From 1.4.2, allowing multiple files without a dot rule will raise a `RuntimeException`.
 
 For example if you have input files like this:
 
