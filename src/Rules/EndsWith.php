@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Somnambulist\Components\Validation\Rules;
 
@@ -10,7 +10,8 @@ class EndsWith extends Rule
     protected string $message = 'rule.starts_with';
     protected array $fillableParams = ['compare_with'];
 
-    public function check(mixed $value): bool{
+    public function check(mixed $value): bool
+    {
         $this->assertHasRequiredParameters($this->fillableParams);
         $compare_with = $this->parameter('compare_with');
 
@@ -31,13 +32,11 @@ class EndsWith extends Rule
         return false;
     }
 
-    /**
-     * @param array $value
-     * @return bool
-     */
     private function isAssociativeArray(array $value): bool
     {
-        if (array() === $value) return false;
+        if (array() === $value){
+            return false;
+        }
         return array_keys($value) !== range(0, count($value) - 1);
     }
 }
