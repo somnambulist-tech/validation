@@ -74,26 +74,10 @@ class ErrorMessage
     {
         return match (true) {
             is_string($value), is_numeric($value)          => (string)$value,
-            is_array($value) && $this->arrayIsList($value) => Helper::join(Helper::wraps($value, '"'), ', ', ', '),
+            is_array($value) && Helper::arrayIsList($value) => Helper::join(Helper::wraps($value, '"'), ', ', ', '),
             is_array($value) || is_object($value)          => json_encode($value),
 
             default => '',
         };
-    }
-
-    private function arrayIsList(array $array): bool
-    {
-        if (!function_exists('array_is_list')) {
-            $i = 0;
-            foreach ($array as $k => $v) {
-                if ($k !== $i++) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        return array_is_list($array);
     }
 }

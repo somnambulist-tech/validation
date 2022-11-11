@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2022-11-11
+----------
+
+ * add `starts_with` and `ends_with` rules with thanks to [DeveloperMarius](https://github.com/DeveloperMarius)
+ * some additional code clean up
+ * add notes about contributing
+
 2022-11-04
 ----------
 

@@ -7,7 +7,6 @@ use Somnambulist\Components\Validation\Rules\StartsWith;
 
 class StartsWithTest extends TestCase
 {
-
     public function setUp(): void
     {
         $this->rule = new StartsWith;

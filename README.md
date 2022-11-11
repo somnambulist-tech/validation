@@ -1138,13 +1138,15 @@ The field under this validation must be a valid UUID and not the nil UUID string
 
 <details><summary><strong>starts_with</strong>:another_field</summary>
 
-The field under this validation must start with `another_field`.
+The field under this validation must start with `another_field`. Comparison can be against strings, numbers and
+array elements.
 
 </details>
 
 <details><summary><strong>ends_with</strong>:another_field</summary>
 
-The field under this validation must end with `another_field`.
+The field under this validation must end with `another_field`. Comparison can be against strings, numbers and
+array elements.
 
 </details>
 
@@ -1365,3 +1367,18 @@ class YourCustomRule extends Rule implements BeforeValidate
 ## Tests
 
 PHPUnit 9+ is used for testing. Run tests via `vendor/bin/phpunit`.
+
+## Contributing
+
+Contributions are welcome! Fork the repository and make a PR back. Please ensure that your code is formatted
+using PSR-12 coding standards, and all PHP files include `declare(strict_types=1);` on the opening `<?php` tag.
+If in doubt about any code-style convention, look at the existing files and follow along.
+
+This library currently targets PHP 8.0.X and 8.1+. If using 8.1 functions, ensure a suitable fallback is used.
+Note that external libraries should not be added to this project. 
+
+If adding new functionality ensure the `README.md` file is updated with your changes and include appropriate
+tests and if possible, language translations with English as the primary requirement.
+
+For bug fixes a failing case must be included in a test. Changes without appropriate tests or that cannot be
+replicated may be rejected.
