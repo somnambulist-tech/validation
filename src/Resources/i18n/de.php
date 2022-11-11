@@ -61,4 +61,6 @@ return [
     'rule.uppercase'              => ':attribute darf nur Großbuchstaben enthalten',
     'rule.url'                    => ':attribute muss eine gültige URL sein',
     'rule.uuid'                   => ':attribute ist keine gültige UUID oder ist NULL',
+    'rule.starts_with'            => ':attribute muss mit :compare_with anfangen',
+    'rule.end_with'               => ':attribute muss auf :compare_with enden',
 ];

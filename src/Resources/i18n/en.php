@@ -62,4 +62,6 @@ return [
     'rule.uppercase'              => ':attribute must be uppercase',
     'rule.url'                    => ':attribute is not a valid URL',
     'rule.uuid'                   => ':attribute is not a valid UUID or is NIL',
+    'rule.starts_with'            => ':attribute must start with :compare_with',
+    'rule.end_with'               => ':attribute must end with :compare_with',
 ];

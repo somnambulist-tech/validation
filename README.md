@@ -1136,6 +1136,18 @@ The field under this validation must be a valid UUID and not the nil UUID string
 
 </details>
 
+<details><summary><strong>starts_with</strong>:another_field</summary>
+
+The field under this validation must start with `another_field`.
+
+</details>
+
+<details><summary><strong>ends_with</strong>:another_field</summary>
+
+The field under this validation must end with `another_field`.
+
+</details>
+
 ## Register/Override Rules
 
 By default, all built-in rules are registered automatically to the `Factory` instance. Some of these
