@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2022-11-12
+----------
+
+ * add `mixed` type hint to `Rule::check` with thanks to [DeveloperMarius](https://github.com/DeveloperMarius)
+
 2022-11-11
 ----------
 
