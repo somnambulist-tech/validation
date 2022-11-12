@@ -12,7 +12,7 @@ class Between extends Rule
     protected string $message = 'rule.between';
     protected array $fillableParams = ['min', 'max'];
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 

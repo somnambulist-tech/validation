@@ -9,7 +9,7 @@ class Length extends Rule
     protected string $message = 'rule.length';
     protected array $fillableParams = ['length'];
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 

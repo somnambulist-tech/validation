@@ -8,7 +8,7 @@ class Numeric extends Rule
 {
     protected string $message = 'rule.numeric';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return is_numeric($value);
     }

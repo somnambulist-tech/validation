@@ -8,7 +8,7 @@ class Lowercase extends Rule
 {
     protected string $message = 'rule.lowercase';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return mb_strtolower($value, mb_detect_encoding($value)) === $value;
     }

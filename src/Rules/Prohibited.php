@@ -11,7 +11,7 @@ class Prohibited extends Rule
 {
     protected string $message = 'rule.prohibited';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return false;
     }

@@ -49,7 +49,7 @@ class AnyOf extends Rule
         return $this;
     }
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters(['allowed_values']);
 

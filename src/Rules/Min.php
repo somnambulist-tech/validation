@@ -12,7 +12,7 @@ class Min extends Rule
     protected string $message = 'rule.min';
     protected array $fillableParams = ['min'];
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 

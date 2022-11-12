@@ -12,7 +12,7 @@ class Max extends Rule
     protected string $message = 'rule.max';
     protected array $fillableParams = ['max'];
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 

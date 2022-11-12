@@ -10,19 +10,19 @@ class Defaults extends Rule implements ModifyValue
     protected string $message = 'rule.default_value';
     protected array $fillableParams = ['default'];
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 
         return true;
     }
 
-    public function modifyValue($value): mixed
+    public function modifyValue(mixed $value): mixed
     {
         return $this->isEmptyValue($value) ? $this->parameter('default') : $value;
     }
 
-    protected function isEmptyValue($value): bool
+    protected function isEmptyValue(mixed $value): bool
     {
         return false === (new Required)->check($value);
     }

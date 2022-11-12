@@ -6,7 +6,7 @@ use Somnambulist\Components\Validation\Rule;
 
 class Nullable extends Rule
 {
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return true;
     }

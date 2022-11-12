@@ -9,7 +9,7 @@ class DigitsBetween extends Rule
     protected string $message = 'rule.digits_between';
     protected array $fillableParams = ['min', 'max'];
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 
