@@ -12,7 +12,7 @@ class After extends Rule
     protected string $message = 'rule.after';
     protected array $fillableParams = ['time'];
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 

@@ -20,7 +20,7 @@ class Uuid extends Rule
     protected string $message = 'rule.uuid';
     protected bool $implicit = true;
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return !is_null($value) && $this->validate($value) && $value !== self::NIL;
     }

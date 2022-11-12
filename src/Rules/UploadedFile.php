@@ -104,7 +104,7 @@ class UploadedFile extends Rule implements BeforeValidate
         $this->validation->input()->set($firstKey, $resolvedValue);
     }
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $minSize      = $this->parameter('min_size');
         $maxSize      = $this->parameter('max_size');

@@ -12,7 +12,7 @@ class Required extends Rule
     protected bool $implicit = true;
     protected string $message = 'rule.required';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->setAttributeAsRequired();
 

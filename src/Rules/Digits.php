@@ -9,7 +9,7 @@ class Digits extends Rule
     protected string $message = 'rule.digits';
     protected array $fillableParams = ['length'];
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 

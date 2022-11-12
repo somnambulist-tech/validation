@@ -12,7 +12,7 @@ class Date extends Rule
         'format' => 'Y-m-d',
     ];
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 

@@ -26,7 +26,7 @@ class Mimes extends Rule
         return $this;
     }
 
-    public function types($types): self
+    public function types(mixed $types): self
     {
         if (is_string($types)) {
             $types = explode(',', $types);
@@ -37,7 +37,7 @@ class Mimes extends Rule
         return $this;
     }
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $allowedTypes = $this->parameter('allowed_types');
 

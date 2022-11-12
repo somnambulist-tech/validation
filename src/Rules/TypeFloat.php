@@ -9,7 +9,7 @@ class TypeFloat extends Rule
 {
     protected string $message = 'rule.float';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         // https://www.php.net/manual/en/function.is-float.php#117304
         if (!is_scalar($value)) {

@@ -8,7 +8,7 @@ class TypeString extends Rule
 {
     protected string $message = 'rule.string';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return is_string($value);
     }

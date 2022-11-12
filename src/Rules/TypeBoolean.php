@@ -9,7 +9,7 @@ class TypeBoolean extends Rule
 {
     protected string $message = 'rule.boolean';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return in_array($value, [true, false, "true", "false", 1, 0, "0", "1", "y", "n"], true);
     }

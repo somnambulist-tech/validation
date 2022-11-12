@@ -9,7 +9,7 @@ class PhoneNumber extends Rule
 {
     protected string $message = 'rule.phone_number';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return 1 === preg_match('/^\+?[1-9]\d{1,14}$/', (string)$value);
     }

@@ -8,7 +8,7 @@ class Alpha extends Rule
 {
     protected string $message = 'rule.alpha';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return is_string($value) && preg_match('/^[\pL\pM]+$/u', $value);
     }

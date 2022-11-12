@@ -9,7 +9,7 @@ class Regex extends Rule
     protected string $message = 'rule.regex';
     protected array $fillableParams = ['regex'];
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 

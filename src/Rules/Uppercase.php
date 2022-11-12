@@ -8,7 +8,7 @@ class Uppercase extends Rule
 {
     protected string $message = 'rule.uppercase';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return mb_strtoupper($value, mb_detect_encoding($value)) === $value;
     }

@@ -8,7 +8,7 @@ class Ip extends Rule
 {
     protected string $message = 'rule.ip';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         return filter_var($value, FILTER_VALIDATE_IP) !== false;
     }

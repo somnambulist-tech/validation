@@ -8,7 +8,7 @@ class AlphaSpaces extends Rule
 {
     protected string $message = 'rule.alpha_spaces';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         if (!is_string($value)) {
             return false;

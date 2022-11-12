@@ -9,7 +9,7 @@ class Present extends Rule
     protected bool $implicit = true;
     protected string $message = 'rule.present';
 
-    public function check($value): bool
+    public function check(mixed $value): bool
     {
         $this->setAttributeAsRequired();
 
