@@ -22,4 +22,9 @@ class RegexTest extends TestCase
     {
         $this->assertFalse($this->rule->fillParameters(["/^F/i"])->check("bar"));
     }
+
+    public function testNullHandling()
+    {
+        $this->assertFalse($this->rule->fillParameters(["/^F/i"])->check(null));
+    }
 }

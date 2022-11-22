@@ -13,6 +13,6 @@ class Regex extends Rule
     {
         $this->assertHasRequiredParameters($this->fillableParams);
 
-        return preg_match($this->parameter('regex'), $value) > 0;
+        return preg_match($this->parameter('regex'), (string)$value) > 0;
     }
 }

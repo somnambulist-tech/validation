@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2022-11-22
+----------
+
+ * add explicit cast to string on `Regex` rule #11
+
 2022-11-12
 ----------
 
