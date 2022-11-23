@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2022-11-23
+----------
+
+ * add additional string casting to rules where strings are required in function calls
+
 2022-11-22
 ----------
 

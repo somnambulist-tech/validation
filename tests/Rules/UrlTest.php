@@ -46,4 +46,9 @@ class UrlTest extends TestCase
         $this->assertFalse($this->rule->forScheme('jdbc')->check('http://www.foobar.com'));
         $this->assertFalse($this->rule->forScheme('http', 'https')->check('any://www.foobar.com'));
     }
+
+    public function testNullHandling()
+    {
+        $this->assertFalse($this->rule->check(null));
+    }
 }

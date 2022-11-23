@@ -10,6 +10,6 @@ class Lowercase extends Rule
 
     public function check(mixed $value): bool
     {
-        return mb_strtolower($value, mb_detect_encoding($value)) === $value;
+        return mb_strtolower((string)$value, mb_detect_encoding((string)$value)) === (string)$value;
     }
 }

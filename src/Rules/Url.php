@@ -29,10 +29,10 @@ class Url extends Rule
         $schemes = $this->parameter('schemes');
 
         if (!$schemes) {
-            return $this->validateCommonScheme($value);
+            return $this->validateCommonScheme((string)$value);
         } else {
             foreach ($schemes as $scheme) {
-                if ($this->validateCommonScheme($value, $scheme)) {
+                if ($this->validateCommonScheme((string)$value, $scheme)) {
                     return true;
                 }
             }
