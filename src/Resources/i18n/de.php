@@ -22,6 +22,7 @@ return [
     'rule.digits'                 => ':attribute darf nur Ziffern enthalten und muss aus genau :length Ziffern bestehen',
     'rule.digits_between'         => ':attribute darf nur Ziffern enthalten und muss zwischen :min und :max liegen',
     'rule.email'                  => ':attribute ist keine gültige E-Mail-Adresse',
+    'rule.end_with'               => ':attribute muss auf :compare_with enden',
     'rule.exists'                 => ':attribute muss einem gültigen Eintrag gleichen',
     'rule.extension'              => ':attribute muss einer der folgenden Dateierweiterungen entsprechen: :allowed_extensions',
     'rule.float'                  => ':attribute muss eine Fließkommazahl sein',
@@ -52,6 +53,7 @@ return [
     'rule.required_without'       => ':attribute ist erforderlich, wenn folgende Feldler leer sind: :fields',
     'rule.required_without_all'   => ':attribute ist erforderlich, wenn alle der folgenden Feldler leer sind: :fields',
     'rule.same'                   => ':attribute muss den gleichen Wert wie :field enthalten',
+    'rule.starts_with'            => ':attribute muss mit :compare_with anfangen',
     'rule.string'                 => ':attribute muss vom Typ string sein',
     'rule.unique'                 => ':attribute muss einzigartig sein, der Wert :value existiert jedoch bereits',
     'rule.uploaded_file'          => ':attribute ist keine gültige hochgelandene Datei',
@@ -61,6 +63,4 @@ return [
     'rule.uppercase'              => ':attribute darf nur Großbuchstaben enthalten',
     'rule.url'                    => ':attribute muss eine gültige URL sein',
     'rule.uuid'                   => ':attribute ist keine gültige UUID oder ist NULL',
-    'rule.starts_with'            => ':attribute muss mit :compare_with anfangen',
-    'rule.end_with'               => ':attribute muss auf :compare_with enden',
 ];
