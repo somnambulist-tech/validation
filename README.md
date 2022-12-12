@@ -633,6 +633,13 @@ See [FILTER_VALIDATE_EMAIL](https://www.php.net/manual/en/filter.filters.validat
 
 </details>
 
+<details><summary><strong>ends_with</strong>:another_field</summary>
+
+The field under this validation must end with `another_field`. Comparison can be against strings, numbers and
+array elements.
+
+</details>
+
 <details><summary><strong>exists</strong>:table,column (database)</summary>
 
 The field under this validation must exist in the given table. This does not check for uniqueness,
@@ -969,6 +976,13 @@ The field should only be validated if present in the input data. For example: `f
 
 </details>
 
+<details><summary><strong>starts_with</strong>:another_field</summary>
+
+The field under this validation must start with `another_field`. Comparison can be against strings, numbers and
+array elements.
+
+</details>
+
 <details><summary><strong>string</strong></summary>
 
 The field under this rule must be a PHP string.
@@ -1133,20 +1147,6 @@ $validation = (new Factory)->validate($inputs, [
 <details><summary><strong>uuid</strong></summary>
 
 The field under this validation must be a valid UUID and not the nil UUID string.
-
-</details>
-
-<details><summary><strong>starts_with</strong>:another_field</summary>
-
-The field under this validation must start with `another_field`. Comparison can be against strings, numbers and
-array elements.
-
-</details>
-
-<details><summary><strong>ends_with</strong>:another_field</summary>
-
-The field under this validation must end with `another_field`. Comparison can be against strings, numbers and
-array elements.
 
 </details>
 
