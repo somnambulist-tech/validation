@@ -22,7 +22,7 @@ return [
     'rule.digits'                 => ':attribute must be numeric and must have an exact length of :length',
     'rule.digits_between'         => ':attribute be numeric and must have a length between :min and :max',
     'rule.email'                  => ':attribute is not a valid email address',
-    'rule.end_with'               => ':attribute must end with :compare_with',
+    'rule.ends_with'               => ':attribute must end with :compare_with',
     'rule.exists'                 => ':attribute must match an existing record',
     'rule.extension'              => ':attribute must be a :allowed_extensions file',
     'rule.float'                  => ':attribute must be a floating point number',
