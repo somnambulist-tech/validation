@@ -57,7 +57,7 @@ class Factory
             'digits'               => new Rules\Digits,
             'digits_between'       => new Rules\DigitsBetween,
             'email'                => new Rules\Email,
-            'end_with'             => new Rules\EndsWith,
+            'ends_with'            => new Rules\EndsWith,
             'extension'            => new Rules\Extension,
             'float'                => new Rules\TypeFloat,
             'in'                   => new Rules\In,
