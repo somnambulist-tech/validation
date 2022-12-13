@@ -22,7 +22,7 @@ return [
     'rule.digits'                 => ':attribute darf nur Ziffern enthalten und muss aus genau :length Ziffern bestehen',
     'rule.digits_between'         => ':attribute darf nur Ziffern enthalten und muss zwischen :min und :max liegen',
     'rule.email'                  => ':attribute ist keine gültige E-Mail-Adresse',
-    'rule.end_with'               => ':attribute muss auf :compare_with enden',
+    'rule.ends_with'              => ':attribute muss auf :compare_with enden',
     'rule.exists'                 => ':attribute muss einem gültigen Eintrag gleichen',
     'rule.extension'              => ':attribute muss einer der folgenden Dateierweiterungen entsprechen: :allowed_extensions',
     'rule.float'                  => ':attribute muss eine Fließkommazahl sein',
