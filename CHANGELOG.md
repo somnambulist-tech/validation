@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+2022-12-13
+----------
+
+ * add rules introduced via PR # 9 to defaults with thanks to [xJuvi](https://github.com/xJuvi)
+ * fix language string bug in EndsWith rule / language files thanks to [xJuvi](https://github.com/xJuvi)
+
 2022-11-23
 ----------
 
