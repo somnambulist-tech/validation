@@ -11,7 +11,7 @@ use function strval;
 
 class EndsWith extends Rule
 {
-    protected string $message = 'rule.starts_with';
+    protected string $message = 'rule.ends_with';
     protected array $fillableParams = ['compare_with'];
 
     public function check(mixed $value): bool

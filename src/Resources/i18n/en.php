@@ -22,6 +22,7 @@ return [
     'rule.digits'                 => ':attribute must be numeric and must have an exact length of :length',
     'rule.digits_between'         => ':attribute be numeric and must have a length between :min and :max',
     'rule.email'                  => ':attribute is not a valid email address',
+    'rule.ends_with'               => ':attribute must end with :compare_with',
     'rule.exists'                 => ':attribute must match an existing record',
     'rule.extension'              => ':attribute must be a :allowed_extensions file',
     'rule.float'                  => ':attribute must be a floating point number',
@@ -53,6 +54,7 @@ return [
     'rule.required_without'       => ':attribute is required when :fields are empty',
     'rule.required_without_all'   => ':attribute is required when :fields are all empty',
     'rule.same'                   => ':attribute must be the same as :field',
+    'rule.starts_with'            => ':attribute must start with :compare_with',
     'rule.string'                 => ':attribute must be a string',
     'rule.unique'                 => ':attribute must be unique, :value already exists',
     'rule.uploaded_file'          => ':attribute is not a valid uploaded file',
@@ -62,6 +64,4 @@ return [
     'rule.uppercase'              => ':attribute must be uppercase',
     'rule.url'                    => ':attribute is not a valid URL',
     'rule.uuid'                   => ':attribute is not a valid UUID or is NIL',
-    'rule.starts_with'            => ':attribute must start with :compare_with',
-    'rule.end_with'               => ':attribute must end with :compare_with',
 ];
