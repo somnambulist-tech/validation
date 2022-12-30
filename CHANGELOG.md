@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+2022-12-30
+----------
+
+ * fix ints being passed to preg_match in alpha_num and alpha_dash rules #13
+ * update tests for PHP 8.2 deprecations
+
 2022-12-13
 ----------
 

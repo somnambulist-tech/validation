@@ -3,10 +3,13 @@
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Rules\EndsWith;
 
 class EndsWithTest extends TestCase
 {
+    private Rule $rule;
+
     public function setUp(): void
     {
         $this->rule = new EndsWith;

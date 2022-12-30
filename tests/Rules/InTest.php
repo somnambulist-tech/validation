@@ -4,10 +4,12 @@ namespace Somnambulist\Components\Validation\Tests\Rules;
 
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Factory;
+use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Rules\In;
 
 class InTest extends TestCase
 {
+    private Rule $rule;
 
     public function setUp(): void
     {
