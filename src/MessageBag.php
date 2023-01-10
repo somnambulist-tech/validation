@@ -17,6 +17,12 @@ class MessageBag
     {
         $this->defaultLang = $lang;
 
+        $filename = preg_replace('/[^A-Za-z0-9\-]/', '', $lang);
+
+        if(file_exists(__DIR__ . '/Resources/i18n/' . $filename . '.php')){
+            $this->add($lang, include __DIR__ . '/Resources/i18n/' . $filename . '.php');
+        }
+
         return $this;
     }
 
