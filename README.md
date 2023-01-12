@@ -129,251 +129,6 @@ $validation->setAlias('district_id', 'District');
 $validation->validate();
 ```
 
-## Validation Messages
-
-Validation messages are defined in `Resources/i18n/en.php`. Any message can be replaced with a custom
-string, or translated to another language. The English strings are always loaded during `Factory`
-instantiation.
-
-Depending on the failure type, various variables will be available to use, however, the following are
-always available for all messages:
-
-* `:attribute`: the attribute under validation, alias will be used if set,
-* `:value`: the value of the attribute under validation, converted to string with arrays and objects as JSON strings.
-
-#### Custom Messages for Validator
-
-All messages are stored in a `MessageBag` on the `Factory` instance. Additional languages can be added to this
-message bag, or customised on the specific validation instance. Additionally, the default language can be set
-on the message bag on the Factory, or a specific language set on the validation instance.
-
-To add a new set of messages:
-
-```php
-use Somnambulist\Components\Validation\Factory;
-
-$factory = new Factory();
-$factory->messages()->add('es', [
-    'rule.required' => 'Se requiere :attribute',
-]);
-
-$validation = $factory->validate($inputs, $rules);
-$validation->setLanguage('es')->validate();
-```
-
-Or override the default English strings:
-
-```php
-use Somnambulist\Components\Validation\Factory;
-
-$factory = new Factory();
-$factory->messages()->replace('en', 'rule.required', 'Se requiere :attribute');
-
-$validation = $factory->validate($inputs, $rules);
-$validation->validate();
-```
-
-Or set the default language:
-
-```php
-use Somnambulist\Components\Validation\Factory;
-
-$factory = new Factory();
-$factory->messages()->default('es');
-
-$validation = $factory->validate($inputs, $rules);
-$validation->validate();
-```
-
-#### Custom Message for Specific Attribute Rule
-
-Sometimes you may want to set custom messages for specific attribute rules to make them more
-explicit or to add other information. This is done by adding a message key for the attribute
-with a `:` and the rule name.
-
-For example:
-
-```php
-use Somnambulist\Components\Validation\Factory;
-
-$validator = new Factory();
-$validation_a = $validator->make($input, [
-	'age' => 'required|min:18'
-]);
-
-$validation->messages()->add('en', 'age:min', '18+ only');
-
-$validation->validate();
-```
-
-#### Custom Messages for Rules
-
-Some rules have several possible validation messages. These are all named as `rule.<name>.<check>`. To change
-the message, override or add the specific message.
-
-For example, `uploaded_file` can have failures for the file, min/max size and type. These are bound to:
-
-* rule.uploaded_file
-* rule.uploaded_file.min_size
-* rule.uploaded_file.max_size
-* rule.uploaded_file.type
-
-To change any of the sub-messages, add/override that message key on the message bag.
-
-For example:
-
-```php
-use Somnambulist\Components\Validation\Factory;
-
-$validator = new Factory();
-$validation_a = $validator->make($input, [
-	'age' => 'required|min:18'
-]);
-
-$validation->messages()->add('en', 'age:min', '18+ only');
-
-$validation->validate();
-```
-
-> Unlike `rakit`, it is not possible to set custom messages in the `Rule` instances directly.
-Any message must be set in the message bag.
-
-### Complex Translation Needs
-
-The system for translations in this library is rather basic. If you have complex needs, or wish to handle
-countables etc. Then all error messages are stored as `ErrorMessage` instances containing the message key
-and the variables for that message.
-
-Instead of using the `ErrorBag` to display messages, you can use the underlying array (or a `DataBag` instance)
-and then pass the message keys to your translation system along with the variables.
-
-Note that errors are a nested set by attribute and rule name.
-
-## Working with Error Messages
-
-Error messages are collected in an `ErrorBag` instance that you can access via `errors()` on the validation
-instance.
-
-```php
-use Somnambulist\Components\Validation\Factory;
-
-$validation = (new Factory())->validate($inputs, $rules);
-
-$errors = $validation->errors();
-```
-
-Now you can use the following methods to retrieve the messages:
-
-#### `all(string $format = ':message')`
-
-Get all messages as a flattened array:
-
-```php
-$messages = $errors->all();
-// [
-//     'email is not a valid email address',
-//     'password minimum is 6 characters',
-//     'password must contain capital letters'
-// ]
-
-$messages = $errors->all('<li>:message</li>');
-// [
-//     '<li>email is not a valid email address</li>',
-//     '<li>password minimum is 6 character</li>',
-//     '<li>password must contain capital letters</li>'
-// ]
-```
-
-#### `firstOfAll(string $format = ':message', bool $dotNotation = false)`
-
-Get only the first message from all existing keys:
-
-```php
-$messages = $errors->firstOfAll();
-// [
-//     'email' => 'Email is not valid email',
-//     'password' => 'Password minimum 6 character',
-// ]
-
-$messages = $errors->firstOfAll('<li>:message</li>');
-// [
-//     'email' => '<li>Email is not valid email</li>',
-//     'password' => '<li>Password minimum 6 character</li>',
-// ]
-```
-
-Argument `$dotNotation` is for array validation. If it is `false` it will return the original array structure,
-if it is `true` it will return a flattened array with dot notation keys.
-
-For example:
-
-```php
-$messages = $errors->firstOfAll(':message', false);
-// [
-//     'contacts' => [
-//          1 => [
-//              'email' => 'Email is not valid email',
-//              'phone' => 'Phone is not valid phone number'
-//          ],
-//     ],
-// ]
-
-$messages = $errors->firstOfAll(':message', true);
-// [
-//     'contacts.1.email' => 'Email is not valid email',
-//     'contacts.1.phone' => 'Email is not valid phone number',
-// ]
-```
-
-#### `first(string $key)`
-
-Get the first message for the given key. It will return a `string` if key has any error message, or `null` if the key has no errors.
-
-For example:
-
-```php
-if ($emailError = $errors->first('email')) {
-    echo $emailError;
-}
-```
-
-#### `toArray()`
-
-Get the raw underlying associative array of ErrorMessage objects.
-
-For example:
-
-```php
-$messages = $errors->toArray();
-// [
-//     'email' => [
-//         'email' => 'Email is not valid email'
-//     ],
-//     'password' => [
-//         'min' => 'Password minimum 6 character',
-//         'regex' => Password must contains capital letters'
-//     ]
-// ]
-```
-
-#### `toDataBag()`
-
-Get the raw underlying associative array of ErrorMessage objects as a `DataBag` instance.
-
-For example:
-
-```php
-$message = $errors->toDataBag()->filter()->first();
-```
-
-#### `count()`
-
-Get the number of error messages.
-
-#### `has(string $key)`
-
-Check if the given key has an error. It returns `true` if a key has an error, and `false` otherwise.
-
 ## Validated, Valid, and Invalid Data
 
 After validation, the data results are held in each validation instance. For example:
@@ -1149,6 +904,424 @@ $validation = (new Factory)->validate($inputs, [
 The field under this validation must be a valid UUID and not the nil UUID string.
 
 </details>
+
+## Optional vs Nullable Validation
+
+Sometimes attributes can be left off or can be null. These cases should be handled carefully and have different results
+after validation.
+
+For optional attributes that can be left out of the data under validation i.e. only validated if the data is present,
+the `sometimes` rule may be used. If this is specified, then that attribute can be left out completely OR it must meet
+the validation criteria.  This is very useful for things like search filters, or pagination markers that are not always
+required:
+
+```php
+[
+    'filters' => 'sometimes|array',
+]
+```
+
+In this example `filters` is entirely optional but if specified should be an array of values. Passing `[filters => '']`
+would not be valid, it would have to be: `[filters => []]`.
+
+Sometimes instead of the attribute being optional, it should be undefined i.e. `null`. Generally it is preferable to use
+`sometimes` and have the value omitted but there may be a case to maintain the attribute with a `null` value. In these
+instances use the `nullable` rule. This will allow the attribute to be present without any value. For example: the
+users birthday may be nullable or a date: `nullable|date`.
+
+Unlike `rakit/validation`, the use of nullable data can cause issues as this library uses strict typing throughout.
+This means that many rules that test for string, or array, or a number error because they receive `null`. This is an
+ambiguity in the rule definition process. For example the rule: `name: string|max:200` as defined implicitly implies
+that the `name` should be a string and up to 200 characters - `null` should not be valid, but to maintain partial
+compatibility it will allow null.
+
+The next major version of this library will remove this handling and make this type of definition _require_ that the
+field be both present and have a value that is not empty (unless empty is specifically allowed). To allow null values,
+the `nullable` rule will need to explicitly defined. As such it is good practice to always use nullable or sometimes.
+
+## Validating Array Data
+
+This library can validate complex arrays of data by making use of dot notation to define the structure of the array.
+There are a couple of variations and some edge cases to be aware of to prevent issues.
+
+The most common situation is wanting to allow an array of options similar to the examples earlier in this readme.
+
+```php
+[
+    'skills'              => 'array',
+    'skills.*.id'         => 'required|numeric',
+    'skills.*.percentage' => 'required|numeric'
+],
+```
+
+The earlier example rules are set to validate user related data and includes an array of skills. Each skill has an id
+and a percentage value. In this case the parent key `skills` should have the rule `array` defined. This is needed to
+ensure the data is actually an array. Each skill property is then referenced using `*` to indicate there are multiple
+values within the skills attribute.
+
+These rules would validate the following array structure:
+
+```php
+[
+    'skills' => [
+        [
+            'id' => 3,
+            'percentage' => 50,
+        ],
+        [
+            'id' => 17,
+            'percentage' => 50,
+        ],
+    ]
+]
+```
+
+The less common situation is an array of arrays without a parent key. In this case there is no prefix and each sub-key
+starts with a `*`. In this situation you should be careful not to mix standard key -> value pairs with the array data.
+
+For example:
+
+```php
+[
+    '*.id'         => 'required|numeric',
+    '*.percentage' => 'required|numeric'
+]
+```
+
+would be used to validate the following array structure:
+
+```php
+[
+    [
+        'id' => 3,
+        'percentage' => 50,
+    ],
+    [
+        'id' => 17,
+        'percentage' => 50,
+    ],
+]
+```
+
+To avoid problems you would need to ensure that the data would not include:
+
+```php
+[
+    'name' => 'foo bar',
+    [
+        'id' => 3,
+        'percentage' => 50,
+    ],
+    [
+        'id' => 17,
+        'percentage' => 50,
+    ],
+]
+```
+
+### Dependent Validation Rules and Array Data
+
+Some rules are used to determine the presence or to be required if certain keys are present. Usually these use the
+standard key name e.g.: `confirm_password` should be the same as the `password` field, so the rule is written as:
+`same:password`.
+
+However: for array data this will not work as the attribute is not the name of the attribute but the _path_ for
+that attribute.
+
+Using the same skills array as an example, say we wanted to require a label if the skill is new. If this was specified
+as `required_if:id:null`, then the validation would look for an attribute named `id` in the root of the data - but it
+does not exist, or it may find the wrong key.
+
+Instead: we have to explicitly bind the rule to the same skill key by writing the rule as: `required_if:skills.*.id,null`.
+If we don't do this, then the rule will be ignored or fail. The same applies when using array of arrays: referencing
+other fields within that array should be prefixed with a `*.` e.g. `required_if:*.id,null`.
+
+Here are examples of both syntaxes:
+
+```php
+[
+    'skills.*.id'         => 'sometimes|numeric',
+    'skills.*.percentage' => 'required|numeric',
+    'skills.*.title'      => 'required_if:skills.*.id,null|string',
+]
+```
+
+And array of arrays:
+
+```php
+[
+    '*.id'         => 'sometimes|numeric',
+    '*.percentage' => 'required|numeric',
+    '*.title'      => 'required_if:*.id,null|string',
+]
+```
+
+## Validation Messages
+
+Validation messages are defined in `Resources/i18n/en.php`. Any message can be replaced with a custom
+string, or translated to another language. The English strings are always loaded during `Factory`
+instantiation.
+
+Depending on the failure type, various variables will be available to use, however, the following are
+always available for all messages:
+
+* `:attribute`: the attribute under validation, alias will be used if set,
+* `:value`: the value of the attribute under validation, converted to string with arrays and objects as JSON strings.
+
+#### Custom Messages for Validator
+
+All messages are stored in a `MessageBag` on the `Factory` instance. Additional languages can be added to this
+message bag, or customised on the specific validation instance. Additionally, the default language can be set
+on the message bag on the Factory, or a specific language set on the validation instance.
+
+To add a new set of messages:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$factory = new Factory();
+$factory->messages()->add('es', [
+    'rule.required' => 'Se requiere :attribute',
+]);
+
+$validation = $factory->validate($inputs, $rules);
+$validation->setLanguage('es')->validate();
+```
+
+Or override the default English strings:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$factory = new Factory();
+$factory->messages()->replace('en', 'rule.required', 'Se requiere :attribute');
+
+$validation = $factory->validate($inputs, $rules);
+$validation->validate();
+```
+
+Or set the default language:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$factory = new Factory();
+$factory->messages()->default('es');
+
+$validation = $factory->validate($inputs, $rules);
+$validation->validate();
+```
+
+#### Custom Message for Specific Attribute Rule
+
+Sometimes you may want to set custom messages for specific attribute rules to make them more
+explicit or to add other information. This is done by adding a message key for the attribute
+with a `:` and the rule name.
+
+For example:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validator = new Factory();
+$validation_a = $validator->make($input, [
+	'age' => 'required|min:18'
+]);
+
+$validation->messages()->add('en', 'age:min', '18+ only');
+
+$validation->validate();
+```
+
+Sometimes you may wish to use parameters from other rules in your error messages. From version 1.6.0
+you can access these using dot notation for the rule name and then the parameter you wish to use. For
+example:
+
+A `password` attribute is validated using `required|between:8,16|regex:/^[\\da-zA-Z!$%+.]+$/` but the
+error messages want to always reference the min/max values. This can be done as:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$factory = new Factory();
+$factory->messages()->replace('en', 'password:between', 'Your password must be between :min and :max characters and only [! $ % + .] as special characters.');
+$factory->messages()->replace('en', 'password:regex', 'Your password must be between :between.min and :between.max characters and only [! $ % + .] as special characters.');
+```
+
+For the `regex` message, the parameters from `between` are referenced by prefixing the min/max with `between.`.
+Not all rules have parameters, in these instances there will be no replacement made.
+
+Note that only rule parameters for the same attribute can be referenced. You cannot access parameters
+from a completely different attribute e.g.: if you validated email or username, you would not be able
+to access those parameters in the password context.
+
+#### Custom Messages for Rules
+
+Some rules have several possible validation messages. These are all named as `rule.<name>.<check>`. To change
+the message, override or add the specific message.
+
+For example, `uploaded_file` can have failures for the file, min/max size and type. These are bound to:
+
+* rule.uploaded_file
+* rule.uploaded_file.min_size
+* rule.uploaded_file.max_size
+* rule.uploaded_file.type
+
+To change any of the sub-messages, add/override that message key on the message bag.
+
+For example:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validator = new Factory();
+$validation_a = $validator->make($input, [
+	'age' => 'required|min:18'
+]);
+
+$validation->messages()->add('en', 'age:min', '18+ only');
+
+$validation->validate();
+```
+
+> Unlike `rakit`, it is not possible to set custom messages in the `Rule` instances directly.
+Any message must be set in the message bag.
+
+### Complex Translation Needs
+
+The system for translations in this library is rather basic. If you have complex needs, or wish to handle
+countables etc. Then all error messages are stored as `ErrorMessage` instances containing the message key
+and the variables for that message.
+
+Instead of using the `ErrorBag` to display messages, you can use the underlying array (or a `DataBag` instance)
+and then pass the message keys to your translation system along with the variables.
+
+Note that errors are a nested set by attribute and rule name.
+
+## Working with Error Messages
+
+Error messages are collected in an `ErrorBag` instance that you can access via `errors()` on the validation
+instance.
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validation = (new Factory())->validate($inputs, $rules);
+
+$errors = $validation->errors();
+```
+
+Now you can use the following methods to retrieve the messages:
+
+#### `all(string $format = ':message')`
+
+Get all messages as a flattened array:
+
+```php
+$messages = $errors->all();
+// [
+//     'email is not a valid email address',
+//     'password minimum is 6 characters',
+//     'password must contain capital letters'
+// ]
+
+$messages = $errors->all('<li>:message</li>');
+// [
+//     '<li>email is not a valid email address</li>',
+//     '<li>password minimum is 6 character</li>',
+//     '<li>password must contain capital letters</li>'
+// ]
+```
+
+#### `firstOfAll(string $format = ':message', bool $dotNotation = false)`
+
+Get only the first message from all existing keys:
+
+```php
+$messages = $errors->firstOfAll();
+// [
+//     'email' => 'Email is not valid email',
+//     'password' => 'Password minimum 6 character',
+// ]
+
+$messages = $errors->firstOfAll('<li>:message</li>');
+// [
+//     'email' => '<li>Email is not valid email</li>',
+//     'password' => '<li>Password minimum 6 character</li>',
+// ]
+```
+
+Argument `$dotNotation` is for array validation. If it is `false` it will return the original array structure,
+if it is `true` it will return a flattened array with dot notation keys.
+
+For example:
+
+```php
+$messages = $errors->firstOfAll(':message', false);
+// [
+//     'contacts' => [
+//          1 => [
+//              'email' => 'Email is not valid email',
+//              'phone' => 'Phone is not valid phone number'
+//          ],
+//     ],
+// ]
+
+$messages = $errors->firstOfAll(':message', true);
+// [
+//     'contacts.1.email' => 'Email is not valid email',
+//     'contacts.1.phone' => 'Email is not valid phone number',
+// ]
+```
+
+#### `first(string $key)`
+
+Get the first message for the given key. It will return a `string` if key has any error message, or `null` if the key has no errors.
+
+For example:
+
+```php
+if ($emailError = $errors->first('email')) {
+    echo $emailError;
+}
+```
+
+#### `toArray()`
+
+Get the raw underlying associative array of ErrorMessage objects.
+
+For example:
+
+```php
+$messages = $errors->toArray();
+// [
+//     'email' => [
+//         'email' => 'Email is not valid email'
+//     ],
+//     'password' => [
+//         'min' => 'Password minimum 6 character',
+//         'regex' => Password must contains capital letters'
+//     ]
+// ]
+```
+
+#### `toDataBag()`
+
+Get the raw underlying associative array of ErrorMessage objects as a `DataBag` instance.
+
+For example:
+
+```php
+$message = $errors->toDataBag()->filter()->first();
+```
+
+#### `count()`
+
+Get the number of error messages.
+
+#### `has(string $key)`
+
+Check if the given key has an error. It returns `true` if a key has an error, and `false` otherwise.
 
 ## Register/Override Rules
 

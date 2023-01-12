@@ -10,6 +10,7 @@ use function array_keys;
 use function array_merge;
 use function array_values;
 use function in_array;
+use function is_array;
 use function reset;
 use const ARRAY_FILTER_USE_BOTH;
 
@@ -79,6 +80,11 @@ class DataBag implements Countable, IteratorAggregate
         return reset($this->data);
     }
 
+    public function flatten(): self
+    {
+        return new self(Helper::arrayDot($this->data));
+    }
+
     public function get(?string $key, mixed $default = null): mixed
     {
         return Helper::arrayGet($this->data, $key, $default);
@@ -123,6 +129,16 @@ class DataBag implements Countable, IteratorAggregate
         $this->data = array_merge($this->data, $params);
 
         return $this;
+    }
+
+    public function notEmpty(array $empty = [false, null, '', []]): static
+    {
+        return $this->filter(fn ($item) => !in_array($item, $empty, true));
+    }
+
+    public function notNull(): static
+    {
+        return $this->filter(fn ($item) => !is_null($item));
     }
 
     public function only(string ...$key): array

@@ -45,4 +45,9 @@ class RuleBag extends DataBag
 
         return $this;
     }
+
+    public function parameters(): DataBag
+    {
+        return $this->map(fn (Rule $r) => $r->parameters())->notEmpty()->flatten();
+    }
 }

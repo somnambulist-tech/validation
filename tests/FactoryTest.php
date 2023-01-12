@@ -2,11 +2,16 @@
 
 namespace Somnambulist\Components\Validation\Tests;
 
+use Closure;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
 use Somnambulist\Components\Validation\Factory;
+use Somnambulist\Components\Validation\MessageBag;
 use Somnambulist\Components\Validation\Tests\Fixtures\Even;
 use Somnambulist\Components\Validation\Tests\Fixtures\Required;
+
+use function is_null;
+
 use const UPLOAD_ERR_OK;
 
 class FactoryTest extends TestCase
@@ -728,5 +733,20 @@ class FactoryTest extends TestCase
         ]);
 
         $this->assertTrue($validation->passes());
+    }
+
+    public function testLoadMessagesFromFile()
+    {
+        Closure::bind(fn () => $this->messages = new MessageBag(), $this->validator, Factory::class)();
+
+        $this->validator->registerLanguageMessages('en', __DIR__ . '/Fixtures/pirate.php');
+
+        $validation = $this->validator->validate([
+            'number' => 'foobar'
+        ], [
+            'number' => ['numeric'],
+        ]);
+
+        $this->assertEquals('yar, number neigh thar', $validation->errors()->first('number'));
     }
 }
