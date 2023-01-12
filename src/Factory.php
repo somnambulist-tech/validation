@@ -2,7 +2,12 @@
 
 namespace Somnambulist\Components\Validation;
 
+use InvalidArgumentException;
+use Somnambulist\Components\Validation\Exceptions\MessageException;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
+
+use function is_readable;
+use function preg_replace;
 
 /**
  * Creates {@link Validation} instances based on the provided rules
@@ -107,7 +112,30 @@ class Factory
 
     protected function registerDefaultMessages(): void
     {
-        $this->messages->add('en', include __DIR__ . '/Resources/i18n/en.php');
+        $this->registerLanguageMessages('en');
+    }
+
+    /**
+     * Loads message resources from the specified file, or uses the library default if file is not set
+     *
+     * @param string $lang
+     * @param string|null $file
+     *
+     * @return void
+     * @throws MessageException
+     */
+    public function registerLanguageMessages(string $lang, string $file = null): void
+    {
+        $file ??= sprintf('%s/Resources/i18n/%s.php', __DIR__, preg_replace('/[^A-Za-z0-9\-]/', '', $lang));
+
+        if (!file_exists($file)) {
+            throw MessageException::messageFileDoesNotExist($file);
+        }
+        if (!is_readable($file)) {
+            throw MessageException::messageFileNotReadable($file);
+        }
+
+        $this->messages->add($lang, include $file);
     }
 
     public function make(array $inputs, array $rules): Validation

@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+2023-01-12
+----------
+
+ * support referencing parameters from other rules for the same attribute for error messages (#14)
+ * add documentation for validating array data (#16)
+ * add documentation for optional and nullable data
+ * add additional methods to `DataBag`
+ * add method to `Factory` for loading message resources more easily (suggestion from PR #15)
+
 2022-12-30
 ----------
 
@@ -10,7 +19,7 @@ Change Log
 2022-12-13
 ----------
 
- * add rules introduced via PR # 9 to defaults with thanks to [xJuvi](https://github.com/xJuvi)
+ * add rules introduced via PR #9 to defaults with thanks to [xJuvi](https://github.com/xJuvi)
  * fix language string bug in EndsWith rule / language files thanks to [xJuvi](https://github.com/xJuvi)
 
 2022-11-23

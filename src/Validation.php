@@ -376,6 +376,8 @@ class Validation
             $message->addParams($replacers);
         }
 
+        $message->addParams($attribute->rules()->parameters()->all());
+
         return $message;
     }
 
