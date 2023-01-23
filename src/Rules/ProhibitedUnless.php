@@ -4,6 +4,7 @@ namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Rules\Behaviours\CanConvertValuesToBooleans;
+
 use function array_merge;
 use function array_shift;
 use function in_array;

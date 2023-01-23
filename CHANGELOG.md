@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2023-01-23
+----------
+
+ * add rule to limit the keys in associative array data: `array_can_only_have_keys`
+ * add rule to require all keys be present in associative array data: `array_must_have_keys`
+ * fix bug where nested arrays were being incorrect converted to strings
+
 2023-01-12
 ----------
 

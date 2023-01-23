@@ -252,6 +252,76 @@ The field under this rule must be an array.
 
 </details>
 
+<details><summary><strong>array_must_have_keys</strong>:value,value,value</summary>
+
+The array must contain all the specified keys to be valid. This is useful to ensure that a
+nested array meets a prescribed format. The same thing can be achieved by using individual
+rules for each key with `required`. Note that this will still allow additional keys to be
+present, it merely validates the presence of specific keys.
+
+This rule is best used in conjunction with the `array` rule, though it can be used standalone.
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validation = $factory->validate([
+    'filters' => ['foo' => 'bar', 'baz' => 'example']
+], [
+    'filters' => 'array|array_must_have_keys:foo,bar,baz',
+]);
+
+$validation->passes(); // true if filters has all the keys in array_must_have_keys
+```
+
+The following examples are functionally equivalent:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validation = $factory->validate([
+    'filters' => ['foo' => 'bar', 'baz' => 'example']
+], [
+    'filters' => 'array|array_must_have_keys:foo,bar,baz',
+    'filters.foo' => 'string|between:1,50',
+    'filters.bar' => 'numeric|min:1',
+    'filters.baz' => 'uuid',
+]);
+
+$validation = $factory->validate([
+    'filters' => ['foo' => 'bar', 'baz' => 'example']
+], [
+    'filters' => 'array',
+    'filters.foo' => 'required|string|between:1,50',
+    'filters.bar' => 'required|numeric|min:1',
+    'filters.baz' => 'required|uuid',
+]);
+```
+
+</details>
+
+<details><summary><strong>array_can_only_have_keys</strong>:value,value,value</summary>
+
+The array can only contain the specified keys, any keys not present will fail validation. By default,
+associative data has no restrictions on the key => values that can be present. For example: you have
+filters for a search box that are passed to SQL, only the specified keys should be allowed to be sent
+and not any value in the array of filters.
+
+This rule is best used in conjunction with the `array` rule, though it can be used standalone.
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$validation = $factory->validate([
+    'filters' => ['foo' => 'bar', 'baz' => 'example']
+], [
+    'filters' => 'array|array_can_only_have_keys:foo,bar',
+]);
+
+$validation->passes(); // true if filters only has the keys in array_can_only_have_keys
+```
+
+</details>
+
 <details><summary><strong>before</strong>:yesterday</summary>
 
 The field under this rule must be a date before the given maximum.

@@ -4,6 +4,7 @@ namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Helper;
 use Somnambulist\Components\Validation\Rule;
+
 use function explode;
 use function in_array;
 

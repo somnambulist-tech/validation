@@ -4,6 +4,7 @@ namespace Somnambulist\Components\Validation\Rules\Behaviours;
 
 use RuntimeException;
 use Somnambulist\Components\Validation\Helper;
+
 use function is_uploaded_file;
 
 trait CanValidateFiles

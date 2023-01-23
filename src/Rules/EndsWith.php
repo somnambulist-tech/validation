@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\Validation\Rules;
 
 use Somnambulist\Components\Validation\Rule;
+
 use function end;
 use function is_array;
 use function is_numeric;

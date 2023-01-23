@@ -4,6 +4,7 @@ namespace Somnambulist\Components\Validation\Tests\Rules;
 
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Factory;
+
 use const UPLOAD_ERR_OK;
 
 class NullableTest extends TestCase

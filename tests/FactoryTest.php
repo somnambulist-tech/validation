@@ -10,8 +10,6 @@ use Somnambulist\Components\Validation\MessageBag;
 use Somnambulist\Components\Validation\Tests\Fixtures\Even;
 use Somnambulist\Components\Validation\Tests\Fixtures\Required;
 
-use function is_null;
-
 use const UPLOAD_ERR_OK;
 
 class FactoryTest extends TestCase

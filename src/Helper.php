@@ -5,6 +5,7 @@ namespace Somnambulist\Components\Validation;
 use function array_map;
 use function function_exists;
 use function implode;
+use function is_array;
 use function is_callable;
 use function str_replace;
 
@@ -258,5 +259,23 @@ class Helper
         }
 
         return array_is_list($array);
+    }
+
+    /**
+     * Returns true if the array is not a list (helper to handle PHP 8.1 compatibility)
+     *
+     * @param array $array
+     *
+     * @return bool
+     */
+    public static function arrayIsNested(array $array): bool
+    {
+        foreach ($array as $k => $v) {
+            if (is_array($v)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

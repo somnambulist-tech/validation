@@ -8,8 +8,6 @@ use ReflectionClass;
 use Somnambulist\Components\Validation\Factory;
 use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Validation;
-use function count;
-use function is_array;
 
 class ValidationTest extends TestCase
 {

@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\Validation;
 
 use Somnambulist\Components\Validation\Exceptions\ParameterException;
+
 use function array_merge;
 use function array_shift;
 use function get_class;

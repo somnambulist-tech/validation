@@ -5,6 +5,7 @@ namespace Somnambulist\Components\Validation;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+
 use function count;
 use function explode;
 use function preg_match;

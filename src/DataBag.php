@@ -5,13 +5,14 @@ namespace Somnambulist\Components\Validation;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+
 use function array_filter;
 use function array_keys;
 use function array_merge;
 use function array_values;
 use function in_array;
-use function is_array;
 use function reset;
+
 use const ARRAY_FILTER_USE_BOTH;
 
 class DataBag implements Countable, IteratorAggregate

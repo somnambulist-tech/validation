@@ -6,6 +6,7 @@ use Closure;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
 use Somnambulist\Components\Validation\Rules\Contracts\ModifyValue;
 use Somnambulist\Components\Validation\Rules\Required;
+
 use function array_merge;
 use function array_splice;
 use function array_unique;
