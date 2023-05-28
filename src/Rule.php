@@ -95,7 +95,17 @@ abstract class Rule
 
     protected function convertParametersForMessage(): array
     {
-        return $this->params;
+        $params = $this->params;
+
+        if (isset($params['field'])) {
+            $params['field'] = $this->validation->alias($params['field']) ?: $params['field'];
+        }
+
+        if (isset($params['fields'])) {
+            $params['fields'] = array_map(fn ($f) => $this->validation->alias($f) ?: $f, $params['fields']);
+        }
+
+        return $params;
     }
 
     protected function assertHasRequiredParameters(array $params): void
