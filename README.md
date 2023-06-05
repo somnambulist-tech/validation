@@ -1138,6 +1138,46 @@ always available for all messages:
 * `:attribute`: the attribute under validation, alias will be used if set,
 * `:value`: the value of the attribute under validation, converted to string with arrays and objects as JSON strings.
 
+#### Loading translation messages
+
+By default, only the English messages are loaded by the `Factory` class. At the time of writing a German translation
+has been provided by contributors, however any language can be added by creating a PHP file that returns an array
+of strings with the message keys and the new messages.
+
+To load a built-in language, you must call `Factor::registerLanguageMessages()` before calling validate. For example:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$factory = new Factory();
+$factory->registerLanguageMessages('de');
+```
+
+`registerLanguageMessages` has a second, optional, argument that allows the path to the language file to be
+specified. If not provided, then the library path of `<vendor_dir>/src/Resources/i18n` will be used. If you wish
+to use a completely customised language file, then use the second argument to provide your file. This can be
+an English language file to fully override the default messages.
+
+For example:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$factory = new Factory();
+$factory->registerLanguageMessages('en', '/path/to/project/i18n/en_US.php');
+```
+
+You can make multiple calls to add multiple languages:
+
+```php
+use Somnambulist\Components\Validation\Factory;
+
+$factory = new Factory();
+$factory->registerLanguageMessages('en', '/path/to/project/i18n/en_US.php');
+$factory->registerLanguageMessages('es', '/path/to/project/i18n/es.php');
+$factory->registerLanguageMessages('de', '/path/to/project/i18n/de.php');
+```
+
 #### Custom Messages for Validator
 
 All messages are stored in a `MessageBag` on the `Factory` instance. Additional languages can be added to this

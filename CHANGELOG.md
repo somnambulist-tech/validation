@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2023-06-05
+----------
+
+ * update README to include notes on registering message translations (#22 thanks to [xJuvi](https://github.com/xJuvi) for reporting)
+
 2023-01-23
 ----------
 
