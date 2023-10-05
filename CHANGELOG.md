@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2023-10-05
+----------
+
+ * add Turkish translations thanks to [relliv](https://github.com/relliv)
+
 2023-06-05
 ----------
 
