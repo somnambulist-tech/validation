@@ -39,7 +39,7 @@ class Factory
         return $this->rule($rule)->fillParameters($args);
     }
 
-    protected function registerDefaultRules()
+    protected function registerDefaultRules(): void
     {
         $rules = [
             'accepted'                 => new Rules\Accepted,

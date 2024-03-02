@@ -17,8 +17,8 @@ class BooleanTest extends TestCase
 
     public function testValids()
     {
-        $this->assertTrue($this->rule->check(\true));
-        $this->assertTrue($this->rule->check(\false));
+        $this->assertTrue($this->rule->check(true));
+        $this->assertTrue($this->rule->check(false));
         $this->assertTrue($this->rule->check(1));
         $this->assertTrue($this->rule->check(0));
         $this->assertTrue($this->rule->check('1'));

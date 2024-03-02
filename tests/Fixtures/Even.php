@@ -6,7 +6,7 @@ use Somnambulist\Components\Validation\Rule;
 
 class Even extends Rule
 {
-    protected string $message = "The :attribute must be even";
+    protected string $message = 'rule.even';
 
     public function check($value): bool
     {

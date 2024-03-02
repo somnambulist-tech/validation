@@ -30,7 +30,7 @@ class BeforeTest extends TestCase
         );
     }
 
-    public function getValidDates()
+    public static function getValidDates(): array
     {
         $now = new DateTime();
 
@@ -54,7 +54,7 @@ class BeforeTest extends TestCase
         $this->validator->fillParameters(["tomorrow"])->check($date);
     }
 
-    public function getInvalidDates()
+    public static function getInvalidDates(): array
     {
         $now = new DateTime();
 

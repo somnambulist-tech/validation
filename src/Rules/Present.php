@@ -16,7 +16,7 @@ class Present extends Rule
         return $this->validation->input()->has($this->attribute->key());
     }
 
-    protected function setAttributeAsRequired()
+    protected function setAttributeAsRequired(): void
     {
         $this->attribute?->makeRequired();
     }

@@ -85,10 +85,13 @@ class FactoryTest extends TestCase
     public function testNewValidationRuleCanBeAdded()
     {
         $this->validator->addRule('even', new Even());
+        $this->validator->messages()->add('en', [
+            'rule.even' => 'The :attribute must be even',
+        ]);
 
-        $data = [4, 6, 8, 10 ];
+        $data = ['s' => 4];
 
-        $validation = $this->validator->make($data, ['s' => 'even'], []);
+        $validation = $this->validator->make($data, ['s' => 'even']);
 
         $validation->validate();
 
@@ -312,7 +315,7 @@ class FactoryTest extends TestCase
         }
     }
 
-    public function rootAsteriskProvider(): array
+    public static function rootAsteriskProvider(): array
     {
         return [
             'control sample success' => [

@@ -74,7 +74,7 @@ class UploadedFileTest extends TestCase
         $this->assertNotNull($errors->first('file:required'));
     }
 
-    public function getSamplesMissingKeyFromUploadedFileValue()
+    public static function getSamplesMissingKeyFromUploadedFileValue(): array
     {
         $validUploadedFile = [
             'name' => 'foo',

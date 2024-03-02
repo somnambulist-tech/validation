@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2024-03-02
+----------
+
+ * required PHP 8.1+
+ * update dependencies
+ * fix missing return types
+
 2023-10-05
 ----------
 
