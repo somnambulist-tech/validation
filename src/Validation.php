@@ -4,6 +4,7 @@ namespace Somnambulist\Components\Validation;
 
 use Closure;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
+use Somnambulist\Components\Validation\Rules\Callback;
 use Somnambulist\Components\Validation\Rules\Contracts\ModifyValue;
 use Somnambulist\Components\Validation\Rules\Required;
 
@@ -361,7 +362,11 @@ class Validation
             array_splice($messageKeys, 3, 0, $primaryAttributeKey);
         }
 
-        $message->setMessage($this->messages->firstOf($messageKeys, $this->lang));
+        $message->setMessage(
+            $this->messages->hasAnyOf($messageKeys, $this->lang)
+                ?
+                $this->messages->firstOf($messageKeys, $this->lang) : $message->key()
+        );
 
         // Replace key indexes
         $keyIndexes = $attribute->indexes();

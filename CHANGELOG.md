@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+2024-03-21
+----------
+
+ * fix callback strings as error messages (#26 thanks to [jakewhiteley](https://github.com/jakewhiteley)
+ * fix bug in callback binding in Callback rule, not setting scope to the rule instance
+
 2024-03-02
 ----------
 

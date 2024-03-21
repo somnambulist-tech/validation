@@ -28,7 +28,7 @@ class Callback extends Rule
             throw new InvalidArgumentException(sprintf('Callback rule for "%s" is not callable.', $this->attribute->key()));
         }
 
-        $callback       = $callback->bindTo($this);
+        $callback       = $callback->bindTo($this, $this);
         $invalidMessage = $callback($value);
 
         if (is_string($invalidMessage)) {

@@ -61,4 +61,15 @@ class MessageBag
     {
         return isset($this->messages[$lang ?? $this->defaultLang][$key]);
     }
+
+    public function hasAnyOf(array $keys, string $lang = null): bool
+    {
+        foreach ($keys as $key) {
+            if ($this->has($key, $lang)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

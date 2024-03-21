@@ -372,7 +372,11 @@ $validation = $validator->validate($_POST, [
 ]);
 ```
 
-You can set a custom message by returning a string instead of false:
+You can set a custom message by returning a string instead of false. To allow for message translation, instead of
+a literal string; return a message key instead and add this to the message bag on the Factory.
+
+> Note: returning a message string will be removed in a future version, requiring only boolean responses.
+> Instead, set the message string directly before returning true/false via `$this->message = "";`.
 
 ```php
 $validation = $validator->validate($_POST, [
