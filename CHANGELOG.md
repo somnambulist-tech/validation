@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2024-05-30
+----------
+
+ * add French translations thanks to [zephyx](https://github.com/zephyx)
+
 2024-03-21
 ----------
 
