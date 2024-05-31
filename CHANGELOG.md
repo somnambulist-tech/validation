@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2024-05-31
+----------
+
+ * additional French contributions thanks to [zephyx](https://github.com/zephyx)
+
 2024-05-30
 ----------
 
