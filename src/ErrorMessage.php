@@ -36,6 +36,11 @@ class ErrorMessage
         return $this->key;
     }
 
+    public function params(): array
+    {
+        return $this->params;
+    }
+
     public function addParam(string $key, mixed $value): self
     {
         $this->params[$key] = $value;

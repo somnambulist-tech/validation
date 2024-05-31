@@ -25,7 +25,7 @@ return [
     'rule.digits_between'           => 'Le champ :attribute doit contenir entre :min et :max chiffres.',
     'rule.email'                    => 'Le champ :attribute doit être une adresse email valide.',
     'rule.ends_with'                => 'Le champ :attribute doit se terminer par une des valeurs suivantes : :compare_with.',
-    'rule.exists'                   => 'Le champ :attribute sélectionné est invalide.',
+    'rule.exists'                   => 'Le champ :attribute sélectionné doit correspondre à un enregistrement existant.',
     'rule.extension'                => 'Le champ :attribute  doit être un fichier de type :allowed_extensions.',
     'rule.float'                    => 'Le champ :attribute doit être un nombre à virgule.',
     'rule.in'                       => 'Le champ :attribute doit être une des valeurs suivantes :allowed_values.',
