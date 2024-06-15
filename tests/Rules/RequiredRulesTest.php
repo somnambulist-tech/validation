@@ -56,6 +56,43 @@ class RequiredRulesTest extends TestCase
         $this->assertTrue($v2->passes());
     }
 
+    public function testRequiresRule()
+    {
+        $v1 = $this->validator->validate([
+            'b' => '',
+        ], [
+            'b' => 'requires:a'
+        ]);
+
+        $this->assertFalse($v1->passes());
+
+        $v2 = $this->validator->validate([
+            'a' => '',
+            'b' => '',
+        ], [
+            'b' => 'requires:a'
+        ]);
+
+        $this->assertFalse($v2->passes());
+
+        $v3 = $this->validator->validate([
+            'a' => null,
+            'b' => '',
+        ], [
+            'b' => 'requires:a'
+        ]);
+
+        $this->assertFalse($v3->passes());
+
+        $v4 = $this->validator->validate([
+            'a' => '23',
+            'b' => '',
+        ], [
+            'b' => 'requires:a'
+        ]);
+        $this->assertTrue($v4->passes());
+    }
+
     public function testRequiredWithRule()
     {
         $v1 = $this->validator->validate([

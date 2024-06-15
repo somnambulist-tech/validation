@@ -769,9 +769,27 @@ The field under validation must be present and not empty unless the `another_fie
 
 </details>
 
+<details><summary><strong>requires</strong>:field_1,field_2,...</summary>
+
+The field under validation requires that the specified fields are present in the input data and are not empty.
+
+For example: field b "requires:a"; if a is either not present, or has an "empty" value, then the validation
+fails. "empty" is false, empty string, or null.
+
+This is an extension of `required_with`, however the rule will fail when used with `sometimes` or `nullable`.
+For example: if b "requires:a" and "a" is allowed to be `nullable`, b will fail as it explicitly requires a
+with a value.
+
+</details>
+
 <details><summary><strong>required_with</strong>:field_1,field_2,...</summary>
 
 The field under validation must be present and not empty only if any of the other specified fields are present.
+
+__Note__: the behaviour of this rule can be circumvented if the rule this is defined on is `sometimes` or
+`nullable`. For example: if a is "required_with:b", but a is also only `sometimes` present, then the required_with
+will never trigger as the sometimes rule will negate it. a would also need to be explicitly passed to trigger the
+rule.
 
 </details>
 
@@ -783,13 +801,13 @@ The field under validation must be present and not empty only when any of the ot
 
 <details><summary><strong>required_with_all</strong>:field_1,field_2,...</summary>
 
-The field under validation must be present and not empty only if all of the other specified fields are present.
+The field under validation must be present and not empty only if all the other specified fields are present.
 
 </details>
 
 <details><summary><strong>required_without_all</strong>:field_1,field_2,...</summary>
 
-The field under validation must be present and not empty only when all of the other specified fields are not present.
+The field under validation must be present and not empty only when all the other specified fields are not present.
 
 </details>
 

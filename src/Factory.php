@@ -90,6 +90,7 @@ class Factory
             'regex'                    => new Rules\Regex,
             'rejected'                 => new Rules\Rejected,
             'required'                 => new Rules\Required,
+            'requires'                 => new Rules\Requires,
             'required_if'              => new Rules\RequiredIf,
             'required_unless'          => new Rules\RequiredUnless,
             'required_with'            => new Rules\RequiredWith,

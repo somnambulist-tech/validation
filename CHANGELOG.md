@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+2024-06-15
+----------
+
+ * add `requires` rule to ensure field(s) are present when another field is provided
+ * improve documentation of `required_with`
+
 2024-05-31
 ----------
 

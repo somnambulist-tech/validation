@@ -49,6 +49,7 @@ return [
     'rule.regex'                    => ':attribute does not meet required format',
     'rule.rejected'                 => ':attribute must be one of: :rejected',
     'rule.required'                 => ':attribute is required',
+    'rule.requires'                 => ':attribute requires :fields',
     'rule.required_if'              => ':attribute is required if :field has a value of :values',
     'rule.required_unless'          => ':attribute is required if :fields has one of :values',
     'rule.required_with'            => ':attribute is required with :fields',
