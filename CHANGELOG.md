@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2024-08-01
+----------
+
+ * add Chinese translations thanks to [messikiller](https://github.com/messikiller)
+
 2024-06-15
 ----------
 
