@@ -86,7 +86,7 @@ class Attribute
 
     public function isUsingDotNotation(): bool
     {
-        return str_contains($this->key(), '.');
+        return str_contains($this->key(), $this->validation->getKeyDot());
     }
 
     public function parent(): ?Attribute
