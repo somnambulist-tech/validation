@@ -43,6 +43,7 @@ class Validation
     private array $invalidData = [];
     private string $separator = ':';
     private ?string $lang = null;
+    private string $keyDot = '.';
 
     public function __construct(Factory $factory, array $inputs, array $rules)
     {
@@ -223,8 +224,8 @@ class Validation
     protected function parseArrayAttribute(Attribute $attribute): array
     {
         $attributeKey = $attribute->key();
-        $data         = Helper::arrayDot($this->initializeAttributeOnData($attributeKey));
-        $pattern      = str_replace('\*', '([^\.]+)', preg_quote($attributeKey));
+        $data         = Helper::arrayDot($this->initializeAttributeOnData($attributeKey), glue: $this->keyDot);
+        $pattern      = str_replace('\*', '([^('. preg_quote($this->keyDot) .')]+)', preg_quote($attributeKey));
 
         $data = array_merge($data, $this->extractValuesForWildcards(
             $data,
@@ -262,7 +263,7 @@ class Validation
             return $data;
         }
 
-        return Helper::arraySet($data, $attributeKey, null);
+        return Helper::arraySet($data, $attributeKey, null, delimiter: $this->keyDot);
     }
 
     /**
@@ -276,7 +277,11 @@ class Validation
      */
     protected function getLeadingExplicitAttributePath(string $attributeKey): ?string
     {
-        return rtrim(explode('*', $attributeKey)[0], '.') ?: null;
+        return preg_replace(
+            '/('. preg_quote($this->keyDot) .')*$/',
+            '',
+            explode('*', $attributeKey)[0],
+        ) ?: null;
     }
 
     /**
@@ -290,10 +295,10 @@ class Validation
     {
         $results = [];
 
-        $value = $this->input->get($attributeKey, '__missing__');
+        $value = $this->input->get($attributeKey, '__missing__', $this->keyDot);
 
         if ($value != '__missing__') {
-            Helper::arraySet($results, $attributeKey, $value);
+            Helper::arraySet($results, $attributeKey, $value, delimiter: $this->keyDot);
         }
 
         return $results;
@@ -308,7 +313,7 @@ class Validation
     {
         $keys = [];
 
-        $pattern = str_replace('\*', '[^\.]+', preg_quote($attributeKey));
+        $pattern = str_replace('\*', '[^\('. preg_quote($this->keyDot) .')]+', preg_quote($attributeKey));
 
         foreach ($data as $key => $value) {
             if (preg_match('/^' . $pattern . '/', $key, $matches)) {
@@ -427,8 +432,8 @@ class Validation
         $key = $attribute->key();
 
         if ($attribute->isArrayAttribute() || $attribute->isUsingDotNotation()) {
-            Helper::arraySet($this->validData, $key, $value);
-            Helper::arrayUnset($this->invalidData, $key);
+            Helper::arraySet($this->validData, $key, $value, delimiter: $this->keyDot);
+            Helper::arrayUnset($this->invalidData, $key, delimiter: $this->keyDot);
         } else {
             $this->validData[$key] = $value;
         }
@@ -444,10 +449,22 @@ class Validation
         $key = $attribute->key();
 
         if ($attribute->isArrayAttribute() || $attribute->isUsingDotNotation()) {
-            Helper::arraySet($this->invalidData, $key, $value);
-            Helper::arrayUnset($this->validData, $key);
+            Helper::arraySet($this->invalidData, $key, $value, delimiter: $this->keyDot);
+            Helper::arrayUnset($this->validData, $key, delimiter: $this->keyDot);
         } else {
             $this->invalidData[$key] = $value;
         }
+    }
+
+    public function setKeyDot(string $keyDot): static
+    {
+        $this->keyDot = $keyDot;
+
+        return $this;
+    }
+
+    public function getKeyDot(): string
+    {
+        return $this->keyDot;
     }
 }

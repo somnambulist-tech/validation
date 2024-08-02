@@ -86,9 +86,9 @@ class DataBag implements Countable, IteratorAggregate
         return new self(Helper::arrayDot($this->data));
     }
 
-    public function get(?string $key, mixed $default = null): mixed
+    public function get(?string $key, mixed $default = null, string $delimiter = '.'): mixed
     {
-        return Helper::arrayGet($this->data, $key, $default);
+        return Helper::arrayGet($this->data, $key, $default, $delimiter);
     }
 
     public function has(string $key): bool

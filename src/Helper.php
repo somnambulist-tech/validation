@@ -17,16 +17,17 @@ class Helper
      *
      * @param array  $array
      * @param string $key
+     * @param string $delimiter
      *
      * @return bool
      */
-    public static function arrayHas(array $array, string $key): bool
+    public static function arrayHas(array $array, string $key, string $delimiter = '.'): bool
     {
         if (array_key_exists($key, $array)) {
             return true;
         }
 
-        foreach (explode('.', $key) as $segment) {
+        foreach (explode($delimiter, $key) as $segment) {
             if (is_array($array) && array_key_exists($segment, $array)) {
                 $array = $array[$segment];
             } else {
@@ -44,10 +45,11 @@ class Helper
      * @param array       $array
      * @param string|null $key
      * @param mixed       $default
+     * @param string      $delimiter
      *
      * @return mixed
      */
-    public static function arrayGet(array $array, mixed $key, mixed $default = null): mixed
+    public static function arrayGet(array $array, mixed $key, mixed $default = null, string $delimiter = '.'): mixed
     {
         if (is_null($key)) {
             return $array;
@@ -57,7 +59,7 @@ class Helper
             return $array[$key];
         }
 
-        foreach (explode('.', $key) as $segment) {
+        foreach (explode($delimiter, $key) as $segment) {
             if (is_array($array) && array_key_exists($segment, $array)) {
                 $array = $array[$segment];
             } else {
@@ -74,16 +76,17 @@ class Helper
      *
      * @param array  $array
      * @param string $prepend
+     * @param string $glue
      *
      * @return array
      */
-    public static function arrayDot(array $array, string $prepend = ''): array
+    public static function arrayDot(array $array, string $prepend = '', string $glue = '.'): array
     {
         $results = [];
 
         foreach ($array as $key => $value) {
             if (is_array($value) && !empty($value)) {
-                $results = array_merge($results, static::arrayDot($value, $prepend . $key . '.'));
+                $results = array_merge($results, static::arrayDot($value, $prepend . $key . $glue, $glue));
             } else {
                 $results[$prepend . $key] = $value;
             }
@@ -100,10 +103,11 @@ class Helper
      * @param string|array|null $key
      * @param mixed             $value
      * @param bool              $overwrite
+     * @param string            $delimiter
      *
      * @return mixed
      */
-    public static function arraySet(mixed &$target, mixed $key, mixed $value, bool $overwrite = true): array
+    public static function arraySet(mixed &$target, mixed $key, mixed $value, bool $overwrite = true, string $delimiter = '.'): array
     {
         if (is_null($key)) {
             if ($overwrite) {
@@ -113,7 +117,7 @@ class Helper
             return $target = array_merge($value, $target);
         }
 
-        $segments = is_array($key) ? $key : explode('.', $key);
+        $segments = is_array($key) ? $key : explode($delimiter, $key);
 
         if (($segment = array_shift($segments)) === '*') {
             if (!is_array($target)) {
@@ -122,7 +126,7 @@ class Helper
 
             if ($segments) {
                 foreach ($target as &$inner) {
-                    static::arraySet($inner, $segments, $value, $overwrite);
+                    static::arraySet($inner, $segments, $value, $overwrite, $delimiter);
                 }
             } elseif ($overwrite) {
                 foreach ($target as &$inner) {
@@ -135,7 +139,7 @@ class Helper
                     $target[$segment] = [];
                 }
 
-                static::arraySet($target[$segment], $segments, $value, $overwrite);
+                static::arraySet($target[$segment], $segments, $value, $overwrite, $delimiter);
             } elseif ($overwrite || !array_key_exists($segment, $target)) {
                 $target[$segment] = $value;
             }
@@ -143,7 +147,7 @@ class Helper
             $target = [];
 
             if ($segments) {
-                static::arraySet($target[$segment], $segments, $value, $overwrite);
+                static::arraySet($target[$segment], $segments, $value, $overwrite, $delimiter);
             } elseif ($overwrite) {
                 $target[$segment] = $value;
             }
@@ -157,23 +161,24 @@ class Helper
      *
      * @param mixed        $target
      * @param string|array $key
+     * @param string       $delimiter
      *
      * @return mixed
      */
-    public static function arrayUnset(mixed &$target, string|array $key): mixed
+    public static function arrayUnset(mixed &$target, string|array $key, string $delimiter = '.'): mixed
     {
         if (!is_array($target)) {
             return $target;
         }
 
-        $segments = is_array($key) ? $key : explode('.', $key);
+        $segments = is_array($key) ? $key : explode($delimiter, $key);
         $segment  = array_shift($segments);
 
         if ($segment == '*') {
             $target = [];
         } elseif ($segments) {
             if (array_key_exists($segment, $target)) {
-                static::arrayUnset($target[$segment], $segments);
+                static::arrayUnset($target[$segment], $segments, $delimiter);
             }
         } elseif (array_key_exists($segment, $target)) {
             unset($target[$segment]);

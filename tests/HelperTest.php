@@ -23,11 +23,13 @@ class HelperTest extends TestCase
         $this->assertTrue(Helper::arrayHas($array, 'foo.bar'));
         $this->assertTrue(Helper::arrayHas($array, 'foo.bar.baz'));
         $this->assertTrue(Helper::arrayHas($array, 'one.two.three'));
+        $this->assertTrue(Helper::arrayHas($array, 'foo/bar/baz', '/'));
 
         $this->assertFalse(Helper::arrayHas($array, 'foo.baz'));
         $this->assertFalse(Helper::arrayHas($array, 'bar.baz'));
         $this->assertFalse(Helper::arrayHas($array, 'foo.bar.qux'));
         $this->assertFalse(Helper::arrayHas($array, 'one.two'));
+        $this->assertFalse(Helper::arrayHas($array, 'one/two', '/'));
     }
 
     public function testArrayGet()
@@ -48,6 +50,10 @@ class HelperTest extends TestCase
 
         $this->assertNull(Helper::arrayGet($array, 'foo.bar.baz.qux'));
         $this->assertNull(Helper::arrayGet($array, 'one.two'));
+
+        $this->assertEquals(Helper::arrayGet($array, 'foo', delimiter: '/'), $array['foo']);
+        $this->assertEquals(Helper::arrayGet($array, 'foo/bar', delimiter: '/'), $array['foo']['bar']);
+        $this->assertEquals(123, Helper::arrayGet($array, 'one.two.three', delimiter: '/'));
     }
 
     public function testArrayDot()
@@ -78,6 +84,18 @@ class HelperTest extends TestCase
             'comments.2.text' => 'baz',
             'one.two.three' => 789
         ], Helper::arrayDot($array));
+
+        $this->assertEquals([
+            'foo/bar/baz' => 123,
+            'foo/bar/qux' => 456,
+            'comments/0/id' => 1,
+            'comments/0/text' => 'foo',
+            'comments/1/id' => 2,
+            'comments/1/text' => 'bar',
+            'comments/2/id' => 3,
+            'comments/2/text' => 'baz',
+            'one.two.three' => 789
+        ], Helper::arrayDot($array, glue: '/'));
     }
 
     public function testArraySet()
@@ -87,17 +105,20 @@ class HelperTest extends TestCase
                 ['text' => 'foo'],
                 ['id' => 2, 'text' => 'bar'],
                 ['id' => 3, 'text' => 'baz'],
+                ['bar' => 'jax'],
             ]
         ];
 
         Helper::arraySet($array, 'comments.*.id', null, false);
         Helper::arraySet($array, 'comments.*.x.y', 1, false);
+        Helper::arraySet($array, 'comments/*/bar', 'flux', true, '/');
 
         $this->assertEquals([
             'comments' => [
-                ['id' => null, 'text' => 'foo', 'x' => ['y' => 1]],
-                ['id' => 2, 'text' => 'bar', 'x' => ['y' => 1]],
-                ['id' => 3, 'text' => 'baz', 'x' => ['y' => 1]],
+                ['id' => null, 'text' => 'foo', 'x' => ['y' => 1], 'bar' => 'flux'],
+                ['id' => 2, 'text' => 'bar', 'x' => ['y' => 1], 'bar' => 'flux'],
+                ['id' => 3, 'text' => 'baz', 'x' => ['y' => 1], 'bar' => 'flux'],
+                ['id' => null, 'x' => ['y' => 1], 'bar' => 'flux'],
             ]
         ], $array);
     }
@@ -127,6 +148,13 @@ class HelperTest extends TestCase
             'users' => [
                 'two' => 'user_two',
             ],
+            'stuffs' => [],
+            'message' => "lorem ipsum",
+        ], $array);
+
+        Helper::arrayUnset($array, 'users/*', '/');
+        $this->assertEquals([
+            'users' => [],
             'stuffs' => [],
             'message' => "lorem ipsum",
         ], $array);

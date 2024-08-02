@@ -750,4 +750,26 @@ class FactoryTest extends TestCase
 
         $this->assertEquals('yar, number neigh thar', $validation->errors()->first('number'));
     }
+
+    public function testCustomizedDelimiterValidation()
+    {
+        $inputs = [
+            'foo' => [
+                'bar' => 'text',
+                'baz' => 123,
+                'qux' => 'long text'
+            ],
+            'foo.bar' => 999,
+            'foo/jaz' => 'jaz_text',
+        ];
+        $rules = [
+            'foo/*' => 'required|max:1',
+            'foo.bar' => 'required|integer',
+            'foo/jaz' => 'required',
+        ];
+        $validation = $this->validator->make($inputs, $rules);
+        $validation->setKeyDot('/');
+
+        $this->assertTrue($validation->passes());
+    }
 }
