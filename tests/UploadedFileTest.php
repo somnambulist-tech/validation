@@ -89,7 +89,7 @@ class UploadedFileTest extends TestCase
         foreach ($validUploadedFile as $key => $value) {
             $uploadedFile = $validUploadedFile;
             unset($uploadedFile[$key]);
-            $samples[] = $uploadedFile;
+            $samples[] = [$uploadedFile];
         }
 
         return $samples;
