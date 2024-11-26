@@ -174,7 +174,7 @@ class Validation
         if (in_array($ruleName, ['matches', 'regex'])) {
             $params = [$exp[1]];
         } else {
-            $params = isset($exp[1]) ? str_getcsv($exp[1]) : [];
+            $params = isset($exp[1]) ? str_getcsv($exp[1], escape: '\\') : [];
         }
 
         return [$ruleName, $params];

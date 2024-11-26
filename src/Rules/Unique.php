@@ -29,7 +29,7 @@ class Unique extends Rule
         return $this;
     }
 
-    public function ignore(mixed $value, string $column = null): self
+    public function ignore(mixed $value, ?string $column = null): self
     {
         $this->params['ignore']        = $value;
         $this->params['ignore_column'] = $column;

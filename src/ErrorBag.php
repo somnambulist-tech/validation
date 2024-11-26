@@ -90,7 +90,7 @@ class ErrorBag implements Countable, IteratorAggregate
         return str_contains($key, '*');
     }
 
-    private function filterMessagesForWildcardKey(string $key, $ruleName = null): array
+    private function filterMessagesForWildcardKey(string $key, ?string $ruleName = null): array
     {
         $messages = $this->errors;
         $pattern  = preg_quote($key, '#');

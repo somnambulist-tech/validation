@@ -126,7 +126,7 @@ class Factory
      * @return void
      * @throws MessageException
      */
-    public function registerLanguageMessages(string $lang, string $file = null): void
+    public function registerLanguageMessages(string $lang, ?string $file = null): void
     {
         $file ??= sprintf('%s/Resources/i18n/%s.php', __DIR__, preg_replace('/[^A-Za-z0-9\-]/', '', $lang));
 

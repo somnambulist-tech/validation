@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2024-11-27
+----------
+
+ * fix deprecation notices for PHP 8.4
+
 2024-08-01
 ----------
 
@@ -31,7 +36,7 @@ Change Log
 2024-03-02
 ----------
 
- * required PHP 8.1+
+ * require PHP 8.1+
  * update dependencies
  * fix missing return types
 

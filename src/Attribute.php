@@ -22,7 +22,7 @@ class Attribute
     public function __construct(
         Validation $validation,
         string $key,
-        string $alias = null,
+        ?string $alias = null,
         array $rules = []
     ) {
         $this->validation = $validation;
@@ -115,7 +115,7 @@ class Attribute
         return $this->validation;
     }
 
-    public function value(string $key = null): mixed
+    public function value(?string $key = null): mixed
     {
         if ($key && $this->isArrayAttribute()) {
             $key = $this->resolveSiblingKey($key);

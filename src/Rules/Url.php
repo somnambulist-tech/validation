@@ -44,7 +44,7 @@ class Url extends Rule
     /**
      * Validate $value has a scheme or has the specified scheme
      */
-    private function validateCommonScheme(string $value, string $scheme = null): bool
+    private function validateCommonScheme(string $value, ?string $scheme = null): bool
     {
         if ($scheme) {
             return $this->validateBasic($value) && preg_match("/^$scheme:\/\//", $value);

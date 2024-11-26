@@ -17,7 +17,7 @@ class UploadedFile extends Rule implements BeforeValidate
     protected string $message = 'rule.uploaded_file';
     protected MimeTypeGuesserContract $guesser;
 
-    public function __construct(MimeTypeGuesserContract $guesser = null)
+    public function __construct(?MimeTypeGuesserContract $guesser = null)
     {
         $this->guesser = $guesser ?? new MimeTypeGuesser();
     }

@@ -41,7 +41,7 @@ class MessageBag
         return $this;
     }
 
-    public function firstOf(array $keys, string $lang = null): string
+    public function firstOf(array $keys, ?string $lang = null): string
     {
         foreach ($keys as $key) {
             if ($this->has($key, $lang)) {
@@ -52,17 +52,17 @@ class MessageBag
         throw MessageException::noMessageForKeys($lang ?? $this->defaultLang, $keys);
     }
 
-    public function get(string $key, string $lang = null): ?string
+    public function get(string $key, ?string $lang = null): ?string
     {
         return $this->messages[$lang ?? $this->defaultLang][$key] ?? null;
     }
 
-    public function has(string $key, string $lang = null): bool
+    public function has(string $key, ?string $lang = null): bool
     {
         return isset($this->messages[$lang ?? $this->defaultLang][$key]);
     }
 
-    public function hasAnyOf(array $keys, string $lang = null): bool
+    public function hasAnyOf(array $keys, ?string $lang = null): bool
     {
         foreach ($keys as $key) {
             if ($this->has($key, $lang)) {
