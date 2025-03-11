@@ -8,18 +8,22 @@ trait CanValidateDates
 {
     protected function assertDate(string $date): void
     {
-        if (!$this->isValidDate($date)) {
+        if ($this->getTimeStamp($date) === null) {
             throw ParameterException::invalidDate($date);
         }
     }
 
-    protected function isValidDate(string $date): bool
+    protected function getTimeStamp(int|string $date): ?int
     {
-        return (strtotime($date) !== false);
-    }
+        if (is_int($date)) {
+            return $date;
+        }
 
-    protected function getTimeStamp($date): int
-    {
-        return strtotime($date);
+        if (is_string($date) && is_numeric($date)) {
+            return (int)$date;
+        }
+
+        $timestamp = strtotime($date);
+        return $timestamp !== false ? $timestamp : null;
     }
 }
