@@ -187,12 +187,13 @@ The field under this rule must be one of `'on'`, `'yes'`, `'1'`, `'true'` (the s
 
 The field under this rule must be a date after the given minimum.
 
-The parameter should be any valid string that can be parsed by `strtotime`. For example:
+The parameter should be any valid string that can be parsed by `strtotime` including unix timestamps. For example:
 
 * after:next week
 * after:2016-12-31
 * after:2016
 * after:2016-12-31 09:56:02
+* after:1583946133
 
 </details>
 
