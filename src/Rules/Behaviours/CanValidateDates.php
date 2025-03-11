@@ -6,7 +6,7 @@ use Somnambulist\Components\Validation\Exceptions\ParameterException;
 
 trait CanValidateDates
 {
-    protected function assertDate(string $date): void
+    protected function assertDate(int|string $date): void
     {
         if ($this->getTimeStamp($date) === null) {
             throw ParameterException::invalidDate($date);
