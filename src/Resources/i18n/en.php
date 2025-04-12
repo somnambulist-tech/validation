@@ -51,7 +51,7 @@ return [
     'rule.required'                 => ':attribute is required',
     'rule.requires'                 => ':attribute requires :fields',
     'rule.required_if'              => ':attribute is required if :field has a value of :values',
-    'rule.required_unless'          => ':attribute is required if :fields has one of :values',
+    'rule.required_unless'          => ':attribute is required if :field has one of :values',
     'rule.required_with'            => ':attribute is required with :fields',
     'rule.required_with_all'        => ':attribute is required with all of :fields',
     'rule.required_without'         => ':attribute is required when :fields are empty',
