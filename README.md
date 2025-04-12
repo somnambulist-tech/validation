@@ -1260,9 +1260,9 @@ $validation_a = $validator->make($input, [
 	'age' => 'required|min:18'
 ]);
 
-$validation->messages()->add('en', 'age:min', '18+ only');
+$validation_a->messages()->add('en', ['age:min'=> '18+ only']);
 
-$validation->validate();
+$validation_a->validate();
 ```
 
 Sometimes you may wish to use parameters from other rules in your error messages. From version 1.6.0
