@@ -2,6 +2,7 @@
 
 namespace Somnambulist\Components\Validation\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Somnambulist\Components\Validation\Factory;
@@ -58,9 +59,7 @@ class UploadedFileTest extends TestCase
         $this->assertTrue($validation->passes());
     }
 
-    /**
-     * @dataProvider getSamplesMissingKeyFromUploadedFileValue
-     */
+    #[DataProvider('getSamplesMissingKeyFromUploadedFileValue')]
     public function testMissingKeyUploadedFile($uploadedFile)
     {
         $validation = $this->validator->validate([

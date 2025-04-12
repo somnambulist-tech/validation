@@ -158,13 +158,23 @@ class RequiredRulesTest extends TestCase
     public function testRequiredWithoutAllRule()
     {
         $v1 = $this->validator->validate([
+            'b' => 'foo',
+            'a' => null,
+            'c' => null,
+        ], [
+            'b' => 'required_without_all:a,c'
+        ]);
+
+        $this->assertTrue($v1->passes());
+
+        $v1 = $this->validator->validate([
             'b' => '',
             'a' => '1'
         ], [
             'b' => 'required_without_all:a,c'
         ]);
 
-        $this->assertTrue($v1->passes());
+        $this->assertFalse($v1->passes());
 
         $v2 = $this->validator->validate([
             'b' => '',

@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2025-04-12
+----------
+
+ * fix array handling in requires, required_* rules not correctly resolving fields (#35 thanks to [HaroldAlingGSD](https://github.com/HaroldAlingGSD))
+ * fix incorrectly translated field names in required rules when using in array context
+ * upgrade to PHPUnit 11.X
+
 2024-11-27
 ----------
 

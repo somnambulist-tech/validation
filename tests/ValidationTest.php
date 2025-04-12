@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\Validation\Tests;
 
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Somnambulist\Components\Validation\Factory;
@@ -11,13 +12,8 @@ use Somnambulist\Components\Validation\Validation;
 
 class ValidationTest extends TestCase
 {
-    /**
-     * @param string $rules
-     * @param array  $expectedResult
-     *
-     * @dataProvider parseRuleProvider
-     */
-    public function testParseRule($rules, $expectedResult)
+    #[DataProvider('parseRuleProvider')]
+    public function testParseRule(string $rules, array $expectedResult)
     {
         $class  = new ReflectionClass(Validation::class);
         $method = $class->getMethod('parseRule');

@@ -2,8 +2,12 @@
 
 namespace Somnambulist\Components\Validation\Rules;
 
+use Somnambulist\Components\Validation\Rules\Behaviours\CanConvertFieldParametersDotNotationToResolvedStrings;
+
 class RequiredWithAll extends Required
 {
+    use CanConvertFieldParametersDotNotationToResolvedStrings;
+
     protected bool $implicit = true;
     protected string $message = 'rule.required_with_all';
 
@@ -22,7 +26,7 @@ class RequiredWithAll extends Required
         $requiredValidator = $this->validation->factory()->rule('required');
 
         foreach ($fields as $field) {
-            if (!$this->validation->input()->has($field)) {
+            if (!$this->attribute->value($field)) {
                 return true;
             }
         }

@@ -15,7 +15,7 @@ Jump to [rules](#available-rules)
 
 ## Requirements
 
- * PHP 8.0+
+ * PHP 8.2+
  * ext/mb-string
 
 ## Installation
@@ -1671,7 +1671,7 @@ class YourCustomRule extends Rule implements BeforeValidate
 
 ## Tests
 
-PHPUnit 9+ is used for testing. Run tests via `vendor/bin/phpunit`.
+PHPUnit 11+ is used for testing. Run tests via `vendor/bin/phpunit`.
 
 ## Contributing
 
@@ -1679,8 +1679,7 @@ Contributions are welcome! Fork the repository and make a PR back. Please ensure
 using PSR-12 coding standards, and all PHP files include `declare(strict_types=1);` on the opening `<?php` tag.
 If in doubt about any code-style convention, look at the existing files and follow along.
 
-This library currently targets PHP 8.0.X and 8.1+. If using 8.1 functions, ensure a suitable fallback is used.
-Note that external libraries should not be added to this project. 
+This library currently targets PHP 8.2+. Note that external libraries should not be added to this project. 
 
 If adding new functionality ensure the `README.md` file is updated with your changes and include appropriate
 tests and if possible, language translations with English as the primary requirement.

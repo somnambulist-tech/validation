@@ -2,8 +2,13 @@
 
 namespace Somnambulist\Components\Validation\Rules;
 
+use Somnambulist\Components\Validation\Rules\Behaviours\CanConvertFieldParametersDotNotationToResolvedStrings;
+use function str_replace;
+
 class Requires extends Required
 {
+    use CanConvertFieldParametersDotNotationToResolvedStrings;
+
     protected bool $implicit = true;
     protected string $message = 'rule.requires';
 
@@ -21,7 +26,7 @@ class Requires extends Required
         $fields = $this->parameter('fields');
 
         foreach ($fields as $field) {
-            if (!$this->validation->input()->has($field) || empty($this->validation->input()->get($field))) {
+            if (!$this->attribute->value($field)) {
                 return false;
             }
         }

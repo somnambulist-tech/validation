@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\Validation\Tests;
 
 use Closure;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Exceptions\RuleException;
 use Somnambulist\Components\Validation\Factory;
@@ -292,11 +293,7 @@ class FactoryTest extends TestCase
         $this->assertFalse($validation->passes());
     }
 
-    /**
-     * Test root asterisk validation.
-     *
-     * @dataProvider rootAsteriskProvider
-     */
+    #[DataProvider('rootAsteriskProvider')]
     public function testRootAsteriskValidation(array $data, array $rules, $errors = null)
     {
         $validation = $this->validator->validate($data, $rules);

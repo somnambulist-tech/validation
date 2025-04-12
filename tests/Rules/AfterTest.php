@@ -4,6 +4,7 @@
 namespace Somnambulist\Components\Validation\Tests\Rules;
 
 use DateTime;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\Validation\Exceptions\ParameterException;
 use Somnambulist\Components\Validation\Rules\After;
@@ -21,9 +22,7 @@ class AfterTest extends TestCase
         $this->validator = new After();
     }
 
-    /**
-     * @dataProvider getValidDates
-     */
+    #[DataProvider('getValidDates')]
     public function testOnlyAWellFormedDateCanBeValidated($date)
     {
         $this->assertTrue(
@@ -31,9 +30,7 @@ class AfterTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider getInvalidDates
-     */
+    #[DataProvider('getInvalidDates')]
     public function testANonWellFormedDateCannotBeValidated($date)
     {
         $this->expectException(ParameterException::class);
