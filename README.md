@@ -1659,12 +1659,9 @@ class YourCustomRule extends Rule implements BeforeValidate
 {
     public function beforeValidate(): void
     {
-        $attribute = $this->getAttribute();
-        $validation = $this->validation;
-
-        // Do something with $attribute and $validation
         // For example change attribute value
-        $validation->setValue($attribute->getKey(), "your custom value");
+        // Current value can be accessed using $this->attribute->value()
+        $this->validation->input()->set($this->attribute->key(), 'Your custom value');
     }
 }
 ```
