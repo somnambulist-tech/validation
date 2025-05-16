@@ -1638,6 +1638,11 @@ class YourCustomRule extends Rule implements ModifyValue
 }
 ```
 
+__Note:__ ModifyValue should not be used to convert a value to an array that then must be validated.
+Use BeforeValidate instead. ModifyValue should only be used to convert e.g. a string to an int or
+to format the value. ModifyValue is called during validation, after the rules have been processed
+meaning the array processing will not be performed.
+
 ### Before Validation Hook
 
 You may want to do some preparation before running the validation. For example, the
@@ -1665,6 +1670,10 @@ class YourCustomRule extends Rule implements BeforeValidate
     }
 }
 ```
+
+__Note:__ BeforeValidate is run before the rules are processed allowing type conversion e.g. a
+string to be changed to an array of values. If you wish to validate an array string using array
+rules, you must use BeforeValidate to change the string to an array.
 
 ## Tests
 
