@@ -39,7 +39,8 @@ class BeforeTest extends TestCase
             [$now->format("Y-m-d h:i:s")],
             ["now"],
             ["tomorrow"],
-            ["2 years ago"]
+            ["2 years ago"],
+            ["1741716133"]
         ];
     }
 
@@ -61,7 +62,8 @@ class BeforeTest extends TestCase
             [$now->format("Y m d")],
             [$now->format("Y m d h:i:s")],
             ["tommorow"], //typo
-            ["lasst year"] //typo
+            ["lasst year"], //typo
+            ["0123"] //invalid unix
         ];
     }
 
