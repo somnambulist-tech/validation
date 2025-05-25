@@ -19,11 +19,13 @@ class NotInTest extends TestCase
     {
         $this->assertTrue($this->rule->fillParameters(['2', '3', '4'])->check('1'));
         $this->assertTrue($this->rule->fillParameters([1, 2, 3])->check(5));
+        $this->assertTrue($this->rule->fillParameters([1, 2, 3])->check([5,10]));
     }
 
     public function testInvalids()
     {
         $this->assertFalse($this->rule->fillParameters(['bar', 'baz', 'qux'])->check('bar'));
+        $this->assertFalse($this->rule->fillParameters(['bar', 'baz', 'qux'])->check(['bar','foo']));
     }
 
     public function testStricts()
@@ -31,10 +33,11 @@ class NotInTest extends TestCase
         // Not strict
         $this->assertFalse($this->rule->fillParameters(['1', '2', '3'])->check(1));
         $this->assertFalse($this->rule->fillParameters(['1', '2', '3'])->check(true));
+        $this->assertFalse($this->rule->fillParameters(['1', '2', '3'])->check([true, 3, 9]));
 
         // Strict
         $this->rule->strict();
         $this->assertTrue($this->rule->fillParameters(['1', '2', '3'])->check(1));
-        $this->assertTrue($this->rule->fillParameters(['1', '2', '3'])->check(1));
+        $this->assertTrue($this->rule->fillParameters(['1', '2', '3'])->check([1,3]));
     }
 }

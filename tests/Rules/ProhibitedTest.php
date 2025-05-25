@@ -163,4 +163,104 @@ class ProhibitedTest extends TestCase
         $this->assertFalse($res->passes());
         $this->assertEquals('bar is not allowed if foo does not have value(s) "bar", "baz", "foo"', $res->errors()->get('bar')['prohibited_unless']);
     }
+
+    public function testProhibitedWithRule()
+    {
+        $validator = new Factory();
+
+        $v1 = $validator->validate([
+            'b' => '',
+        ], [
+            'b' => 'prohibited_with:a'
+        ]);
+
+        $this->assertTrue($v1->passes());
+
+        $v2 = $validator->validate([
+            'a' => '1',
+            'b' => 'test',
+        ], [
+            'b' => 'prohibited_with:a'
+        ]);
+
+        $this->assertFalse($v2->passes());
+    }
+
+    public function testProhibitedWithoutRule()
+    {
+        $validator = new Factory();
+
+        $v1 = $validator->validate([
+            'b' => 'test',
+        ], [
+            'b' => 'prohibited_without:a'
+        ]);
+
+        $this->assertFalse($v1->passes());
+
+        $v2 = $validator->validate([
+            'a' => '1',
+            'b' => 'test',
+        ], [
+            'b' => 'prohibited_without:a'
+        ]);
+
+        $this->assertTrue($v2->passes());
+    }
+
+    public function testProhibitedWithAllRule()
+    {
+        $validator = new Factory();
+
+        $v1 = $validator->validate([
+            'b' => '',
+            'a' => '1'
+        ], [
+            'b' => 'prohibited_with_all:a,c'
+        ]);
+
+        $this->assertTrue($v1->passes());
+
+        $v2 = $validator->validate([
+            'a' => '1',
+            'b' => 'test',
+            'c' => '2'
+        ], [
+            'b' => 'prohibited_with_all:a,c'
+        ]);
+
+        $this->assertFalse($v2->passes());
+    }
+
+    public function testProhibitedWithoutAllRule()
+    {
+        $validator = new Factory();
+
+        $v1 = $validator->validate([
+            'b' => 'foo',
+            'a' => null,
+            'c' => null,
+        ], [
+            'b' => 'prohibited_without_all:a,c'
+        ]);
+
+        $this->assertFalse($v1->passes());
+
+        $v1 = $validator->validate([
+            'b' => '',
+            'a' => '1'
+        ], [
+            'b' => 'prohibited_without_all:a,c'
+        ]);
+
+        $this->assertTrue($v1->passes());
+
+        $v2 = $validator->validate([
+            'b' => 'test',
+        ], [
+            'b' => 'prohibited_without_all:a,c'
+        ]);
+
+        $this->assertFalse($v2->passes());
+    }
 }

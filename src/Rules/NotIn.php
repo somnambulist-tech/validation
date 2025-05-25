@@ -45,6 +45,16 @@ class NotIn extends Rule
     {
         $this->assertHasRequiredParameters(['disallowed_values']);
 
+        if (is_array($value)) {
+            foreach ($value as $v) {
+                if (in_array($v, (array)$this->parameter('disallowed_values'), $this->strict)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         return !in_array($value, (array)$this->parameter('disallowed_values'), $this->strict);
     }
 }
