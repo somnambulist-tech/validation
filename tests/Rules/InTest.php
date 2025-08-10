@@ -20,11 +20,13 @@ class InTest extends TestCase
     {
         $this->assertTrue($this->rule->fillParameters([1,2,3])->check(1));
         $this->assertTrue($this->rule->fillParameters(['1', 'bar', '3'])->check('bar'));
+        $this->assertTrue($this->rule->fillParameters(['1', 'bar', '3'])->check(['bar', '3']));
     }
 
     public function testInvalids()
     {
         $this->assertFalse($this->rule->fillParameters([1,2,3])->check(4));
+        $this->assertFalse($this->rule->fillParameters([1,2,3])->check([3,4]));
     }
 
     public function testStricts()
@@ -32,11 +34,12 @@ class InTest extends TestCase
         // Not strict
         $this->assertTrue($this->rule->fillParameters(['1', '2', '3'])->check(1));
         $this->assertTrue($this->rule->fillParameters(['1', '2', '3'])->check(true));
+        $this->assertTrue($this->rule->fillParameters(['1', '2', '3'])->check([true, 3]));
 
         // Strict
         $this->rule->strict();
         $this->assertFalse($this->rule->fillParameters(['1', '2', '3'])->check(1));
-        $this->assertFalse($this->rule->fillParameters(['1', '2', '3'])->check(1));
+        $this->assertFalse($this->rule->fillParameters(['1', '2', '3'])->check([1,3]));
     }
 
     public function testWithCommasInStrings()

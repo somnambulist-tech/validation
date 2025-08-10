@@ -44,6 +44,16 @@ class In extends Rule
     {
         $this->assertHasRequiredParameters(['allowed_values']);
 
+        if (is_array($value)) {
+            foreach ($value as $v) {
+                if (!in_array($v, $this->parameter('allowed_values'), $this->strict)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         return in_array($value, $this->parameter('allowed_values'), $this->strict);
     }
 }

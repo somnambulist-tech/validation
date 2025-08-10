@@ -1,0 +1,44 @@
+<?php declare(strict_types=1);
+
+namespace Somnambulist\Components\Validation\Rules;
+
+use Somnambulist\Components\Validation\Rules\Behaviours\CanConvertFieldParametersDotNotationToResolvedStrings;
+
+/**
+ * Based on Laravel validators required_with but here the field must be missing or empty if
+ * any of the other specified fields are present and not empty.
+ */
+class ProhibitedWith extends Prohibited
+{
+    use CanConvertFieldParametersDotNotationToResolvedStrings;
+
+    protected bool $implicit = true;
+    protected string $message  = 'rule.prohibited_with';
+
+    public function fillParameters(array $params): self
+    {
+        $this->params['fields'] = $params;
+
+        return $this;
+    }
+
+    public function check(mixed $value): bool
+    {
+        $this->assertHasRequiredParameters(['fields']);
+
+        $fields            = $this->parameter('fields');
+        $requiredValidator = $this->validation->factory()->rule('required');
+
+        if (!$requiredValidator->check($this->attribute()->value())) {
+            return true;
+        }
+
+        foreach ($fields as $field) {
+            if ($requiredValidator->check($this->attribute->value($field))) {
+                return false;
+            }
+        }
+
+        return $requiredValidator->check($value);
+    }
+}
