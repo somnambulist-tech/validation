@@ -17,7 +17,11 @@ class ValidationTest extends TestCase
     {
         $class  = new ReflectionClass(Validation::class);
         $method = $class->getMethod('parseRule');
-        $method->setAccessible(true);
+
+        // Deprecated in PHP 8.5
+        if (PHP_VERSION_ID < 80500) {
+            $method->setAccessible(true);
+        }
 
         $validation = new Validation(new Factory(), [], []);
 
