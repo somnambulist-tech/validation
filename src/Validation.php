@@ -340,7 +340,7 @@ class Validation
 
     protected function resolveAttributeName(Attribute $attribute): string
     {
-        return $this->aliases[$attribute->key()] ?? $this->aliases[$attribute->parent()?->key()] ?? $attribute->key();
+        return $this->aliases[$attribute->key()] ?? ($attribute->parent() ? $this->aliases[$attribute->parent()->key()] : null) ?? $attribute->key();
     }
 
     protected function resolveMessage(Attribute $attribute, Rule $rule, mixed $value): ErrorMessage
