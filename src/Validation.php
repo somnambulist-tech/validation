@@ -8,9 +8,12 @@ use Somnambulist\Components\Validation\Rules\Callback;
 use Somnambulist\Components\Validation\Rules\Contracts\ModifyValue;
 use Somnambulist\Components\Validation\Rules\Required;
 
+use function array_filter;
+use function array_key_exists;
 use function array_merge;
 use function array_splice;
 use function array_unique;
+use function dump;
 use function explode;
 use function get_class;
 use function gettype;
@@ -340,7 +343,15 @@ class Validation
 
     protected function resolveAttributeName(Attribute $attribute): string
     {
-        return $this->aliases[$attribute->key()] ?? $this->aliases[$attribute->parent()?->key()] ?? $attribute->key();
+        $key = array_filter([$attribute->key(), $attribute->parent()?->key()]);
+
+        foreach ($key as $k) {
+            if (array_key_exists($k, $this->aliases)) {
+                return $this->aliases[$k];
+            }
+        }
+
+        return $attribute->key();
     }
 
     protected function resolveMessage(Attribute $attribute, Rule $rule, mixed $value): ErrorMessage

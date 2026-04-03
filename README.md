@@ -15,7 +15,7 @@ Jump to [rules](#available-rules)
 
 ## Requirements
 
- * PHP 8.2+
+ * PHP 8.3+
  * ext/mb-string
 
 ## Installation

@@ -2,26 +2,27 @@
 
 namespace Somnambulist\Components\Validation\Tests;
 
+use Closure;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use Somnambulist\Components\Validation\Factory;
 use Somnambulist\Components\Validation\Rule;
 use Somnambulist\Components\Validation\Validation;
+use function is_null;
 
 class ValidationTest extends TestCase
 {
     #[DataProvider('parseRuleProvider')]
     public function testParseRule(string $rules, array $expectedResult)
     {
-        $class  = new ReflectionClass(Validation::class);
-        $method = $class->getMethod('parseRule');
-        $method->setAccessible(true);
+        $accessor = function (object $object, string $method, mixed $scope = null, mixed ...$args): mixed {
+            return Closure::bind(fn () => $this->{$method}(...$args), $object, !is_null($scope) ? $scope : $object)();
+        };
 
         $validation = new Validation(new Factory(), [], []);
 
-        $result = $method->invokeArgs($validation, [$rules]);
+        $result = $accessor($validation, 'parseRule', $validation,$rules);
         $this->assertSame($expectedResult, $result);
     }
 

@@ -1,6 +1,20 @@
 Change Log
 ==========
 
+2026-04-02
+----------
+
+ * added Ukrainian, Polish and Russian translations (#42) thanks to [konanyhin](https://github.com/konanyhin)
+ * add PHP 8.5 to test suite
+ * drop PHP 8.2
+ * fix null accessor PHP 8.5 issue reported by [scottasmith](https://github.com/scottasmith) and [jdpanderson](https://github.com/jdpanderson)
+ * fix other PHP 8.5 deprecations
+
+2025-08-10
+----------
+
+ * add rules : prohibited_with, prohibited_with_all, prohibited_without, prohibited_without_all (#38) thanks to [zephyx](https://github.com/zephyx)
+
 2025-04-12
 ----------
 
